@@ -1,0 +1,14 @@
+E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\DialogueEditor.exe.config
+E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\DialogueEditor.exe
+E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\DialogueEditor.pdb
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.csprojAssemblyReference.cache
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.Form1.resources
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.Properties.Resources.resources
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.csproj.GenerateResource.cache
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.csproj.CoreCompileInputs.cache
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.exe
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.pdb
+E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.Data.SQLite.dll
+E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.Data.SQLite.dll.config
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.csproj.CopyComplete
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.NodeUI.resources
