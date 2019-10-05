@@ -29,7 +29,7 @@ namespace DialogueEditor
         List<Control> dellist = new List<Control>();
         SQLiteDataReader reader;
         int countResult;
-        List<int> realCount = new List<int>();
+        public List<List<int>> realCount = new List<List<int>>();
         List<int> usedNode = new List<int>();
 
         public Form1()
@@ -178,44 +178,32 @@ namespace DialogueEditor
         private void button2_Click(object sender, EventArgs e)
         {
             usedNode.Clear();
+            realCount.Clear();
             for (int j = 0; j < nodeContainer.Count(); j++)
             {
-                nodeContainer[j].rCount = 0;
+                nodeContainer[j].rCount.Clear();
                 for (int i = 0; i < nodeContainer[j].toNodeList.Count; i++)
                 {
-                    if(nodeContainer[j].toNodeList[i].Text!="")
+                    if (nodeContainer[j].toNodeList[i].Text != "" && nodeContainer[j].toNodeList[i].Text != "0" && !usedNode.Contains(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text))))
                     {
-                        nodeContainer[j].rCount++;
+                        nodeContainer[j].rCount.Add(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text)));
+                        usedNode.Add(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text)));
                     }
                 }
-                realCount.Add(nodeContainer[j].rCount);
-            }
-            
-                for (int j = 0; j < nodeContainer.Count(); j++)
+                if (nodeContainer[j].rCount.Count != 0)
                 {
-
-                for (int i = 0; i < realCount[j]; i++)
-                    {
-                    if (nodeContainer[j].toNodeList[i].Text == "0")
-                    {
-                        continue;
-                    }  
-                    
-                            var num = Convert.ToInt32(nodeContainer[j].toNodeList[i].Text);
-                        if (usedNode.Contains(num))
-                        {
-                        
-                            continue;
-                        }
-                        else
-                        {
-                            nodeContainerUI[num].Location = new Point((Width / (realCount[j]+1)) - (197 / 2) + (Width * i / (realCount[j]+1)), 450 + (j * 200));
-                        }
-
-                        
-                         usedNode.Add(num);
-                    }
+                    realCount.Add(nodeContainer[j].rCount);
                 }
+            }
+
+            for (int j = 0; j < realCount.Count; j++)
+            {
+                for (int i = 0; i < realCount[j].Count; i++)
+                {
+                    var num = realCount[j].ElementAt(i);
+                    nodeContainerUI[num].Location = new Point((Width / (realCount[j].Count + 1)) - (197 / 2) + (Width * i / (realCount[j].Count + 1)), 450 + (j * 400));
+                }
+            }
 
         }
         private void textBox7_TextChanged(object sender, EventArgs e)

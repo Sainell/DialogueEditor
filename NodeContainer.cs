@@ -16,7 +16,7 @@ namespace DialogueEditor
         public List<CheckBox> exitCheckBoxList = new List<CheckBox>();
         public List<TextBox> toNodeList = new List<TextBox>();
         public TextBox npcTextBox;
-        public int rCount = 0;
+        public List<int> rCount = new List<int>();
         NodeUI node;
 
        public NodeContainer(NodeUI node)
