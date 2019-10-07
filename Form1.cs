@@ -15,6 +15,7 @@ namespace DialogueEditor
 {
     public partial class Form1 : Form
     {
+
         private SQLiteConnection DB;
         SQLiteCommand cmd;
         SQLiteCommand cmdCount;
@@ -35,7 +36,10 @@ namespace DialogueEditor
         public Form1()
         {
             InitializeComponent();
+          
+               
         }
+        
        
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -49,14 +53,24 @@ namespace DialogueEditor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
-
-
-
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Form1 f1 = new Form1();
+            f1.Controls.Clear();
+            f1.TopMost = true;
+            f1.TransparencyKey = SystemColors.Control;
+               this.IsMdiContainer = true;
+                f1.MdiParent = this;
+            f1.FormBorderStyle = 0;
+            f1.Anchor = (AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left);
+            f1.Dock = DockStyle.Fill;
+            f1.AutoScroll = true;
+            f1.Show();
+
+
             DB = new SQLiteConnection("Data Source= " + @" E:\Projects\RPG_Van_Helsing\Assets\StreamingAssets\world.bytes");
             DB.Open();
             cmd = DB.CreateCommand();
@@ -94,7 +108,6 @@ namespace DialogueEditor
                 nodeContainerUI.Add(new NodeUI());
                 nodeContainerUI[i].Visible = true;
                 nodeContainerUI[i].Location = new Point((Width/2)-(197/2), 50+(i*400));
-                //nodeContainerUI[i].Location = new Point(20 + (200 * i), 50);
                 nodeContainerUI[i].Name = "nodeUI" + i;
                 nodeContainerUI[i].groupBox1.Text = "Node ID:" + i;
                 Controls.Add(nodeContainerUI[i]);
@@ -165,14 +178,20 @@ namespace DialogueEditor
 
                 reader.Close();
             }
-            Graphics g = this.CreateGraphics();
-            Pen pen = new Pen(Color.Red);
-            pen.StartCap = LineCap.ArrowAnchor;
-            pen.EndCap = LineCap.RoundAnchor;
-            Point p1 = nodeContainerUI[0].Location;
-            Point p2 = nodeContainerUI[1].Location;
+            Graphics g = f1.CreateGraphics();
+            Pen pen = new Pen(Color.Red, 3);
+            pen.StartCap = LineCap.RoundAnchor;
+            pen.EndCap = LineCap.ArrowAnchor;
+            //Point p1 = new Point(300, 10);
+            //Point p2 = new Point(300, 300);
+            Point p1 = PointToClient(nodeContainer[0].startPoint[0]);
+            Point p2 = PointToClient(nodeContainer[1].endPoint);
+
+            Point p3 = PointToClient(nodeContainer[0].startPoint[4]);
+            Point p4 = PointToClient(nodeContainer[1].endPoint);
+
             g.DrawLine(pen, p1, p2);
-            
+            g.DrawLine(pen, p3, p4);
 
         }
         private void button2_Click(object sender, EventArgs e)
@@ -271,6 +290,9 @@ namespace DialogueEditor
 
         }
 
-       
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

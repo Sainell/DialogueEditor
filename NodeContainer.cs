@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,9 @@ namespace DialogueEditor
         public List<TextBox> toNodeList = new List<TextBox>();
         public TextBox npcTextBox;
         public List<int> rCount = new List<int>();
+        public List<Point> startPoint = new List<Point>();
+        public Point endPoint;
+        public Point _endPoint;
         NodeUI node;
 
        public NodeContainer(NodeUI node)
@@ -59,6 +63,15 @@ namespace DialogueEditor
             toNodeList.Add(node.textBox8);
             toNodeList.Add(node.textBox15);
             toNodeList.Add(node.textBox16);
+
+            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox6.Location.Y)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox7.Location.Y)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox8.Location.Y)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox15.Location.Y)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox16.Location.Y)));
+
+            endPoint = node.PointToScreen((new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y)));
+            //_endPoint = node.
 
         }
     }
