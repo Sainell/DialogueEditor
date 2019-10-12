@@ -15,7 +15,7 @@ namespace DialogueEditor
 {
     public partial class Form1 : Form
     {
-
+        private Form1 f1;
         private SQLiteConnection DB;
         SQLiteCommand cmd;
         SQLiteCommand cmdCount;
@@ -32,6 +32,7 @@ namespace DialogueEditor
         int countResult;
         public List<List<int>> realCount = new List<List<int>>();
         List<int> usedNode = new List<int>();
+        private Random rnd = new Random();
 
         public Form1()
         {
@@ -40,7 +41,7 @@ namespace DialogueEditor
                
         }
         
-       
+        
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -53,22 +54,26 @@ namespace DialogueEditor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+            f1.Location = this.Location;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form1 f1 = new Form1();
-            f1.Controls.Clear();
-            f1.TopMost = true;
-            f1.TransparencyKey = SystemColors.Control;
-               this.IsMdiContainer = true;
-                f1.MdiParent = this;
-            f1.FormBorderStyle = 0;
-            f1.Anchor = (AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left);
-            f1.Dock = DockStyle.Fill;
-            f1.AutoScroll = true;
-            f1.Show();
+           // if (f1 != null) f1.Close();
+           // f1 = new Form1();
+           // f1.Controls.Clear();
+           // f1.TopMost = true;
+           // f1.TransparencyKey = SystemColors.Control;
+           //// this.IsMdiContainer = true;
+           //// f1.MdiParent = this;
+           // //f1.FormBorderStyle = 0;
+           // f1.Anchor = (AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left);
+           // f1.Dock = DockStyle.Fill;
+           // f1.StartPosition = FormStartPosition.Manual;
+           // f1.Location = this.Location;
+           // f1.AutoScroll = true;
+
+           // f1.Show();
 
 
             DB = new SQLiteConnection("Data Source= " + @" E:\Projects\RPG_Van_Helsing\Assets\StreamingAssets\world.bytes");
@@ -178,20 +183,8 @@ namespace DialogueEditor
 
                 reader.Close();
             }
-            Graphics g = f1.CreateGraphics();
-            Pen pen = new Pen(Color.Red, 3);
-            pen.StartCap = LineCap.RoundAnchor;
-            pen.EndCap = LineCap.ArrowAnchor;
-            //Point p1 = new Point(300, 10);
-            //Point p2 = new Point(300, 300);
-            Point p1 = PointToClient(nodeContainer[0].startPoint[0]);
-            Point p2 = PointToClient(nodeContainer[1].endPoint);
-
-            Point p3 = PointToClient(nodeContainer[0].startPoint[4]);
-            Point p4 = PointToClient(nodeContainer[1].endPoint);
-
-            g.DrawLine(pen, p1, p2);
-            g.DrawLine(pen, p3, p4);
+            
+            
 
         }
         private void button2_Click(object sender, EventArgs e)
@@ -203,13 +196,16 @@ namespace DialogueEditor
                 nodeContainer[j].rCount.Clear();
                 for (int i = 0; i < nodeContainer[j].toNodeList.Count; i++)
                 {
-                    if (nodeContainer[j].toNodeList[i].Text != "" && nodeContainer[j].toNodeList[i].Text != "0" && !usedNode.Contains(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text))))
+                    if (nodeContainer[j].toNodeList[i].Text != "" && nodeContainer[j].toNodeList[i].Text != "0" )
                     {
-                        nodeContainer[j].rCount.Add(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text)));
-                        usedNode.Add(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text)));
+                        if (!usedNode.Contains(Convert.ToInt32(nodeContainer[j].toNodeList[i].Text)))
+                        {
+                            nodeContainer[j].rCount.Add(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text)));
+                            usedNode.Add(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text)));
+                        }
                     }
                 }
-                if (nodeContainer[j].rCount.Count != 0)
+                if (nodeContainer[j].rCount.Count != 0 )
                 {
                     realCount.Add(nodeContainer[j].rCount);
                 }
@@ -221,6 +217,66 @@ namespace DialogueEditor
                 {
                     var num = realCount[j].ElementAt(i);
                     nodeContainerUI[num].Location = new Point((Width / (realCount[j].Count + 1)) - (197 / 2) + (Width * i / (realCount[j].Count + 1)), 450 + (j * 400));
+                    nodeContainer.RemoveAt(num);
+                    nodeContainer.Insert(num, new NodeContainer(nodeContainerUI[num]));
+                }
+            }
+            Graphics g = CreateGraphics();
+            Pen pen = new Pen(Color.Red, 3);
+            Pen pen2 = new Pen(Color.Blue, 3);
+            Pen pen3 = new Pen(Color.DarkOliveGreen, 3);
+            pen.StartCap = LineCap.RoundAnchor;
+            pen.EndCap = LineCap.ArrowAnchor;
+
+            for (int j = 0; j < usedNode.Count; j++)
+            {
+
+                for (int i = 0; i < nodeContainer[j].toNodeList.Count; i++)
+                {
+                    if (nodeContainer[j].toNodeList[i].Text != "" && nodeContainer[j].toNodeList[i].Text != "0")
+                    {
+
+                        Point pStart = PointToClient(nodeContainer[j].startPoint[i]);
+                        Point pEnd = PointToClient(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint);
+
+                        Point pUpRight = PointToClient(nodeContainer[j].intermediatePointUpRight);
+                        Point pUpLeft = PointToClient(nodeContainer[j].intermediatePointUpLeft);
+                        Point pDownRight = PointToClient(nodeContainer[j].intermediatePointDownRight);
+                        Point pDownLeft = PointToClient(nodeContainer[j].intermediatePointDownLeft);
+                        Point pMiddleRight = PointToClient(nodeContainer[j].intermediatePointMiddleRight);
+                        Point pMiddleLeft = PointToClient(nodeContainer[j].intermediatePointMiddleLeft);
+                        Point pUp = PointToClient(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp);
+                        Point pDown = PointToClient(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointDown);
+
+                        
+
+                        g.DrawRectangle(pen2, pUpRight.X, pUpRight.Y, 4, 4);
+                        g.DrawRectangle(pen2, pUpLeft.X, pUpLeft.Y, 4, 4);
+                        g.DrawRectangle(pen2, pDownRight.X, pDownRight.Y, 4, 4);
+                        g.DrawRectangle(pen2, pDownLeft.X, pDownLeft.Y, 4, 4);
+                        g.DrawRectangle(pen2, pMiddleRight.X, pMiddleRight.Y, 4, 4);
+                        g.DrawRectangle(pen2, pMiddleLeft.X, pMiddleLeft.Y, 4, 4);
+                        g.DrawRectangle(pen, pUp.X, pUp.Y, 4, 4);
+                        g.DrawRectangle(pen, pDown.X, pDown.Y, 4, 4);
+
+                        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+
+                        var leftLineLength = Math.Sqrt((pUpLeft.X - pEnd.X) * (pUpLeft.X - pEnd.X) + (pUpLeft.Y - pEnd.Y) * (pUpLeft.Y - pEnd.Y));
+                        var rightLineLength = Math.Sqrt((pUpRight.X - pEnd.X) * (pUpRight.X - pEnd.X) + (pUpRight.Y - pEnd.Y) * (pUpRight.Y - pEnd.Y));
+                        if (rightLineLength<leftLineLength)
+                        {
+                            g.DrawCurve(new Pen(randomColor, 4), new Point[] { pStart, pUpRight, pDownRight, pUp, pEnd });
+                        }
+                        else
+                        {
+                            g.DrawCurve(new Pen(randomColor, 4), new Point[] { pStart, pUpLeft, pDownLeft, pUp, pEnd });
+                        }
+
+                        
+
+                        
+
+                    }
                 }
             }
 
@@ -291,6 +347,11 @@ namespace DialogueEditor
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
         {
 
         }

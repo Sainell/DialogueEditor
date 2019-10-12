@@ -20,7 +20,15 @@ namespace DialogueEditor
         public List<int> rCount = new List<int>();
         public List<Point> startPoint = new List<Point>();
         public Point endPoint;
-        public Point _endPoint;
+        public Point intermediatePointUpLeft;
+        public Point intermediatePointUpRight;
+        public Point intermediatePointDownLeft;
+        public Point intermediatePointDownRight;
+        public Point intermediatePointMiddleLeft;
+        public Point intermediatePointMiddleRight;
+        public Point intermediatePointUp;
+        public Point intermediatePointDown;
+
         NodeUI node;
 
        public NodeContainer(NodeUI node)
@@ -64,14 +72,27 @@ namespace DialogueEditor
             toNodeList.Add(node.textBox15);
             toNodeList.Add(node.textBox16);
 
-            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox6.Location.Y)));
-            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox7.Location.Y)));
-            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox8.Location.Y)));
-            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox15.Location.Y)));
-            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X, node.textBox16.Location.Y)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X + node.textBox6.Width/2 , node.textBox6.Location.Y+ node.textBox6.Height/2)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox7.Location.X + node.textBox7.Width/2, node.textBox7.Location.Y + node.textBox7.Height / 2)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox8.Location.X + node.textBox8.Width/2, node.textBox8.Location.Y + node.textBox8.Height / 2)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox15.Location.X + node.textBox15.Width/2, node.textBox15.Location.Y + node.textBox15.Height / 2)));
+            startPoint.Add(node.PointToScreen(new Point(node.textBox16.Location.X + node.textBox16.Width/2, node.textBox16.Location.Y + node.textBox16.Height / 2)));
 
-            endPoint = node.PointToScreen((new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y)));
-            //_endPoint = node.
+            endPoint = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width /2), node.groupBox1.Location.Y+(node.groupBox1.Height/2)));
+
+
+            intermediatePointUpRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width *5/4), node.groupBox1.Location.Y+(node.groupBox1.Height/2)));
+            intermediatePointUpLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width /2 ), node.groupBox1.Location.Y + (node.groupBox1.Height/2)));
+
+            intermediatePointDownRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width * 5 / 4), node.groupBox1.Location.Y + (node.groupBox1.Height)));
+            intermediatePointDownLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width / 2), node.groupBox1.Location.Y + (node.groupBox1.Height)));
+
+            intermediatePointMiddleRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width * 3 / 2), node.groupBox1.Location.Y+(node.groupBox1.Height*3/4)));
+            intermediatePointMiddleLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width / 2), node.groupBox1.Location.Y+ (node.groupBox1.Height*3/4)));
+
+            intermediatePointUp = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y -10));
+            intermediatePointDown = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y + (node.groupBox1.Height)+10));
+
 
         }
     }
