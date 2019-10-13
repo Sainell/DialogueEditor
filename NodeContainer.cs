@@ -81,14 +81,14 @@ namespace DialogueEditor
             endPoint = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width /2), node.groupBox1.Location.Y+(node.groupBox1.Height/2)));
 
 
-            intermediatePointUpRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width *5/4), node.groupBox1.Location.Y+(node.groupBox1.Height/2)));
-            intermediatePointUpLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width /2 ), node.groupBox1.Location.Y + (node.groupBox1.Height/2)));
+            intermediatePointMiddleRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width *5/4), node.groupBox1.Location.Y+(node.groupBox1.Height/2)));
+            intermediatePointMiddleLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width *1/4 ), node.groupBox1.Location.Y + (node.groupBox1.Height/2)));
 
             intermediatePointDownRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width * 5 / 4), node.groupBox1.Location.Y + (node.groupBox1.Height)));
-            intermediatePointDownLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width / 2), node.groupBox1.Location.Y + (node.groupBox1.Height)));
+            intermediatePointDownLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width *1/4), node.groupBox1.Location.Y + (node.groupBox1.Height)));
 
-            intermediatePointMiddleRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width * 3 / 2), node.groupBox1.Location.Y+(node.groupBox1.Height*3/4)));
-            intermediatePointMiddleLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width / 2), node.groupBox1.Location.Y+ (node.groupBox1.Height*3/4)));
+            intermediatePointUpRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width *5/4), node.groupBox1.Location.Y));
+            intermediatePointUpLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width * 1 / 4), node.groupBox1.Location.Y));
 
             intermediatePointUp = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y -10));
             intermediatePointDown = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y + (node.groupBox1.Height)+10));
