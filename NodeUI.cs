@@ -31,5 +31,10 @@ namespace DialogueEditor
         {
 
         }
+
+        private void textBox10_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -112,7 +112,7 @@ namespace DialogueEditor
                
                 nodeContainerUI.Add(new NodeUI());
                 nodeContainerUI[i].Visible = true;
-                nodeContainerUI[i].Location = new Point((Width/2)-(197/2), 50+(i*400));
+                nodeContainerUI[i].Location = new Point((Width/2)-(197/2), 50+(i*450));
                 nodeContainerUI[i].Name = "nodeUI" + i;
                 nodeContainerUI[i].groupBox1.Text = "Node ID:" + i;
                 Controls.Add(nodeContainerUI[i]);
@@ -216,7 +216,7 @@ namespace DialogueEditor
                 for (int i = 0; i < realCount[j].Count; i++)
                 {
                     var num = realCount[j].ElementAt(i);
-                    nodeContainerUI[num].Location = new Point((Width / (realCount[j].Count + 1)) - (197 / 2) + (Width * i / (realCount[j].Count + 1)), 450 + (j * 400));
+                    nodeContainerUI[num].Location = new Point((Width / (realCount[j].Count + 1)) - (197 / 2) + (Width * i / (realCount[j].Count + 1)), 500 + (j * 450));
                     nodeContainer.RemoveAt(num);
                     nodeContainer.Insert(num, new NodeContainer(nodeContainerUI[num]));
                 }
@@ -225,6 +225,7 @@ namespace DialogueEditor
             Pen pen = new Pen(Color.Red, 3);
             Pen pen2 = new Pen(Color.Blue, 3);
             Pen pen3 = new Pen(Color.DarkOliveGreen, 3);
+            Pen pen4 = new Pen(Color.AliceBlue, 3);
             pen.StartCap = LineCap.RoundAnchor;
             pen.EndCap = LineCap.ArrowAnchor;
 
@@ -237,6 +238,8 @@ namespace DialogueEditor
                     {
 
                         Point pStart = PointToClient(nodeContainer[j].startPoint[i]);
+                        Point pRightStart = PointToClient(nodeContainer[j].startRightPoint[i]);
+                        Point pLeftStart = PointToClient(nodeContainer[j].startLeftPoint[i]);
                         Point pEnd = PointToClient(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint);
 
                         Point pUpRight = PointToClient(nodeContainer[j].intermediatePointUpRight);
@@ -259,6 +262,9 @@ namespace DialogueEditor
                         g.DrawRectangle(pen2, pMiddleLeft.X, pMiddleLeft.Y, 4, 4);
                         g.DrawRectangle(pen, pUp.X, pUp.Y, 4, 4);
 
+                        g.DrawRectangle(pen, pRightStart.X, pRightStart.Y, 4, 4);
+                        g.DrawRectangle(pen, pLeftStart.X, pLeftStart.Y, 4, 4);
+
                         Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
 
                         double LineLength(Point p1, Point p2)
@@ -272,18 +278,24 @@ namespace DialogueEditor
                         if (LineLength(pMiddleRight, pEnd) < LineLength(pMiddleLeft,pEnd))
                         {
                             Point point = new Point();
-                            if (LineLength(pUpRight, pEnd) < LineLength(pDownRight, pEnd)) point = pUpRight;
+                            if (LineLength(pUpRight, pUp) < LineLength(pDownRight, pUp))
+                            {
+                                point = pUpRight;
+                            }
                             else point = pDownRight;
 
-                            g.DrawCurve(new Pen(randomColor, 4), new Point[] { pStart, pMiddleRight, point, pUp, pEnd });
+                            g.DrawCurve(new Pen(randomColor, 4), new Point[] { pRightStart, pMiddleRight, point, pUp, pEnd });
                         }
                         else
                         {
                             Point point = new Point();
-                            if (LineLength(pUpLeft, pEnd) < LineLength(pDownLeft, pEnd)) point = pUpLeft;
+                            if (LineLength(pUpLeft, pUp) < LineLength(pDownLeft, pUp))
+                            {
+                                point = pUpLeft;
+                            }
                             else point = pDownLeft;
 
-                            g.DrawCurve(new Pen(randomColor, 4), new Point[] { pStart, pMiddleLeft, point, pUp, pEnd });
+                            g.DrawCurve(new Pen(randomColor, 4), new Point[] { pLeftStart, pMiddleLeft, point, pUp, pEnd });
                         }
                     }
                 }
