@@ -7,6 +7,8 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Drawing.Drawing2D;
+using System.Text;
+using System.IO;
 
 namespace DialogueEditor
 {
@@ -37,8 +39,9 @@ namespace DialogueEditor
         List<Pen> penList = new List<Pen>();
         private Random rnd = new Random();
         List<Point[]> pointsList = new List<Point[]>();
+        StringBuilder sb = new StringBuilder();
 
-       
+
         public DBConnection(string BDpath)
         {
             DB = new SQLiteConnection("Data Source= " + BDpath);
@@ -51,7 +54,11 @@ namespace DialogueEditor
 
         public void OpenConnection()
         {
-            DB.Open();
+            DB.Open();          
+        }
+        public void CloseConnection()
+        {
+            DB.Close();
         }
 
         public void GetFromDB(int npc_id, Control.ControlCollection controls, Form1 form)
@@ -59,17 +66,14 @@ namespace DialogueEditor
             this.Controls = controls;
             this.npc_id = npc_id;
             this.form = form;
-          //  textBox6.Text = nodeContainer.Count().ToString();
 
-            cmdNPCtext.CommandText = $"select Npc_text from 'dialogue_node' where Npc_id = {npc_id}";
             cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
             
             ClearNodeUIElements();
             CreateNodeCounteinerList();
-            GetAllAnswerNodeDates();
+            GetNodeAllDates();
             GetRealCountNodes();
             RestructingNodes();
-
         }
         public int GetUIElementCount()
         {
@@ -118,14 +122,13 @@ namespace DialogueEditor
             }
         }
 
-        public void GetAllAnswerNodeDates()
+        public void GetNodeAllDates()
         {
             for (int i = 0; i < nodeContainer.Count; i++)
             {
                 cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
                 cmd.CommandText = $"select * from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
-
-
+                cmdNPCtext.CommandText = $"select Npc_text from 'dialogue_node' where Npc_id = {npc_id}";
 
                 foreach (TextBox t in nodeContainer[i].answerBoxList)
                 {
@@ -165,20 +168,69 @@ namespace DialogueEditor
                 for (int j = 0; j < GetNpcTextCount(); j++)
                 {
                     reader.Read();
+                    nodeContainer[i].AnswerIDList[j].Text = reader.GetValue(0).ToString();
                     nodeContainer[i].answerBoxList[j].Text = reader.GetValue(2).ToString();
                     nodeContainer[i].questIdList[j].Text = reader.GetValue(8).ToString();
                     nodeContainer[i].toNodeList[j].Text = reader.GetValue(3).ToString();
                     if (reader.GetValue(6).ToString() == "1") nodeContainer[i].startCheckBoxList[j].Checked = true;
                     if (reader.GetValue(7).ToString() == "1") nodeContainer[i].finishCheckBoxList[j].Checked = true;
                     if ((bool)reader.GetValue(4) == true) nodeContainer[i].exitCheckBoxList[j].Checked = true;
-
-
                 }
-
                 reader.Close();
             }
 
         }
+
+        public void SaveChangesToDB()
+        {
+            for (int i = 0; i < nodeContainer.Count(); i++)
+            {
+
+                var npcText = nodeContainer[i].npcTextBox.Text;
+                cmdNPCtext.CommandText = $"update 'dialogue_node' SET Npc_text ='{npcText}' where Npc_id = {npc_id} and Node_id = {i}";
+                WriteCommand(cmdNPCtext.CommandText);
+                cmdNPCtext.ExecuteNonQuery();
+
+                for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++)
+                {
+                    
+                    var ID = nodeContainer[i].AnswerIDList[j].Text;
+                    if (ID == "") continue;
+                    var answerBoxText = nodeContainer[i].answerBoxList[j].Text;
+                    var questIdText = nodeContainer[i].questIdList[j].Text;
+                    var toNodeText = nodeContainer[i].toNodeList[j].Text;
+                    int startCheckBoxValue;
+                    if (nodeContainer[i].startCheckBoxList[j].Checked == true) {startCheckBoxValue = 1; }
+                    else startCheckBoxValue = 0;
+                    int finishCheckBoxValue;
+                    if (nodeContainer[i].finishCheckBoxList[j].Checked == true) {finishCheckBoxValue = 1; }
+                    else finishCheckBoxValue = 0;
+                    int exitCheckBoxValue;
+                    if (nodeContainer[i].exitCheckBoxList[j].Checked == true) {exitCheckBoxValue = 1; }
+                    else exitCheckBoxValue = 0;
+
+                    cmd.CommandText = $"update 'dialogue_answers' SET Answer_text='{answerBoxText}', To_node ='{toNodeText}', Quest_ID='{questIdText}', End_dialogue='{exitCheckBoxValue}', Start_quest='{startCheckBoxValue}', End_quest='{finishCheckBoxValue}'   where Id = '{ID}'";
+                    WriteCommand(cmd.CommandText);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void WriteCommand(string cmd)
+        {           
+            sb.AppendFormat(cmd + "; "+ "\r\n");
+        }
+        public void CreateDBPatch()
+        {
+            var path = @".\DB_Patches\";
+            var date = DateTime.Now.ToString("yyyyMMdd-HHmm");
+            var dbname = "_world_";
+            var table = "dialogues";
+            var format = ".sql";
+            File.AppendAllText(path+date+dbname+table+format, sb.ToString());
+        }
+
+
 
         public void GetRealCountNodes()
         {
@@ -306,6 +358,7 @@ namespace DialogueEditor
 
         public void DrawLines()
         {
+            
             for (int i = 0; i < pointsList.Count; i++)
             {
                  g.DrawCurve(penList[i], pointsList[i]);

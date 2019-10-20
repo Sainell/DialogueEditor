@@ -21,6 +21,7 @@ namespace DialogueEditor
         public List<Point> startRightPoint = new List<Point>();
         public List<Point> startLeftPoint = new List<Point>();
         public TextBox npcTextBox;
+        public List<Label> AnswerIDList = new List<Label>();
         public Point endPoint;
         public Point intermediatePointUpLeft;
         public Point intermediatePointUpRight;
@@ -39,6 +40,11 @@ namespace DialogueEditor
             this.node = node;
         
             npcTextBox = node.textBox9;
+
+            AnswerIDList.Add(node.label13);
+            AnswerIDList.Add(node.label12);
+            AnswerIDList.Add(node.label11);
+            AnswerIDList.Add(node.label8);
 
             answerBoxList.Add(node.textBox1);
             answerBoxList.Add(node.textBox2);

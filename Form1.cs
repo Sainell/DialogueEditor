@@ -17,7 +17,8 @@ namespace DialogueEditor
         List<int> usedNode = new List<int>();
         private Random rnd = new Random();
         DBConnection DB;
-        Graphics g;
+        OpenFileDialog ofd = new OpenFileDialog();
+        string dbpath;
         Pen pen = new Pen(Color.Red, 3);
         Pen pen2 = new Pen(Color.Blue, 3);
         Pen pen3 = new Pen(Color.DarkOliveGreen, 3);
@@ -30,16 +31,21 @@ namespace DialogueEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DB = new DBConnection(@" E:\Projects\RPG_Van_Helsing\Assets\StreamingAssets\world.bytes");
-            DB.OpenConnection();
-            DB.GetFromDB(npc_id,Controls,this);
-            DB.CreateGraph();
+           
+            if (dbpath != null)
+            {
+                DB = new DBConnection(dbpath);
+                DB.OpenConnection();
+                DB.GetFromDB(npc_id, Controls, this);
+                DB.CreateGraph();
+            }
+            else
+                {
+                    MessageBox.Show("DataBase not selected");
+                }
            
         }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            DB.DrawLines();
-        }
+
         private void textBox7_TextChanged(object sender, EventArgs e)
         {
             npc_id = Convert.ToInt16( textBox7.Text);
@@ -58,5 +64,34 @@ namespace DialogueEditor
             }
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DB.SaveChangesToDB();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+           if (DB!=null) DB.CloseConnection();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DB.CreateDBPatch();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                label2.Text = ofd.FileName;
+                dbpath = ofd.FileName;
+            }
+                
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
