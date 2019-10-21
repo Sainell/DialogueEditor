@@ -227,10 +227,17 @@ namespace DialogueEditor
             var dbname = "_world_";
             var table = "dialogues";
             var format = ".sql";
+
             File.AppendAllText(path+date+dbname+table+format, sb.ToString());
+            MessageBox.Show($"Patch name is:  {date + dbname + table + format}");
         }
 
-
+        public void CreateNewNode(string npc_text)
+        {
+            cmd.CommandText = $"insert into 'dialogue_node' (Npc_id, Node_ID, Npc_text) values ('{npc_id}','{nodeContainer.Count}','{npc_text}') ";
+            WriteCommand(cmd.CommandText);
+            cmd.ExecuteNonQuery();
+        }
 
         public void GetRealCountNodes()
         {
@@ -317,7 +324,7 @@ namespace DialogueEditor
                         //g.DrawRectangle(pen2, pDownLeft.X, pDownLeft.Y, 4, 4);
                         //g.DrawRectangle(pen2, pMiddleRight.X, pMiddleRight.Y, 4, 4);
                         //g.DrawRectangle(pen2, pMiddleLeft.X, pMiddleLeft.Y, 4, 4);
-                        // g.DrawRectangle(pen, pUp.X, pUp.Y, 4, 4);
+                        //g.DrawRectangle(pen, pUp.X, pUp.Y, 4, 4);
                         //g.DrawRectangle(pen, pRightStart.X, pRightStart.Y, 4, 4);
                         //g.DrawRectangle(pen, pLeftStart.X, pLeftStart.Y, 4, 4);
 

@@ -36,8 +36,15 @@ namespace DialogueEditor
             {
                 DB = new DBConnection(dbpath);
                 DB.OpenConnection();
-                DB.GetFromDB(npc_id, Controls, this);
-                DB.CreateGraph();
+                if (npc_id != 0)
+                {
+                    DB.GetFromDB(npc_id, Controls, this);
+                    DB.CreateGraph();
+                }
+                else
+                {
+                    MessageBox.Show("NPC ID not selected");
+                }
             }
             else
                 {
@@ -91,7 +98,12 @@ namespace DialogueEditor
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
+           
+        }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DB.CreateNewNode("test444");
         }
     }
 }

@@ -36,6 +36,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -67,7 +68,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(222, 4);
+            this.button2.Location = new System.Drawing.Point(204, 4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(87, 23);
             this.button2.TabIndex = 11;
@@ -77,7 +78,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(334, 4);
+            this.button3.Location = new System.Drawing.Point(297, 4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(99, 23);
             this.button3.TabIndex = 12;
@@ -100,13 +101,23 @@
             this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label2.Location = new System.Drawing.Point(439, 11);
+            this.label2.Location = new System.Drawing.Point(583, 11);
             this.label2.Name = "label2";
             this.label2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label2.Size = new System.Drawing.Size(527, 13);
+            this.label2.Size = new System.Drawing.Size(383, 13);
             this.label2.TabIndex = 14;
             this.label2.Text = "db folder";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(402, 4);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(99, 23);
+            this.button5.TabIndex = 15;
+            this.button5.Text = "Create new Node";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Form1
             // 
@@ -116,6 +127,7 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1094, 566);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -148,6 +160,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button5;
     }
 }
 
