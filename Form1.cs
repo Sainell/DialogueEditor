@@ -16,7 +16,7 @@ namespace DialogueEditor
         public List<List<int>> realCount = new List<List<int>>();
         List<int> usedNode = new List<int>();
         private Random rnd = new Random();
-        DBConnection DB;
+        public DBConnection DB;
         OpenFileDialog ofd = new OpenFileDialog();
         string dbpath;
         Pen pen = new Pen(Color.Red, 3);

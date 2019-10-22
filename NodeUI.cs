@@ -7,39 +7,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SQLite;
 
 namespace DialogueEditor
 {
     public partial class NodeUI : UserControl
     {
+        public List<AnswerUI> answerUIList = new List<AnswerUI>();
+        public int count;
+        public DBConnection DB;
+        public int node_ID;
+
+        public NodeUI(int count, int node_ID, DBConnection DB)
+        {
+            InitializeComponent();
+
+            this.count = count;
+            this.node_ID = node_ID;
+            this.DB = DB;
+  
+        }
+        
+        public void CreateAnswers()
+        {
+            for (int i = 0; i < count; i++)
+            {
+                answerUIList.Add(new AnswerUI());
+                answerUIList[i].Parent = this.groupBox1;
+                answerUIList[i].Visible = true;
+                answerUIList[i].Location = new Point(textBox9.Location.X,textBox9.Location.Y+50+(i*100));
+                answerUIList[i].Name = "AnswerUI" + i;
+                answerUIList[i].label13.Text = i.ToString();
+            }
+        }
+
         public NodeUI()
         {
             InitializeComponent();
         }
 
-        private void textBox9_TextChanged(object sender, EventArgs e)
+        private void NodeUI_Load(object sender, EventArgs e)
         {
-
+            CreateAnswers();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox10_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-
+           DB.CreateNewAnswer(this.node_ID);
         }
     }
 }

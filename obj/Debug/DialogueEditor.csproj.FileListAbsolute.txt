@@ -12,3 +12,4 @@ E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.Data.SQLite.dll
 E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.Data.SQLite.dll.config
 E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.csproj.CopyComplete
 E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.NodeUI.resources
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.AnswerUI.resources

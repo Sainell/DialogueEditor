@@ -12,13 +12,13 @@ using System.IO;
 
 namespace DialogueEditor
 {
-    class DBConnection
+    public class DBConnection
     {
-        private SQLiteConnection db;
         SQLiteCommand cmd;
         SQLiteCommand cmdCount;
         SQLiteCommand cmdNPCtext;
         SQLiteCommand cmdUIcount;
+        SQLiteCommand cmdUIAnswerCount;
         public SQLiteConnection DB { get; private set; }
         private List<NodeUI> nodeContainerUI = new List<NodeUI>();
         private List<NodeContainer> nodeContainer = new List<NodeContainer>();
@@ -28,7 +28,7 @@ namespace DialogueEditor
         int countResult;
         private int npc_id;
         Control.ControlCollection Controls;
-        Form1 form;
+        public Form1 form;
         List<int> usedNode = new List<int>();
         public List<List<int>> realCount = new List<List<int>>();
         Graphics g;
@@ -50,6 +50,7 @@ namespace DialogueEditor
             cmdUIcount = DB.CreateCommand();
             cmdCount = DB.CreateCommand();
             cmdUIcount = DB.CreateCommand();
+            cmdUIAnswerCount = DB.CreateCommand();
         }
 
         public void OpenConnection()
@@ -111,8 +112,10 @@ namespace DialogueEditor
         {
             for (int i = 0; i < GetUIElementCount(); i++)
             {
+                cmdUIAnswerCount.CommandText = $"select count(*) from 'dialogue_answers' where Npc_id ={npc_id} and Node_ID = {i}";
+                var UIanswerCountResult = Convert.ToInt16(cmdUIAnswerCount.ExecuteScalar());
 
-                nodeContainerUI.Add(new NodeUI());
+                nodeContainerUI.Add(new NodeUI(UIanswerCountResult,i,form.DB));
                 nodeContainerUI[i].Visible = true;
                 nodeContainerUI[i].Location = new Point((form.Width / 2) - (197 / 2), 50 + (i * 450));
                 nodeContainerUI[i].Name = "nodeUI" + i;
@@ -239,6 +242,13 @@ namespace DialogueEditor
             cmd.ExecuteNonQuery();
         }
 
+        public void CreateNewAnswer(int node_ID)
+        {
+            cmd.CommandText = $"insert into 'dialogue_answers' (Npc_id, Node_ID) values ('{npc_id}','{node_ID}')";
+            WriteCommand(cmd.CommandText);
+            cmd.ExecuteNonQuery();
+        }
+
         public void GetRealCountNodes()
         {
             usedNode.Clear();
@@ -292,8 +302,6 @@ namespace DialogueEditor
                 {
                     if (nodeContainer[j].toNodeList[i].Text != "" && nodeContainer[j].toNodeList[i].Text != "0")
                     {
-
-                        Point pStart = form.PointToClient(new Point(nodeContainer[j].startPoint[i].X, nodeContainer[j].startPoint[i].Y - form.VerticalScroll.Value));
 
                         Point pRightStart = form.PointToClient(new Point(nodeContainer[j].startRightPoint[i].X, nodeContainer[j].startRightPoint[i].Y - form.VerticalScroll.Value));
                         Point pLeftStart = form.PointToClient(new Point(nodeContainer[j].startLeftPoint[i].X, nodeContainer[j].startLeftPoint[i].Y - form.VerticalScroll.Value));

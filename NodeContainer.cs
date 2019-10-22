@@ -12,16 +12,15 @@ namespace DialogueEditor
     {
         public List<TextBox> answerBoxList = new List<TextBox>();
         public List<TextBox> questIdList = new List<TextBox>();
+        public List<TextBox> toNodeList = new List<TextBox>();
         public List<CheckBox> startCheckBoxList = new List<CheckBox>();
         public List<CheckBox> finishCheckBoxList = new List<CheckBox>();
         public List<CheckBox> exitCheckBoxList = new List<CheckBox>();
-        public List<TextBox> toNodeList = new List<TextBox>();
-        public List<int> rCount = new List<int>();
-        public List<Point> startPoint = new List<Point>();
         public List<Point> startRightPoint = new List<Point>();
         public List<Point> startLeftPoint = new List<Point>();
-        public TextBox npcTextBox;
         public List<Label> AnswerIDList = new List<Label>();
+        public List<int> rCount = new List<int>();
+        public TextBox npcTextBox;
         public Point endPoint;
         public Point intermediatePointUpLeft;
         public Point intermediatePointUpRight;
@@ -31,65 +30,25 @@ namespace DialogueEditor
         public Point intermediatePointMiddleRight;
         public Point intermediatePointUp;
         public Point intermediatePointDown;
-
-
         NodeUI node;
 
        public NodeContainer(NodeUI node)
         {
             this.node = node;
-        
             npcTextBox = node.textBox9;
 
-            AnswerIDList.Add(node.label13);
-            AnswerIDList.Add(node.label12);
-            AnswerIDList.Add(node.label11);
-            AnswerIDList.Add(node.label8);
-
-            answerBoxList.Add(node.textBox1);
-            answerBoxList.Add(node.textBox2);
-            answerBoxList.Add(node.textBox3);
-            answerBoxList.Add(node.textBox4);
-
-            questIdList.Add(node.textBox10);
-            questIdList.Add(node.textBox11);
-            questIdList.Add(node.textBox12);
-            questIdList.Add(node.textBox13);
-
-            startCheckBoxList.Add(node.checkBox6);
-            startCheckBoxList.Add(node.checkBox9);
-            startCheckBoxList.Add(node.checkBox11);
-            startCheckBoxList.Add(node.checkBox13);
-
-            finishCheckBoxList.Add(node.checkBox7);
-            finishCheckBoxList.Add(node.checkBox8);
-            finishCheckBoxList.Add(node.checkBox10);
-            finishCheckBoxList.Add(node.checkBox12);
-
-            exitCheckBoxList.Add(node.checkBox1);
-            exitCheckBoxList.Add(node.checkBox2);
-            exitCheckBoxList.Add(node.checkBox3);
-            exitCheckBoxList.Add(node.checkBox4);
-
-            toNodeList.Add(node.textBox6);
-            toNodeList.Add(node.textBox7);
-            toNodeList.Add(node.textBox8);
-            toNodeList.Add(node.textBox15);
-
-            startPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X + node.textBox6.Width / 2, node.textBox6.Location.Y + node.textBox6.Height / 2)));
-            startPoint.Add(node.PointToScreen(new Point(node.textBox7.Location.X + node.textBox7.Width / 2, node.textBox7.Location.Y + node.textBox7.Height / 2)));
-            startPoint.Add(node.PointToScreen(new Point(node.textBox8.Location.X + node.textBox8.Width / 2, node.textBox8.Location.Y + node.textBox8.Height / 2)));
-            startPoint.Add(node.PointToScreen(new Point(node.textBox15.Location.X + node.textBox15.Width / 2, node.textBox15.Location.Y + node.textBox15.Height / 2)));
-
-            startRightPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X + node.textBox6.Width + 7, node.textBox6.Location.Y + node.textBox6.Height / 2)));
-            startRightPoint.Add(node.PointToScreen(new Point(node.textBox7.Location.X + node.textBox7.Width + 7, node.textBox7.Location.Y + node.textBox7.Height / 2)));
-            startRightPoint.Add(node.PointToScreen(new Point(node.textBox8.Location.X + node.textBox8.Width + 7, node.textBox8.Location.Y + node.textBox8.Height / 2)));
-            startRightPoint.Add(node.PointToScreen(new Point(node.textBox15.Location.X + node.textBox15.Width + 7, node.textBox15.Location.Y + node.textBox15.Height / 2)));
-
-            startLeftPoint.Add(node.PointToScreen(new Point(node.textBox6.Location.X - 157, node.textBox6.Location.Y + node.textBox6.Height / 2)));
-            startLeftPoint.Add(node.PointToScreen(new Point(node.textBox7.Location.X - 157, node.textBox7.Location.Y + node.textBox7.Height / 2)));
-            startLeftPoint.Add(node.PointToScreen(new Point(node.textBox8.Location.X - 157, node.textBox8.Location.Y + node.textBox8.Height / 2)));
-            startLeftPoint.Add(node.PointToScreen(new Point(node.textBox15.Location.X - 157, node.textBox15.Location.Y + node.textBox15.Height / 2)));
+            for (int i = 0; i < node.count; i++)
+            {
+                AnswerIDList.Add(node.answerUIList[i].label13);
+                answerBoxList.Add(node.answerUIList[i].textBox1);
+                questIdList.Add(node.answerUIList[i].textBox10);
+                startCheckBoxList.Add(node.answerUIList[i].checkBox6);
+                finishCheckBoxList.Add(node.answerUIList[i].checkBox7);
+                exitCheckBoxList.Add(node.answerUIList[i].checkBox1);
+                toNodeList.Add(node.answerUIList[i].textBox6);
+                startRightPoint.Add(node.answerUIList[i].PointToScreen(new Point(node.answerUIList[i].textBox6.Location.X + node.answerUIList[i].textBox6.Width + 7, node.answerUIList[i].textBox6.Location.Y + node.answerUIList[i].textBox6.Height / 2)));
+                startLeftPoint.Add(node.answerUIList[i].PointToScreen(new Point(node.answerUIList[i].textBox6.Location.X - 157, node.answerUIList[i].textBox6.Location.Y + node.answerUIList[i].textBox6.Height / 2)));
+            }
 
             endPoint = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y + (node.groupBox1.Height / 2)));
 
