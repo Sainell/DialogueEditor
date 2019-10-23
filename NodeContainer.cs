@@ -31,11 +31,13 @@ namespace DialogueEditor
         public Point intermediatePointUp;
         public Point intermediatePointDown;
         NodeUI node;
+        public int nodeHeight;
 
        public NodeContainer(NodeUI node)
         {
             this.node = node;
             npcTextBox = node.textBox9;
+            nodeHeight = node.Height;
 
             for (int i = 0; i < node.count; i++)
             {

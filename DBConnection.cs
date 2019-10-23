@@ -280,7 +280,7 @@ namespace DialogueEditor
                 for (int i = 0; i < realCount[j].Count; i++)
                 {
                     var num = realCount[j].ElementAt(i);
-                    nodeContainerUI[num].Location = new Point((form.Width / (realCount[j].Count + 1)) - (197 / 2) + (form.Width * i / (realCount[j].Count + 1)), 500 + (j * 450));
+                    nodeContainerUI[num].Location = new Point((form.Width / (realCount[j].Count + 1)) - (197 / 2) + (form.Width * i / (realCount[j].Count + 1)), 700 + (j * 450));
                     nodeContainer.RemoveAt(num);
                     nodeContainer.Insert(num, new NodeContainer(nodeContainerUI[num]));
                 }

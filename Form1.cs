@@ -60,10 +60,21 @@ namespace DialogueEditor
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(label2);
+            panel1.Controls.Add(textBox7);
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(button2);
+            panel1.Controls.Add(button3);
+            panel1.Controls.Add(button4);
+            panel1.Controls.Add(button5);
 
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+          //  foreach(Control c in panel1.Controls)
+          //  c.Location = new Point(c.Location.X, c.Location.Y - this.VerticalScroll.Value);
+
             if (DB != null)
             {
                 DB.DrawPointsAndLines();
@@ -103,7 +114,22 @@ namespace DialogueEditor
 
         private void button5_Click(object sender, EventArgs e)
         {
-            DB.CreateNewNode("test444");
+            DB.CreateNewNode("npc text");
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel1_Scroll(object sender, ScrollEventArgs e)
+        {
+
+        }
+
+        private void Form1_Scroll(object sender, ScrollEventArgs e)
+        {
+
         }
     }
 }
