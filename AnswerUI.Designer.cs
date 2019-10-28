@@ -37,6 +37,7 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label13
@@ -125,10 +126,25 @@
             this.textBox1.Size = new System.Drawing.Size(153, 36);
             this.textBox1.TabIndex = 44;
             // 
+            // button1
+            // 
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.ForeColor = System.Drawing.Color.Red;
+            this.button1.Location = new System.Drawing.Point(169, 55);
+            this.button1.Margin = new System.Windows.Forms.Padding(0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(13, 13);
+            this.button1.TabIndex = 53;
+            this.button1.Text = "X";
+            this.button1.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // AnswerUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.checkBox7);
             this.Controls.Add(this.checkBox6);
@@ -139,7 +155,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox1);
             this.Name = "AnswerUI";
-            this.Size = new System.Drawing.Size(200, 83);
+            this.Size = new System.Drawing.Size(194, 83);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,5 +172,6 @@
         public System.Windows.Forms.CheckBox checkBox1;
         public System.Windows.Forms.Label label4;
         public System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button1;
     }
 }

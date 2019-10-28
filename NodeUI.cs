@@ -17,14 +17,16 @@ namespace DialogueEditor
         public int count;
         public DBConnection DB;
         public int node_ID;
+        public Form1 form;
 
-        public NodeUI(int count, int node_ID, DBConnection DB)
+        public NodeUI(int count, int node_ID, DBConnection DB,Form1 form)
         {
             InitializeComponent();
 
             this.count = count;
             this.node_ID = node_ID;
             this.DB = DB;
+            this.form = form;
   
         }
         
@@ -54,6 +56,13 @@ namespace DialogueEditor
         private void button1_Click(object sender, EventArgs e)
         {
            DB.CreateNewAnswer(this.node_ID);
+           form.DBUpdate();
+            
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

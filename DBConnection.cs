@@ -55,7 +55,7 @@ namespace DialogueEditor
 
         public void OpenConnection()
         {
-            DB.Open();          
+            DB.Open();
         }
         public void CloseConnection()
         {
@@ -69,7 +69,7 @@ namespace DialogueEditor
             this.form = form;
 
             cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
-            
+
             ClearNodeUIElements();
             CreateNodeCounteinerList();
             GetNodeAllDates();
@@ -81,7 +81,7 @@ namespace DialogueEditor
             var UIcountResult = Convert.ToInt16(cmdUIcount.ExecuteScalar());
             return UIcountResult;
         }
-        
+
         public int GetNpcTextCount()
         {
             countResult = Convert.ToInt16(cmdCount.ExecuteScalar());
@@ -115,7 +115,7 @@ namespace DialogueEditor
                 cmdUIAnswerCount.CommandText = $"select count(*) from 'dialogue_answers' where Npc_id ={npc_id} and Node_ID = {i}";
                 var UIanswerCountResult = Convert.ToInt16(cmdUIAnswerCount.ExecuteScalar());
 
-                nodeContainerUI.Add(new NodeUI(UIanswerCountResult,i,form.DB));
+                nodeContainerUI.Add(new NodeUI(UIanswerCountResult, i, form.DB, form));
                 nodeContainerUI[i].Visible = true;
                 nodeContainerUI[i].Location = new Point((form.Width / 2) - (197 / 2), 50 + (i * 450));
                 nodeContainerUI[i].Name = "nodeUI" + i;
@@ -196,20 +196,20 @@ namespace DialogueEditor
 
                 for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++)
                 {
-                    
+
                     var ID = nodeContainer[i].AnswerIDList[j].Text;
                     if (ID == "") continue;
                     var answerBoxText = nodeContainer[i].answerBoxList[j].Text;
                     var questIdText = nodeContainer[i].questIdList[j].Text;
                     var toNodeText = nodeContainer[i].toNodeList[j].Text;
                     int startCheckBoxValue;
-                    if (nodeContainer[i].startCheckBoxList[j].Checked == true) {startCheckBoxValue = 1; }
+                    if (nodeContainer[i].startCheckBoxList[j].Checked == true) { startCheckBoxValue = 1; }
                     else startCheckBoxValue = 0;
                     int finishCheckBoxValue;
-                    if (nodeContainer[i].finishCheckBoxList[j].Checked == true) {finishCheckBoxValue = 1; }
+                    if (nodeContainer[i].finishCheckBoxList[j].Checked == true) { finishCheckBoxValue = 1; }
                     else finishCheckBoxValue = 0;
                     int exitCheckBoxValue;
-                    if (nodeContainer[i].exitCheckBoxList[j].Checked == true) {exitCheckBoxValue = 1; }
+                    if (nodeContainer[i].exitCheckBoxList[j].Checked == true) { exitCheckBoxValue = 1; }
                     else exitCheckBoxValue = 0;
 
                     cmd.CommandText = $"update 'dialogue_answers' SET Answer_text='{answerBoxText}', To_node ='{toNodeText}', Quest_ID='{questIdText}', End_dialogue='{exitCheckBoxValue}', Start_quest='{startCheckBoxValue}', End_quest='{finishCheckBoxValue}'   where Id = '{ID}'";
@@ -220,18 +220,19 @@ namespace DialogueEditor
         }
 
         public void WriteCommand(string cmd)
-        {           
-            sb.AppendFormat(cmd + "; "+ "\r\n");
+        {
+            sb.AppendFormat(cmd + "; " + "\r\n");
         }
         public void CreateDBPatch()
         {
+            SaveChangesToDB();
             var path = @".\DB_Patches\";
             var date = DateTime.Now.ToString("yyyyMMdd-HHmm");
             var dbname = "_world_";
             var table = "dialogues";
             var format = ".sql";
 
-            File.AppendAllText(path+date+dbname+table+format, sb.ToString());
+            File.AppendAllText(path + date + dbname + table + format, sb.ToString());
             MessageBox.Show($"Patch name is:  {date + dbname + table + format}");
         }
 
@@ -241,10 +242,23 @@ namespace DialogueEditor
             WriteCommand(cmd.CommandText);
             cmd.ExecuteNonQuery();
         }
+        public void DeleteNode(int node_id)
+        {
+            cmd.CommandText = $"delete from 'dialogue_node' where Npc_id={npc_id} and where Node_ID={node_id}";
+            WriteCommand(cmd.CommandText);
+            cmd.ExecuteNonQuery();
+        }
 
         public void CreateNewAnswer(int node_ID)
         {
-            cmd.CommandText = $"insert into 'dialogue_answers' (Npc_id, Node_ID) values ('{npc_id}','{node_ID}')";
+            cmd.CommandText = $"insert into 'dialogue_answers' (Npc_id, Node_ID, Answer_text, To_node, End_dialogue) values ('{npc_id}','{node_ID}','answer','0','0')";
+            WriteCommand(cmd.CommandText);
+            cmd.ExecuteNonQuery();
+        }
+
+        public void DeleteAnswer(int answer_id)
+        {
+            cmd.CommandText = $"delete from 'dialogue_answers' where Id ={answer_id}";
             WriteCommand(cmd.CommandText);
             cmd.ExecuteNonQuery();
         }

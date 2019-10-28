@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace DialogueEditor
@@ -23,6 +24,8 @@ namespace DialogueEditor
         Pen pen2 = new Pen(Color.Blue, 3);
         Pen pen3 = new Pen(Color.DarkOliveGreen, 3);
         Pen pen4 = new Pen(Color.AliceBlue, 3);
+        string copyDbDirectory = @".\_tempWorld.bytes";
+        bool isClearTempDB = false;
 
         public Form1()
         {
@@ -31,26 +34,7 @@ namespace DialogueEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
-           
-            if (dbpath != null)
-            {
-                DB = new DBConnection(dbpath);
-                DB.OpenConnection();
-                if (npc_id != 0)
-                {
-                    DB.GetFromDB(npc_id, Controls, this);
-                    DB.CreateGraph();
-                }
-                else
-                {
-                    MessageBox.Show("NPC ID not selected");
-                }
-            }
-            else
-                {
-                    MessageBox.Show("DataBase not selected");
-                }
-           
+            DBUpdate(); 
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
@@ -101,8 +85,23 @@ namespace DialogueEditor
         {
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                label2.Text = ofd.FileName;
-                dbpath = ofd.FileName;
+                
+                try
+                {
+                    FileInfo fn = new FileInfo(ofd.FileName);
+                    fn.CopyTo(copyDbDirectory,isClearTempDB);
+                    MessageBox.Show($"Database was successfully copied to: {copyDbDirectory}");
+                }
+                catch
+                {
+                    MessageBox.Show("DataBase copy already exist");
+                }
+                finally
+                {
+                    dbpath = copyDbDirectory;
+                    label2.Text = copyDbDirectory;
+                    
+                }
             }
                 
         }
@@ -115,6 +114,7 @@ namespace DialogueEditor
         private void button5_Click(object sender, EventArgs e)
         {
             DB.CreateNewNode("npc text");
+            DBUpdate();
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -130,6 +130,41 @@ namespace DialogueEditor
         private void Form1_Scroll(object sender, ScrollEventArgs e)
         {
 
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                isClearTempDB = true;
+            }
+            else isClearTempDB = false;
+        }
+        public void DBUpdate()
+        {
+            if (dbpath != null)
+            {
+                DB = new DBConnection(dbpath);
+                DB.OpenConnection();
+                if (npc_id != 0)
+                {
+                    DB.GetFromDB(npc_id, Controls, this);
+                    DB.CreateGraph();
+                }
+                else
+                {
+                    MessageBox.Show("NPC ID not selected");
+                }
+            }
+            else
+            {
+                MessageBox.Show("DataBase not selected");
+            }
         }
     }
 }
