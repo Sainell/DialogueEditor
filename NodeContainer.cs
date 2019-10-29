@@ -63,7 +63,7 @@ namespace DialogueEditor
             intermediatePointUpRight = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width * 5 / 4), node.groupBox1.Location.Y));
             intermediatePointUpLeft = node.PointToScreen(new Point(node.groupBox1.Location.X - (node.groupBox1.Width * 1 / 4), node.groupBox1.Location.Y));
 
-            intermediatePointUp = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y - 10));
+            intermediatePointUp = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y - 5));
             intermediatePointDown = node.PointToScreen(new Point(node.groupBox1.Location.X + (node.groupBox1.Width / 2), node.groupBox1.Location.Y + (node.groupBox1.Height) + 10));
 
         }

@@ -34,7 +34,7 @@ namespace DialogueEditor
         {
             for (int i = 0; i < count; i++)
             {
-                answerUIList.Add(new AnswerUI());
+                answerUIList.Add(new AnswerUI(this));
                 answerUIList[i].Parent = this.groupBox1;
                 answerUIList[i].Visible = true;
                 answerUIList[i].Location = new Point(textBox9.Location.X,textBox9.Location.Y+50+(i*100));
@@ -62,7 +62,14 @@ namespace DialogueEditor
 
         private void button2_Click(object sender, EventArgs e)
         {
+            DB.DeleteNode(node_ID);
+            form.DBUpdate();
+        }
 
+        public void AnswerDelete(int answerNumber)
+        {
+            DB.DeleteAnswer(answerNumber);
+            form.DBUpdate();
         }
     }
 }

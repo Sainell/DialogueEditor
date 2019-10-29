@@ -12,9 +12,23 @@ namespace DialogueEditor
 {
     public partial class AnswerUI : UserControl
     {
-        public AnswerUI()
+
+        NodeUI node;
+        string answerId;
+        public AnswerUI(NodeUI node)
         {
             InitializeComponent();
+            this.node = node;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            node.AnswerDelete(Convert.ToInt16(answerId));
+        }
+
+        private void label13_TextChanged(object sender, EventArgs e)
+        {
+            answerId = label13.Text;
         }
     }
 }

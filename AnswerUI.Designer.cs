@@ -48,6 +48,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(0, 13);
             this.label13.TabIndex = 52;
+            this.label13.TextChanged += new System.EventHandler(this.label13_TextChanged);
             // 
             // checkBox7
             // 
@@ -89,7 +90,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(151, 1);
+            this.label1.Location = new System.Drawing.Point(133, 1);
             this.label1.Name = "label1";
             this.label1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label1.Size = new System.Drawing.Size(45, 13);
@@ -117,6 +118,7 @@
             this.label4.Size = new System.Drawing.Size(62, 13);
             this.label4.TabIndex = 45;
             this.label4.Text = "Answer ID: ";
+            this.label4.TextChanged += new System.EventHandler(this.button1_Click);
             // 
             // textBox1
             // 
@@ -131,7 +133,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 3.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.ForeColor = System.Drawing.Color.Red;
-            this.button1.Location = new System.Drawing.Point(169, 55);
+            this.button1.Location = new System.Drawing.Point(181, 0);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(13, 13);
@@ -139,6 +141,7 @@
             this.button1.Text = "X";
             this.button1.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // AnswerUI
             // 

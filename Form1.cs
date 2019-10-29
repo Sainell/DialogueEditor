@@ -166,5 +166,10 @@ namespace DialogueEditor
                 MessageBox.Show("DataBase not selected");
             }
         }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            DBUpdate();
+        }
     }
 }
