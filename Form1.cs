@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace DialogueEditor
@@ -26,6 +27,7 @@ namespace DialogueEditor
         Pen pen4 = new Pen(Color.AliceBlue, 3);
         string copyDbDirectory = @".\_tempWorld.bytes";
         bool isClearTempDB = false;
+        public StringBuilder sb = new StringBuilder();
 
         public Form1()
         {
@@ -56,13 +58,10 @@ namespace DialogueEditor
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-          //  foreach(Control c in panel1.Controls)
-          //  c.Location = new Point(c.Location.X, c.Location.Y - this.VerticalScroll.Value);
-
             if (DB != null)
             {
-                DB.DrawPointsAndLines();
-                DB.DrawLines();
+                    DB.DrawPointsAndLines();
+                    DB.DrawLines();
             }
         }
 
@@ -102,13 +101,7 @@ namespace DialogueEditor
                     label2.Text = copyDbDirectory;
                     
                 }
-            }
-                
-        }
-
-        private void Form1_Load_1(object sender, EventArgs e)
-        {
-           
+            }                
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -117,24 +110,10 @@ namespace DialogueEditor
             DBUpdate();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel1_Scroll(object sender, ScrollEventArgs e)
-        {
-
-        }
-
         private void Form1_Scroll(object sender, ScrollEventArgs e)
         {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
+            //foreach(Control c in panel1.Controls)
+           //panel1.Location = new Point(panel1.Location.X, panel1.Location.Y + VerticalScroll.Value     
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -145,6 +124,15 @@ namespace DialogueEditor
             }
             else isClearTempDB = false;
         }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            if (dbpath != null)
+            {
+                DBUpdate();
+            }
+        }
+
         public void DBUpdate()
         {
             if (dbpath != null)
@@ -165,11 +153,6 @@ namespace DialogueEditor
             {
                 MessageBox.Show("DataBase not selected");
             }
-        }
-
-        private void Form1_ResizeEnd(object sender, EventArgs e)
-        {
-            DBUpdate();
         }
     }
 }

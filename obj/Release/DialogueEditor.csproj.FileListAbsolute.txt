@@ -1,0 +1,13 @@
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.AnswerUI.resources
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.Form1.resources
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.NodeUI.resources
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.Properties.Resources.resources
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.csproj.GenerateResource.cache
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.csproj.CoreCompileInputs.cache
+E:\Projects\DialogueEditor\DialogueEditor\bin\Release\DialogueEditor.exe.config
+E:\Projects\DialogueEditor\DialogueEditor\bin\Release\DialogueEditor.exe
+E:\Projects\DialogueEditor\DialogueEditor\bin\Release\DialogueEditor.pdb
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.csprojAssemblyReference.cache
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.csproj.CopyComplete
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.exe
+E:\Projects\DialogueEditor\DialogueEditor\obj\Release\DialogueEditor.pdb

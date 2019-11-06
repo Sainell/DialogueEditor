@@ -39,7 +39,9 @@ namespace DialogueEditor
         List<Pen> penList = new List<Pen>();
         private Random rnd = new Random();
         List<Point[]> pointsList = new List<Point[]>();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb;
+        Point try_pEnd;
+        Point try_pUp;
 
 
         public DBConnection(string BDpath)
@@ -67,6 +69,7 @@ namespace DialogueEditor
             this.Controls = controls;
             this.npc_id = npc_id;
             this.form = form;
+            this.sb = form.sb;
 
             cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
 
@@ -201,7 +204,16 @@ namespace DialogueEditor
                     if (ID == "") continue;
                     var answerBoxText = nodeContainer[i].answerBoxList[j].Text;
                     var questIdText = nodeContainer[i].questIdList[j].Text;
-                    var toNodeText = nodeContainer[i].toNodeList[j].Text;
+                    string toNodeText;
+                    if (Convert.ToInt16(nodeContainer[i].toNodeList[j].Text) >= nodeContainer.Count)
+                    {
+                        MessageBox.Show($"ERROR SAVE: Node '{nodeContainer[i].toNodeList[j].Text}' does not exist");
+                        toNodeText = 0.ToString();
+                    }
+                    else
+                    {
+                       toNodeText = nodeContainer[i].toNodeList[j].Text;
+                    }
                     int startCheckBoxValue;
                     if (nodeContainer[i].startCheckBoxList[j].Checked == true) { startCheckBoxValue = 1; }
                     else startCheckBoxValue = 0;
@@ -225,7 +237,6 @@ namespace DialogueEditor
         }
         public void CreateDBPatch()
         {
-            SaveChangesToDB();
             var path = @".\DB_Patches\";
             var date = DateTime.Now.ToString("yyyyMMdd-HHmm");
             var dbname = "_world_";
@@ -302,7 +313,7 @@ namespace DialogueEditor
                     }
                     catch
                     {
-                        MessageBox.Show($@"ERROR: 'to_node' is not correct");
+                        MessageBox.Show($@"ERROR: 'Node' is not correct");
                     }
 
                 }
@@ -322,17 +333,28 @@ namespace DialogueEditor
                 {
                     if (nodeContainer[j].toNodeList[i].Text != "" && nodeContainer[j].toNodeList[i].Text != "0")
                     {
+                        try
+                        {
+                            try_pEnd = form.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.X - form.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.Y - form.VerticalScroll.Value));
+                            try_pUp = form.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.X - form.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.Y - form.VerticalScroll.Value));
 
-                        Point pRightStart = form.PointToClient(new Point(nodeContainer[j].startRightPoint[i].X-form.HorizontalScroll.Value, nodeContainer[j].startRightPoint[i].Y - form.VerticalScroll.Value));
-                        Point pLeftStart = form.PointToClient(new Point(nodeContainer[j].startLeftPoint[i].X - form.HorizontalScroll.Value, nodeContainer[j].startLeftPoint[i].Y - form.VerticalScroll.Value));
-                        Point pEnd = form.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.X - form.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.Y - form.VerticalScroll.Value));
-                        Point pUpRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointUpRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpRight.Y - form.VerticalScroll.Value));
-                        Point pUpLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointUpLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpLeft.Y - form.VerticalScroll.Value));
-                        Point pDownRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointDownRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointDownRight.Y - form.VerticalScroll.Value));
-                        Point pDownLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointDownLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointDownLeft.Y - form.VerticalScroll.Value));
-                        Point pMiddleRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleRight.Y - form.VerticalScroll.Value));
-                        Point pMiddleLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleLeft.Y - form.VerticalScroll.Value));
-                        Point pUp = form.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.X - form.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.Y - form.VerticalScroll.Value));
+                        }
+                        catch
+                        {                           
+                            MessageBox.Show($"ERROR DRAW: Node '{nodeContainer[j].toNodeList[i].Text}' does not exits. Reset to 'Null'");
+                            nodeContainer[j].toNodeList[i].Text = 0.ToString();
+                        }
+                        finally {
+                            Point pEnd = try_pEnd;
+                            Point pUp = try_pUp;
+                            Point pRightStart = form.PointToClient(new Point(nodeContainer[j].startRightPoint[i].X-form.HorizontalScroll.Value, nodeContainer[j].startRightPoint[i].Y - form.VerticalScroll.Value));
+                            Point pLeftStart = form.PointToClient(new Point(nodeContainer[j].startLeftPoint[i].X - form.HorizontalScroll.Value, nodeContainer[j].startLeftPoint[i].Y - form.VerticalScroll.Value));
+                            Point pUpRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointUpRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpRight.Y - form.VerticalScroll.Value));
+                            Point pUpLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointUpLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpLeft.Y - form.VerticalScroll.Value));
+                            Point pDownRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointDownRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointDownRight.Y - form.VerticalScroll.Value));
+                            Point pDownLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointDownLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointDownLeft.Y - form.VerticalScroll.Value));
+                            Point pMiddleRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleRight.Y - form.VerticalScroll.Value));
+                            Point pMiddleLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleLeft.Y - form.VerticalScroll.Value));
 
                         //For line settings
                         //g.DrawRectangle(pen2, pUpRight.X, pUpRight.Y, 4, 4);
@@ -347,28 +369,28 @@ namespace DialogueEditor
 
                         Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
 
-                        if (LineLength(pMiddleRight, pEnd) < LineLength(pMiddleLeft, pEnd))
-                        {
-                            Point point = new Point();
-                            if (LineLength(pUpRight, pUp) < LineLength(pDownRight, pUp))
+                            if (LineLength(pMiddleRight, pEnd) < LineLength(pMiddleLeft, pEnd))
                             {
-                                point = pUpRight;
+                                Point point = new Point();
+                                if (LineLength(pUpRight, pUp) < LineLength(pDownRight, pUp))
+                                {
+                                    point = pUpRight;
+                                }
+                                else point = pDownRight;
+                                pointsList.Add(new Point[] { pRightStart, pMiddleRight, point, pUp });
+                                penList.Add(new Pen(randomColor, 3));
                             }
-                            else point = pDownRight;
-                            pointsList.Add(new Point[] { pRightStart, pMiddleRight, point, pUp});
-                            penList.Add(new Pen(randomColor,3));
-                        }
-                        else
-                        {
-                            Point point = new Point();
-                            if (LineLength(pUpLeft, pUp) < LineLength(pDownLeft, pUp))
+                            else
                             {
-                                point = pUpLeft;
+                                Point point = new Point();
+                                if (LineLength(pUpLeft, pUp) < LineLength(pDownLeft, pUp))
+                                {
+                                    point = pUpLeft;
+                                }
+                                else point = pDownLeft;
+                                pointsList.Add(new Point[] { pLeftStart, pMiddleLeft, point, pUp });
+                                penList.Add(new Pen(randomColor, 3));
                             }
-                            else point = pDownLeft;
-                            pointsList.Add(new Point[] { pLeftStart, pMiddleLeft, point, pUp});
-                            penList.Add(new Pen(randomColor,3));
-
                         }
                     }
                 }
