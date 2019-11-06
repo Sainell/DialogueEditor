@@ -39,8 +39,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button6 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,6 +132,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
+            this.panel1.AutoSize = true;
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(217)))), ((int)(((byte)(238)))), ((int)(((byte)(255)))));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -147,8 +148,18 @@
             this.panel1.Controls.Add(this.button3);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1094, 36);
+            this.panel1.Size = new System.Drawing.Size(1094, 32);
             this.panel1.TabIndex = 16;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(841, 4);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(95, 23);
+            this.button6.TabIndex = 17;
+            this.button6.Text = "Open Temp DB";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // checkBox1
             // 
@@ -163,16 +174,6 @@
             this.checkBox1.Text = "   Clear \r\nTemp DB";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(841, 4);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(95, 23);
-            this.button6.TabIndex = 17;
-            this.button6.Text = "Open Temp DB";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // Form1
             // 
@@ -190,7 +191,7 @@
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DialogueEditor v.1.5";
+            this.Text = "DialogueEditor v.1.6";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Form1_Scroll);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
@@ -198,6 +199,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
