@@ -340,14 +340,15 @@ namespace DialogueEditor
 
                         }
                         catch
-                        {                           
+                        {
                             MessageBox.Show($"ERROR DRAW: Node '{nodeContainer[j].toNodeList[i].Text}' does not exits. Reset to 'Null'");
                             nodeContainer[j].toNodeList[i].Text = 0.ToString();
                         }
-                        finally {
+                        finally
+                        {
                             Point pEnd = try_pEnd;
                             Point pUp = try_pUp;
-                            Point pRightStart = form.PointToClient(new Point(nodeContainer[j].startRightPoint[i].X-form.HorizontalScroll.Value, nodeContainer[j].startRightPoint[i].Y - form.VerticalScroll.Value));
+                            Point pRightStart = form.PointToClient(new Point(nodeContainer[j].startRightPoint[i].X - form.HorizontalScroll.Value, nodeContainer[j].startRightPoint[i].Y - form.VerticalScroll.Value));
                             Point pLeftStart = form.PointToClient(new Point(nodeContainer[j].startLeftPoint[i].X - form.HorizontalScroll.Value, nodeContainer[j].startLeftPoint[i].Y - form.VerticalScroll.Value));
                             Point pUpRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointUpRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpRight.Y - form.VerticalScroll.Value));
                             Point pUpLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointUpLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpLeft.Y - form.VerticalScroll.Value));
@@ -356,18 +357,18 @@ namespace DialogueEditor
                             Point pMiddleRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleRight.Y - form.VerticalScroll.Value));
                             Point pMiddleLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleLeft.Y - form.VerticalScroll.Value));
 
-                        //For line settings
-                        //g.DrawRectangle(pen2, pUpRight.X, pUpRight.Y, 4, 4);
-                        //g.DrawRectangle(pen2, pUpLeft.X, pUpLeft.Y, 4, 4);
-                        //g.DrawRectangle(pen2, pDownRight.X, pDownRight.Y, 4, 4);
-                        //g.DrawRectangle(pen2, pDownLeft.X, pDownLeft.Y, 4, 4);
-                        //g.DrawRectangle(pen2, pMiddleRight.X, pMiddleRight.Y, 4, 4);
-                        //g.DrawRectangle(pen2, pMiddleLeft.X, pMiddleLeft.Y, 4, 4);
-                        //g.DrawRectangle(pen, pUp.X, pUp.Y, 4, 4);
-                        //g.DrawRectangle(pen, pRightStart.X, pRightStart.Y, 4, 4);
-                        //g.DrawRectangle(pen, pLeftStart.X, pLeftStart.Y, 4, 4);
+                            //For line settings
+                            //g.DrawRectangle(pen2, pUpRight.X, pUpRight.Y, 4, 4);
+                            //g.DrawRectangle(pen2, pUpLeft.X, pUpLeft.Y, 4, 4);
+                            //g.DrawRectangle(pen2, pDownRight.X, pDownRight.Y, 4, 4);
+                            //g.DrawRectangle(pen2, pDownLeft.X, pDownLeft.Y, 4, 4);
+                            //g.DrawRectangle(pen2, pMiddleRight.X, pMiddleRight.Y, 4, 4);
+                            //g.DrawRectangle(pen2, pMiddleLeft.X, pMiddleLeft.Y, 4, 4);
+                            //g.DrawRectangle(pen, pUp.X, pUp.Y, 4, 4);
+                            //g.DrawRectangle(pen, pRightStart.X, pRightStart.Y, 4, 4);
+                            //g.DrawRectangle(pen, pLeftStart.X, pLeftStart.Y, 4, 4);
 
-                        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                            Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
 
                             if (LineLength(pMiddleRight, pEnd) < LineLength(pMiddleLeft, pEnd))
                             {
@@ -408,6 +409,7 @@ namespace DialogueEditor
             {
                 penList[i].CustomEndCap = new AdjustableArrowCap(4,7);
                 g.DrawCurve(penList[i], pointsList[i]);
+                
             }
             pointsList.Clear();
         }

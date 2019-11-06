@@ -31,7 +31,8 @@ namespace DialogueEditor
 
         public Form1()
         {
-            InitializeComponent();                        
+            InitializeComponent();
+            MouseWheel += new MouseEventHandler(Form1_MouseWheel);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -54,6 +55,7 @@ namespace DialogueEditor
             panel1.Controls.Add(button3);
             panel1.Controls.Add(button4);
             panel1.Controls.Add(button5);
+            panel1.Controls.Add(button6);
 
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -103,6 +105,11 @@ namespace DialogueEditor
                 }
             }                
         }
+        private void button6_Click(object sender, EventArgs e)
+        {
+            dbpath = copyDbDirectory;
+            label2.Text = copyDbDirectory;
+        }
 
         private void button5_Click(object sender, EventArgs e)
         {
@@ -112,8 +119,12 @@ namespace DialogueEditor
 
         private void Form1_Scroll(object sender, ScrollEventArgs e)
         {
-            //foreach(Control c in panel1.Controls)
-           //panel1.Location = new Point(panel1.Location.X, panel1.Location.Y + VerticalScroll.Value     
+            MenuPanelScrolling();
+        }
+
+        private void Form1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            MenuPanelScrolling();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -146,13 +157,17 @@ namespace DialogueEditor
                 }
                 else
                 {
-                    MessageBox.Show("NPC ID not selected");
+                    MessageBox.Show("ERROR: NPC ID not selected");
                 }
             }
             else
             {
-                MessageBox.Show("DataBase not selected");
+                MessageBox.Show("ERROR: DataBase not selected");
             }
+        }
+        private void MenuPanelScrolling()
+        {
+            panel1.Location = new Point(panel1.Location.X, 0);
         }
     }
 }
