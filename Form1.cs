@@ -28,11 +28,13 @@ namespace DialogueEditor
         string copyDbDirectory = @".\_tempWorld.bytes";
         bool isClearTempDB = false;
         public StringBuilder sb = new StringBuilder();
+        private Form2 startform;
 
-        public Form1()
+        public Form1(Form2 startform)
         {
             InitializeComponent();
             MouseWheel += new MouseEventHandler(Form1_MouseWheel);
+            this.startform = startform;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -75,6 +77,8 @@ namespace DialogueEditor
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
            if (DB!=null) DB.CloseConnection();
+            startform.Show();
+           
         }
 
         private void button3_Click(object sender, EventArgs e)
