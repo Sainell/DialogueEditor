@@ -142,10 +142,10 @@ namespace DialogueEditor
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
-            if (dbpath != null)
-            {
-                DBUpdate();
-            }
+            //if (dbpath != null)
+            //{
+            //   DBUpdate();
+            //}
         }
 
         public void DBUpdate()
@@ -158,6 +158,7 @@ namespace DialogueEditor
                 {
                     DB.GetFromDB(npc_id, Controls, this);
                     DB.CreateGraph();
+                    MenuPanelScrolling();
                 }
                 else
                 {
@@ -171,7 +172,7 @@ namespace DialogueEditor
         }
         private void MenuPanelScrolling()
         {
-            panel1.Location = new Point(panel1.Location.X, 0);
+         //  panel1.Location = new Point(panel1.Location.X, 0);
         }
     }
 }

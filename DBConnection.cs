@@ -135,7 +135,6 @@ namespace DialogueEditor
                 cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
                 cmd.CommandText = $"select * from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
                 cmdNPCtext.CommandText = $"select Npc_text from 'dialogue_node' where Npc_id = {npc_id}";
-
                 foreach (TextBox t in nodeContainer[i].answerBoxList)
                 {
                     t.Text = "";
@@ -184,7 +183,7 @@ namespace DialogueEditor
                 }
                 reader.Close();
             }
-
+            
         }
 
         public void SaveChangesToDB()
@@ -255,9 +254,38 @@ namespace DialogueEditor
         }
         public void DeleteNode(int node_id)
         {
-            cmd.CommandText = $"delete from 'dialogue_node' where Npc_id={npc_id} and Node_ID={node_id}";
-            WriteCommand(cmd.CommandText);
-            cmd.ExecuteNonQuery();
+            if (node_id ==0)
+            {
+                MessageBox.Show($"ERROR: can't delete Starting Node ({node_id}) ");
+                return;
+            }
+            var checkBindings = true;
+            
+            {
+                for (int j = 0; j < nodeContainerUI.Count; j++)
+                {
+                    for (int i = 0; i < nodeContainerUI[j].answerUIList.Count; i++)
+                    {
+                        if (nodeContainerUI[j].answerUIList[i].textBox6.Text == node_id.ToString())
+                        {
+                            checkBindings = false;
+                            MessageBox.Show($"ERROR: Node {node_id} used in other nodes");
+                            return;
+                            
+                        }
+                        else
+                        {
+                            checkBindings = true;
+                        }
+                    }
+                }
+            }
+            if (checkBindings)
+            {
+                cmd.CommandText = $"delete from 'dialogue_node' where Npc_id={npc_id} and Node_ID={node_id}";
+                WriteCommand(cmd.CommandText);
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public void CreateNewAnswer(int node_ID)
