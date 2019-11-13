@@ -14,7 +14,15 @@ namespace DialogueEditor
     {
 
         NodeUI node;
-        string answerId;
+        public string answerId { get; set; }
+        public string answerBoxText { get; set; }
+        public string questIdText { get; set; }
+        public string toNodeText { get; set; }
+        public bool startCheckBoxValue { get; set; }
+        public bool finishCheckBoxValue { get; set; }
+        public bool exitCheckBoxValue { get; set; }
+
+
         public AnswerUI(NodeUI node)
         {
             InitializeComponent();
@@ -33,7 +41,31 @@ namespace DialogueEditor
 
         private void textBox6_TextChanged(object sender, EventArgs e)
         {
-            
+            toNodeText = textBox6.Text;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            answerBoxText = textBox1.Text;
+        }
+
+        private void textBox10_TextChanged(object sender, EventArgs e)
+        {
+            questIdText = textBox10.Text;
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+            startCheckBoxValue = checkBox6.Checked;
+        }
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        {
+            finishCheckBoxValue = checkBox7.Checked;
+        }
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            exitCheckBoxValue = checkBox1.Checked;
         }
     }
 }

@@ -29,6 +29,8 @@ namespace DialogueEditor
         bool isClearTempDB = false;
         public StringBuilder sb = new StringBuilder();
         private Form2 startform;
+        List<Temp> temp;
+        bool tempSaveFlag = true;
 
         public Form1(Form2 startform)
         {
@@ -39,7 +41,11 @@ namespace DialogueEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DBUpdate(); 
+            if (temp != null)
+            {
+                temp.Clear();
+            }
+            DBUpdate(false); 
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
@@ -118,7 +124,7 @@ namespace DialogueEditor
         private void button5_Click(object sender, EventArgs e)
         {
             DB.CreateNewNode("npc text");
-            DBUpdate();
+            DBUpdate(false);
         }
 
         private void Form1_Scroll(object sender, ScrollEventArgs e)
@@ -140,15 +146,7 @@ namespace DialogueEditor
             else isClearTempDB = false;
         }
 
-        private void Form1_ResizeEnd(object sender, EventArgs e)
-        {
-            //if (dbpath != null)
-            //{
-            //   DBUpdate();
-            //}
-        }
-
-        public void DBUpdate()
+        public void DBUpdate(bool tempsave)
         {
             if (dbpath != null)
             {
@@ -156,7 +154,7 @@ namespace DialogueEditor
                 DB.OpenConnection();
                 if (npc_id != 0)
                 {
-                    DB.GetFromDB(npc_id, Controls, this);
+                    DB.GetFromDB(npc_id, Controls, this,tempsave);
                     DB.CreateGraph();
                     MenuPanelScrolling();
                 }
@@ -173,6 +171,37 @@ namespace DialogueEditor
         private void MenuPanelScrolling()
         {
          //  panel1.Location = new Point(panel1.Location.X, 0);
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+           
+            
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (tempSaveFlag)
+            {
+                temp = DB.SaveToTemp();
+                tempSaveFlag = false;
+            }
+            if (dbpath != null)
+            {
+                DBUpdate(true);
+                DB.LoadFromTemp(temp);
+            }
+            tempSaveFlag = true;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+          temp = DB.SaveToTemp();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            DB.LoadFromTemp(temp);
         }
     }
 }

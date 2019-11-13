@@ -42,6 +42,7 @@ namespace DialogueEditor
         StringBuilder sb;
         Point try_pEnd;
         Point try_pUp;
+        List<Temp> temp = new List<Temp>();
 
 
         public DBConnection(string BDpath)
@@ -64,7 +65,7 @@ namespace DialogueEditor
             DB.Close();
         }
 
-        public void GetFromDB(int npc_id, Control.ControlCollection controls, Form1 form)
+        public void GetFromDB(int npc_id, Control.ControlCollection controls, Form1 form,bool tempsave)
         {
             this.Controls = controls;
             this.npc_id = npc_id;
@@ -72,13 +73,14 @@ namespace DialogueEditor
             this.sb = form.sb;
 
             cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
-
+            
             ClearNodeUIElements();
             CreateNodeCounteinerList();
-            GetNodeAllDates();
+            GetNodeAllDates();         
             GetRealCountNodes();
             RestructingNodes();
         }
+
         public int GetUIElementCount()
         {
             var UIcountResult = Convert.ToInt16(cmdUIcount.ExecuteScalar());
@@ -183,7 +185,59 @@ namespace DialogueEditor
                 }
                 reader.Close();
             }
-            
+
+        }
+
+        public List<Temp> SaveToTemp()
+        {
+            temp.Clear();
+            for (int i = 0; i < nodeContainer.Count(); i++)
+            {
+                if(nodeContainerUI[i].npcText==null)
+                {
+                    temp.Clear();
+                    return temp;
+                }
+                var npcText = nodeContainerUI[i].npcText;
+
+                for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++)
+                {
+                    var ID = nodeContainerUI[i].answerUIList[j].answerId;
+
+                    var answerBoxText = nodeContainerUI[i].answerUIList[j].answerBoxText;
+
+                    var questIdText = nodeContainerUI[i].answerUIList[j].questIdText;
+                    var toNodeText = nodeContainerUI[i].answerUIList[j].toNodeText;
+                    var startCheckBoxValue = nodeContainerUI[i].answerUIList[j].startCheckBoxValue;
+                    var finishCheckBoxValue = nodeContainerUI[i].answerUIList[j].finishCheckBoxValue;
+                    var exitCheckBoxValue = nodeContainerUI[i].answerUIList[j].exitCheckBoxValue;
+                    temp.Add(new Temp(npcText, ID, answerBoxText, questIdText, toNodeText, startCheckBoxValue, finishCheckBoxValue, exitCheckBoxValue));
+                }
+                
+            }
+            return temp;
+        }
+        public void LoadFromTemp(List<Temp> temp)
+        {
+            if (temp.Count!=0)
+            {
+                var k = 0;
+                for (int i = 0; i < nodeContainer.Count(); i++)
+                {
+                    nodeContainer[i].npcTextBox.Text = temp[i].npcText;
+
+                    for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++, k++)
+                    {
+                        nodeContainer[i].AnswerIDList[j].Text = temp[k].ID;
+                        nodeContainer[i].answerBoxList[j].Text = temp[k].answerBoxText;
+                        nodeContainer[i].questIdList[j].Text = temp[k].questIdText;
+                        nodeContainer[i].toNodeList[j].Text = temp[k].toNodeText;
+                        nodeContainer[i].startCheckBoxList[j].Checked = temp[k].startCheckBoxValue;
+                        nodeContainer[i].finishCheckBoxList[j].Checked = temp[k].finishCheckBoxValue;
+                        nodeContainer[i].exitCheckBoxList[j].Checked = temp[k].exitCheckBoxValue;
+                    }
+                }
+            }
         }
 
         public void SaveChangesToDB()

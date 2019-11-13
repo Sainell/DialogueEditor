@@ -9,21 +9,21 @@ namespace DialogueEditor
 {
     class AnswerContainer
     {
-        public TextBox answerBox;
-        public TextBox questId;
-        public CheckBox startCheckBox;
-        public CheckBox finishCheckBox;
-        public CheckBox exitCheckBox;
-        public TextBox toNode;
+        public string answerBox;
+        public string questId;
+        public bool startCheckBox;
+        public bool finishCheckBox;
+        public bool exitCheckBox;
+        public string toNode;
 
         public AnswerContainer(AnswerUI answer)
         {
-            answerBox = answer.textBox1;
-            questId = answer.textBox10;
-            startCheckBox = answer.checkBox6;
-            finishCheckBox = answer.checkBox7;
-            exitCheckBox = answer.checkBox1;
-            toNode = answer.textBox6;
+            answerBox = answer.answerBoxText;
+            questId = answer.answerId;
+            startCheckBox = answer.startCheckBoxValue;
+            finishCheckBox = answer.finishCheckBoxValue;
+            exitCheckBox = answer.exitCheckBoxValue;
+            toNode = answer.toNodeText;
         }
     }
 }
