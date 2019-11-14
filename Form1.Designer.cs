@@ -39,10 +39,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -154,6 +154,26 @@
             this.panel1.Size = new System.Drawing.Size(1094, 33);
             this.panel1.TabIndex = 16;
             // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(591, 5);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(77, 23);
+            this.button8.TabIndex = 19;
+            this.button8.Text = "test2";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(508, 4);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(77, 23);
+            this.button7.TabIndex = 18;
+            this.button7.Text = "test";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // button6
             // 
             this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -179,26 +199,6 @@
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(508, 4);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(77, 23);
-            this.button7.TabIndex = 18;
-            this.button7.Text = "test";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(591, 5);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(77, 23);
-            this.button8.TabIndex = 19;
-            this.button8.Text = "test2";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -215,7 +215,7 @@
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DialogueEditor v.1.6";
+            this.Text = "DialogueEditor v.1.7";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Form1_Scroll);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);

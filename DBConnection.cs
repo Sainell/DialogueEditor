@@ -65,7 +65,7 @@ namespace DialogueEditor
             DB.Close();
         }
 
-        public void GetFromDB(int npc_id, Control.ControlCollection controls, Form1 form,bool tempsave)
+        public void GetFromDB(int npc_id, Control.ControlCollection controls, Form1 form)
         {
             this.Controls = controls;
             this.npc_id = npc_id;
@@ -494,6 +494,21 @@ namespace DialogueEditor
                 
             }
             pointsList.Clear();
+        }
+
+        public string[] LoadTaskTypes()
+        {
+            cmdCount.CommandText = $"select count(*) from 'quest_task_types'";
+            var typesCount = cmdCount.ExecuteScalar();
+            string[] types = new string[8];
+            cmd.CommandText = $"select * from 'quest_task_types'";
+            reader = cmd.ExecuteReader();
+            for (int i=0;i< Convert.ToInt32(typesCount);i++)
+            {
+                reader.Read();
+                types[i] = reader.GetValue(1).ToString();            
+            }
+            return types;
         }
         
     }

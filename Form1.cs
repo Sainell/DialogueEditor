@@ -154,7 +154,7 @@ namespace DialogueEditor
                 DB.OpenConnection();
                 if (npc_id != 0)
                 {
-                    DB.GetFromDB(npc_id, Controls, this,tempsave);
+                    DB.GetFromDB(npc_id, Controls, this);
                     DB.CreateGraph();
                     MenuPanelScrolling();
                 }
