@@ -55,7 +55,7 @@ namespace DialogueEditor
                 finally
                 {
                     dbpath = copyDbDirectory;
-                    label2.Text = copyDbDirectory;
+                    label6.Text = copyDbDirectory;
 
                 }
             }
@@ -64,7 +64,7 @@ namespace DialogueEditor
         private void button6_Click(object sender, EventArgs e)
         {
             dbpath = copyDbDirectory;
-            label2.Text = copyDbDirectory;
+            label6.Text = copyDbDirectory;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -84,7 +84,19 @@ namespace DialogueEditor
                 DB.OpenConnection();
                 if (quest_id != 0)
                 {
+                    comboBox1.Items.Clear();
+                    comboBox2.Items.Clear();
+                    comboBox3.Items.Clear();
+                    comboBox5.Items.Clear();
+                    comboBox6.Items.Clear();
+                    comboBox7.Items.Clear();
+
+                    comboBox1.Items.AddRange(DB.LoadGameEvents());
                     comboBox2.Items.AddRange(DB.LoadTaskTypes());
+                    comboBox3.Items.AddRange(DB.LoadGameEvents());
+                    comboBox5.Items.AddRange(DB.LoadNpcList());
+                    comboBox6.Items.AddRange(DB.LoadNpcList());
+                    comboBox7.Items.AddRange(DB.LoadNpcList());
                 }
                 else
                 {
@@ -100,6 +112,40 @@ namespace DialogueEditor
         private void Form3_Load(object sender, EventArgs e)
         {
            
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                isClearTempDB = true;
+            }
+            else isClearTempDB = false;
         }
     }
 }

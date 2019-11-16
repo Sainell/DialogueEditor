@@ -499,18 +499,48 @@ namespace DialogueEditor
         public string[] LoadTaskTypes()
         {
             cmdCount.CommandText = $"select count(*) from 'quest_task_types'";
-            var typesCount = cmdCount.ExecuteScalar();
-            string[] types = new string[8];
+            var typesCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            string[] types = new string[typesCount];
             cmd.CommandText = $"select * from 'quest_task_types'";
             reader = cmd.ExecuteReader();
-            for (int i=0;i< Convert.ToInt32(typesCount);i++)
+            for (int i=0;i<typesCount;i++)
             {
                 reader.Read();
                 types[i] = reader.GetValue(1).ToString();            
             }
+            reader.Close();
             return types;
         }
-        
+        public string[] LoadNpcList()
+        {
+            cmdCount.CommandText = $"select count(*) from 'npc'";
+            var npcCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            string[] npcList = new string[npcCount];
+            cmd.CommandText = $"select * from 'npc'";
+            reader = cmd.ExecuteReader();
+            for (int i = 0; i < npcCount; i++)
+            {
+                reader.Read();
+                npcList[i] = reader.GetValue(0).ToString();
+            }
+            reader.Close();
+            return npcList;
+        }
+        public string[] LoadGameEvents()
+        {
+            cmdCount.CommandText = $"select count(*) from 'game_event_types'";
+            var eventsCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            string[] events = new string[eventsCount];
+            cmd.CommandText = $"select * from 'game_event_types'";
+            reader = cmd.ExecuteReader();
+            for (int i = 0; i < eventsCount; i++)
+            {
+                reader.Read();
+                events[i] = reader.GetValue(1).ToString();
+            }
+            reader.Close();
+            return events;
+        }
     }
     
 }
