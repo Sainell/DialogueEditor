@@ -14,3 +14,4 @@ E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.NodeUI.resour
 E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.AnswerUI.resources
 E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.Form2.resources
 E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.Form3.resources
+E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.TaskUI.resources

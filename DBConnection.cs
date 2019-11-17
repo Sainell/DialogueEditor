@@ -541,6 +541,55 @@ namespace DialogueEditor
             reader.Close();
             return events;
         }
+        public int GetTasksCount(int questID)
+        {
+            cmdCount.CommandText = $"select count(*) from 'quest_objectives' where QuestId={questID}";
+            var tasksCount = cmdCount.ExecuteScalar();
+            return Convert.ToInt16(tasksCount);
+        }
+        public void LoadTaskList(int questID,ref List<TaskUI> taskCounteinerUI)
+        {
+            cmd.CommandText = $"select * from 'quest_objectives' where QuestId={questID}";
+            reader = cmd.ExecuteReader();
+            for(int i=0;i<taskCounteinerUI.Count;i++)
+            {
+                reader.Read();
+                var id = reader.GetValue(2).ToString();
+                cmdUIAnswerCount.CommandText = $"select type from 'quest_task_types' where id={id}";
+                taskCounteinerUI[i].taskType = cmdUIAnswerCount.ExecuteScalar().ToString(); 
+                taskCounteinerUI[i].targetID = reader.GetValue(3).ToString();
+                taskCounteinerUI[i].amount = reader.GetValue(4).ToString();
+                taskCounteinerUI[i].isOptional = reader.GetValue(5).ToString();
+            }
+            reader.Close();
+
+        }
+
+        public string LoadQuest(int questID,string value)
+        {
+            cmd.CommandText = $"select * from 'quest' where Id={questID}";
+            reader = cmd.ExecuteReader();
+            reader.Read();
+            if (value == "start")
+            {
+                var startDialogueId = reader.GetValue(7).ToString();
+                reader.Close();
+                return startDialogueId;
+            }
+            if (value == "end")
+            {
+                var endDialogueId = reader.GetValue(8).ToString();
+                reader.Close();
+                return endDialogueId;
+            }
+
+            else
+            {
+                throw new Exception("error value");
+                return null;
+            }
+
+        }
     }
     
 }

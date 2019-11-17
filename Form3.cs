@@ -15,11 +15,12 @@ namespace DialogueEditor
     {
         private Form2 startform;
         public DBConnection DB;
-        private int quest_id;
+        private int questId;
         private string dbpath;
         OpenFileDialog ofd = new OpenFileDialog();
         string copyDbDirectory = @".\_tempWorld.bytes";
         bool isClearTempDB = false;
+        List<TaskUI> taskContainerUI = new List<TaskUI>();
 
         public Form3(Form2 startform)
         {
@@ -69,7 +70,7 @@ namespace DialogueEditor
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            quest_id = Convert.ToInt16(textBox1.Text);
+            questId = Convert.ToInt16(textBox1.Text);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -82,61 +83,45 @@ namespace DialogueEditor
             {
                 DB = new DBConnection(dbpath);
                 DB.OpenConnection();
-                if (quest_id != 0)
+                if (questId != 0)
                 {
                     comboBox1.Items.Clear();
-                    comboBox2.Items.Clear();
                     comboBox3.Items.Clear();
-                    comboBox5.Items.Clear();
                     comboBox6.Items.Clear();
                     comboBox7.Items.Clear();
+                    taskContainerUI.Clear();
+                    
+                    
 
-                    comboBox1.Items.AddRange(DB.LoadGameEvents());
-                    comboBox2.Items.AddRange(DB.LoadTaskTypes());
+                    comboBox1.Items.AddRange(DB.LoadGameEvents());     
                     comboBox3.Items.AddRange(DB.LoadGameEvents());
-                    comboBox5.Items.AddRange(DB.LoadNpcList());
                     comboBox6.Items.AddRange(DB.LoadNpcList());
                     comboBox7.Items.AddRange(DB.LoadNpcList());
+
+
+                    comboBox6.SelectedItem = DB.LoadQuest(questId,"start");
+                    comboBox7.SelectedItem = DB.LoadQuest(questId,"end");
+
+                    CreateTaskContainerUI(DB.GetTasksCount(questId));
+                    panel2.Location = new Point(panel4.Location.X, panel4.Location.Y + panel4.Height + 2);
+                    foreach (TaskUI task in taskContainerUI)
+                    {
+                        task.taskTypeItems = DB.LoadTaskTypes();
+                        task.targetIdItems = DB.LoadNpcList();
+                    }
+
+                    DB.LoadTaskList(questId, ref taskContainerUI);
+
                 }
                 else
                 {
-                    MessageBox.Show("ERROR: NPC ID not selected");
+                    MessageBox.Show("ERROR: Quest ID not selected");
                 }
             }
             else
             {
                 MessageBox.Show("ERROR: DataBase not selected");
             }
-        }
-
-        private void Form3_Load(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -146,6 +131,18 @@ namespace DialogueEditor
                 isClearTempDB = true;
             }
             else isClearTempDB = false;
+        }
+        private void CreateTaskContainerUI(int count)
+        {
+            panel4.Controls.Clear();
+            for (int i=0; i < count; i++)
+            {
+                taskContainerUI.Add(new TaskUI());
+                taskContainerUI[i].Parent = panel4;
+                taskContainerUI[i].Visible = true;
+                taskContainerUI[i].Location = new Point(0,0+(i*30));
+                taskContainerUI[i].taskName = "Task " + (i+1);
+            }
         }
     }
 }
