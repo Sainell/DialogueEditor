@@ -12,14 +12,16 @@ namespace DialogueEditor
 {
     public partial class TaskUI : UserControl
     {
+        Form3 form;
 
-        public TaskUI()
+        public TaskUI(Form3 form)
         {
             InitializeComponent();
+            this.form = form;
         }
-   
-        public string taskType { get { return comboBox2.SelectedText; } set { comboBox2.SelectedItem= value; } }
-        public string targetID { get { return comboBox5.SelectedText; } set { comboBox5.SelectedItem = value; } }
+
+        public string taskType { get { return comboBox2.SelectedItem.ToString(); } set { comboBox2.SelectedItem = value; } }
+        public string targetID { get { return comboBox5.SelectedItem.ToString(); } set { comboBox5.SelectedItem = value; } }
         public string amount { get { return textBox2.Text; } set { textBox2.Text = value; } }
         public string isOptional
         { get
@@ -33,8 +35,8 @@ namespace DialogueEditor
                     return "0";
                 };
             }
-        
-          set { if (value == "0") checkBox1.Checked = false; else checkBox1.Checked = true; }
+
+            set { if (value == "0") checkBox1.Checked = false; else checkBox1.Checked = true; }
         }
         public string taskName { get { return label4.Text; } set { label4.Text = value; } }
 
@@ -47,6 +49,15 @@ namespace DialogueEditor
         }
         public string[] targetIdItems
         {
+            get
+            {
+                string[] str = new string[comboBox5.Items.Count];
+               for (int i=0;i<str.Length;i++)
+                {
+                    str[i] = comboBox5.Items[i].ToString();
+                }
+                return str;
+            }
             set
             {
                 comboBox5.Items.AddRange(value);
@@ -56,6 +67,13 @@ namespace DialogueEditor
         {
             comboBox2.Items.Clear();
             comboBox5.Items.Clear();
+        }
+
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           comboBox5.Items.Clear();
+           comboBox5.Items.AddRange(form.DB.LoadIdByTaskType(taskType));
         }
     }
 }

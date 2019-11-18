@@ -25,6 +25,7 @@ namespace DialogueEditor
         List<NodeUI> del = new List<NodeUI>();
         List<Control> dellist = new List<Control>();
         SQLiteDataReader reader;
+        SQLiteDataReader readerTask;
         int countResult;
         private int npc_id;
         Control.ControlCollection Controls;
@@ -73,10 +74,10 @@ namespace DialogueEditor
             this.sb = form.sb;
 
             cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
-            
+
             ClearNodeUIElements();
             CreateNodeCounteinerList();
-            GetNodeAllDates();         
+            GetNodeAllDates();
             GetRealCountNodes();
             RestructingNodes();
         }
@@ -193,7 +194,7 @@ namespace DialogueEditor
             temp.Clear();
             for (int i = 0; i < nodeContainer.Count(); i++)
             {
-                if(nodeContainerUI[i].npcText==null)
+                if (nodeContainerUI[i].npcText == null)
                 {
                     temp.Clear();
                     return temp;
@@ -213,13 +214,13 @@ namespace DialogueEditor
                     var exitCheckBoxValue = nodeContainerUI[i].answerUIList[j].exitCheckBoxValue;
                     temp.Add(new Temp(npcText, ID, answerBoxText, questIdText, toNodeText, startCheckBoxValue, finishCheckBoxValue, exitCheckBoxValue));
                 }
-                
+
             }
             return temp;
         }
         public void LoadFromTemp(List<Temp> temp)
         {
-            if (temp.Count!=0)
+            if (temp.Count != 0)
             {
                 var k = 0;
                 for (int i = 0; i < nodeContainer.Count(); i++)
@@ -265,7 +266,7 @@ namespace DialogueEditor
                     }
                     else
                     {
-                       toNodeText = nodeContainer[i].toNodeList[j].Text;
+                        toNodeText = nodeContainer[i].toNodeList[j].Text;
                     }
                     int startCheckBoxValue;
                     if (nodeContainer[i].startCheckBoxList[j].Checked == true) { startCheckBoxValue = 1; }
@@ -308,13 +309,13 @@ namespace DialogueEditor
         }
         public void DeleteNode(int node_id)
         {
-            if (node_id ==0)
+            if (node_id == 0)
             {
                 MessageBox.Show($"ERROR: can't delete Starting Node ({node_id}) ");
                 return;
             }
             var checkBindings = true;
-            
+
             {
                 for (int j = 0; j < nodeContainerUI.Count; j++)
                 {
@@ -325,7 +326,7 @@ namespace DialogueEditor
                             checkBindings = false;
                             MessageBox.Show($"ERROR: Node {node_id} used in other nodes");
                             return;
-                            
+
                         }
                         else
                         {
@@ -489,9 +490,9 @@ namespace DialogueEditor
         {
             for (int i = 0; i < pointsList.Count; i++)
             {
-                penList[i].CustomEndCap = new AdjustableArrowCap(4,7);
+                penList[i].CustomEndCap = new AdjustableArrowCap(4, 7);
                 g.DrawCurve(penList[i], pointsList[i]);
-                
+
             }
             pointsList.Clear();
         }
@@ -503,10 +504,10 @@ namespace DialogueEditor
             string[] types = new string[typesCount];
             cmd.CommandText = $"select * from 'quest_task_types'";
             reader = cmd.ExecuteReader();
-            for (int i=0;i<typesCount;i++)
+            for (int i = 0; i < typesCount; i++)
             {
                 reader.Read();
-                types[i] = reader.GetValue(1).ToString();            
+                types[i] = reader.GetValue(1).ToString();
             }
             reader.Close();
             return types;
@@ -547,25 +548,25 @@ namespace DialogueEditor
             var tasksCount = cmdCount.ExecuteScalar();
             return Convert.ToInt16(tasksCount);
         }
-        public void LoadTaskList(int questID,ref List<TaskUI> taskCounteinerUI)
+        public void LoadTaskList(int questID, ref List<TaskUI> taskCounteinerUI)
         {
-            cmd.CommandText = $"select * from 'quest_objectives' where QuestId={questID}";
-            reader = cmd.ExecuteReader();
-            for(int i=0;i<taskCounteinerUI.Count;i++)
+            cmdUIcount.CommandText = $"select * from 'quest_objectives' where QuestId={questID}";
+            readerTask = cmdUIcount.ExecuteReader();
+            for (int i = 0; i < taskCounteinerUI.Count; i++)
             {
-                reader.Read();
-                var id = reader.GetValue(2).ToString();
+                readerTask.Read();
+                var id = readerTask.GetValue(2).ToString();
                 cmdUIAnswerCount.CommandText = $"select type from 'quest_task_types' where id={id}";
-                taskCounteinerUI[i].taskType = cmdUIAnswerCount.ExecuteScalar().ToString(); 
-                taskCounteinerUI[i].targetID = reader.GetValue(3).ToString();
-                taskCounteinerUI[i].amount = reader.GetValue(4).ToString();
-                taskCounteinerUI[i].isOptional = reader.GetValue(5).ToString();
+                taskCounteinerUI[i].taskType = cmdUIAnswerCount.ExecuteScalar().ToString();
+                taskCounteinerUI[i].targetID = readerTask.GetValue(3).ToString();
+                taskCounteinerUI[i].amount = readerTask.GetValue(4).ToString();
+                taskCounteinerUI[i].isOptional = readerTask.GetValue(5).ToString();
             }
-            reader.Close();
+            readerTask.Close();
 
         }
 
-        public string LoadQuest(int questID,string value)
+        public string LoadQuestSelectID(int questID, string value)
         {
             cmd.CommandText = $"select * from 'quest' where Id={questID}";
             reader = cmd.ExecuteReader();
@@ -586,9 +587,81 @@ namespace DialogueEditor
             else
             {
                 throw new Exception("error value");
-                return null;
             }
 
+        }
+
+        public string LoadQuestSelectType(int questID, string value)
+        {
+            cmd.CommandText = $"select StartQuestEventType,EndQuestEventType from 'quest' where Id={questID}";
+            reader = cmd.ExecuteReader();
+            reader.Read();
+            if (value == "start")
+            {
+                var id = reader.GetValue(0).ToString();
+                reader.Close();
+                cmdUIAnswerCount.CommandText = $"select game_events from 'game_event_types' where id ={id}";
+                var startQuestEventType = cmdUIAnswerCount.ExecuteScalar().ToString();
+                return startQuestEventType;
+            }
+            else if (value == "end")
+            {
+                var id = reader.GetValue(1).ToString();
+                reader.Close();
+                cmdUIAnswerCount.CommandText = $"select game_events from 'game_event_types' where id ={id}";
+                var endQuestEventType = cmdUIAnswerCount.ExecuteScalar().ToString();
+                return endQuestEventType;
+            }
+            else
+            {
+                throw new Exception("error value");
+            }
+        }
+
+        public string[] LoadDialogueList()
+        {
+            cmdCount.CommandText = $"select count(*) from 'dialogue_answers'";
+            var dialogueCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            string[] dialogueList = new string[dialogueCount];
+            cmd.CommandText = $"select Id from 'dialogue_answers'";
+            reader = cmd.ExecuteReader();
+            for (int i = 0; i < dialogueCount; i++)
+            {
+                reader.Read();
+                dialogueList[i] = reader.GetValue(0).ToString();
+            }
+            reader.Close();
+            return dialogueList;
+        }
+
+        public string[] LoadIdByEventType(string eventType)
+        {
+            switch (eventType)
+            {
+                case "DialogAnswerSelect":
+                    return LoadDialogueList();
+
+                case "NpcDie":
+                    return LoadNpcList();
+
+                default:
+                    return null;
+            }
+        }
+
+        public string[] LoadIdByTaskType(string taskType)
+        {
+            switch (taskType)
+            {
+                case "SelectAnswer":
+                    return LoadDialogueList();
+
+                case "KillNpc":
+                    return LoadNpcList();
+
+                default:
+                    return null;
+            }
         }
     }
     

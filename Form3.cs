@@ -95,23 +95,23 @@ namespace DialogueEditor
 
                     comboBox1.Items.AddRange(DB.LoadGameEvents());     
                     comboBox3.Items.AddRange(DB.LoadGameEvents());
-                    comboBox6.Items.AddRange(DB.LoadNpcList());
-                    comboBox7.Items.AddRange(DB.LoadNpcList());
+                    comboBox1.SelectedItem = DB.LoadQuestSelectType(questId, "start");
+                    comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "end");
 
+                    
 
-                    comboBox6.SelectedItem = DB.LoadQuest(questId,"start");
-                    comboBox7.SelectedItem = DB.LoadQuest(questId,"end");
+                    comboBox6.SelectedItem = DB.LoadQuestSelectID(questId,"start");
+                    comboBox7.SelectedItem = DB.LoadQuestSelectID(questId,"end");
 
                     CreateTaskContainerUI(DB.GetTasksCount(questId));
+
                     panel2.Location = new Point(panel4.Location.X, panel4.Location.Y + panel4.Height + 2);
+
                     foreach (TaskUI task in taskContainerUI)
                     {
                         task.taskTypeItems = DB.LoadTaskTypes();
-                        task.targetIdItems = DB.LoadNpcList();
                     }
-
                     DB.LoadTaskList(questId, ref taskContainerUI);
-
                 }
                 else
                 {
@@ -122,6 +122,11 @@ namespace DialogueEditor
             {
                 MessageBox.Show("ERROR: DataBase not selected");
             }
+        }
+
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -137,12 +142,24 @@ namespace DialogueEditor
             panel4.Controls.Clear();
             for (int i=0; i < count; i++)
             {
-                taskContainerUI.Add(new TaskUI());
+                taskContainerUI.Add(new TaskUI(this));
                 taskContainerUI[i].Parent = panel4;
                 taskContainerUI[i].Visible = true;
                 taskContainerUI[i].Location = new Point(0,0+(i*30));
                 taskContainerUI[i].taskName = "Task " + (i+1);
             }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox6.Items.Clear();
+            comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()));
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox7.Items.Clear();
+            comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()));
         }
     }
 }
