@@ -52,6 +52,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.button5 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -151,12 +152,13 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(290, 9);
+            this.button2.Location = new System.Drawing.Point(201, 9);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 25);
             this.button2.TabIndex = 14;
             this.button2.Text = "Save Quest";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button6
             // 
@@ -229,12 +231,13 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(205, 9);
+            this.button3.Location = new System.Drawing.Point(282, 9);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 25);
             this.button3.TabIndex = 24;
             this.button3.Text = "Add Quest";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // comboBox8
             // 
@@ -285,11 +288,21 @@
             this.panel4.Size = new System.Drawing.Size(318, 28);
             this.panel4.TabIndex = 29;
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(363, 9);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(80, 25);
+            this.button5.TabIndex = 30;
+            this.button5.Text = "Create Patch";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -343,5 +356,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Button button5;
     }
 }

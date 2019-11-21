@@ -24,7 +24,8 @@ namespace DialogueEditor
         public string targetID { get { return comboBox5.SelectedItem.ToString(); } set { comboBox5.SelectedItem = value; } }
         public string amount { get { return textBox2.Text; } set { textBox2.Text = value; } }
         public string isOptional
-        { get
+        {
+            get
             {
                 if (checkBox1.Checked == true)
                 {
@@ -38,6 +39,7 @@ namespace DialogueEditor
 
             set { if (value == "0") checkBox1.Checked = false; else checkBox1.Checked = true; }
         }
+
         public string taskName { get { return label4.Text; } set { label4.Text = value; } }
 
         public string[] taskTypeItems
@@ -72,8 +74,15 @@ namespace DialogueEditor
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-           comboBox5.Items.Clear();
-           comboBox5.Items.AddRange(form.DB.LoadIdByTaskType(taskType));
+           comboBox5.Items.Clear();       
+           targetIdItems = form.DB.LoadIdByTaskType(taskType);
+            comboBox5.SelectedIndex = 0;
+            //comboBox5.Items.AddRange(form.DB.LoadIdByTaskType(taskType));
+        }
+
+        private void comboBox2_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            
         }
     }
 }

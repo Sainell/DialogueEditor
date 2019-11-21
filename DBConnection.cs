@@ -402,7 +402,7 @@ namespace DialogueEditor
                 }
             }
         }
-
+        #region Drawing
         public void CreateGraph()
         {
             g = form.CreateGraphics();
@@ -496,7 +496,8 @@ namespace DialogueEditor
             }
             pointsList.Clear();
         }
-
+        #endregion
+        #region Load Quest from DB
         public string[] LoadTaskTypes()
         {
             cmdCount.CommandText = $"select count(*) from 'quest_task_types'";
@@ -512,6 +513,7 @@ namespace DialogueEditor
             reader.Close();
             return types;
         }
+
         public string[] LoadNpcList()
         {
             cmdCount.CommandText = $"select count(*) from 'npc'";
@@ -527,6 +529,7 @@ namespace DialogueEditor
             reader.Close();
             return npcList;
         }
+
         public string[] LoadGameEvents()
         {
             cmdCount.CommandText = $"select count(*) from 'game_event_types'";
@@ -542,12 +545,30 @@ namespace DialogueEditor
             reader.Close();
             return events;
         }
+
+        public string[] LoadDialogueList()
+        {
+            cmdCount.CommandText = $"select count(*) from 'dialogue_answers'";
+            var dialogueCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            string[] dialogueList = new string[dialogueCount];
+            cmd.CommandText = $"select Id from 'dialogue_answers'";
+            reader = cmd.ExecuteReader();
+            for (int i = 0; i < dialogueCount; i++)
+            {
+                reader.Read();
+                dialogueList[i] = reader.GetValue(0).ToString();
+            }
+            reader.Close();
+            return dialogueList;
+        }
+
         public int GetTasksCount(int questID)
         {
             cmdCount.CommandText = $"select count(*) from 'quest_objectives' where QuestId={questID}";
             var tasksCount = cmdCount.ExecuteScalar();
             return Convert.ToInt16(tasksCount);
         }
+
         public void LoadTaskList(int questID, ref List<TaskUI> taskCounteinerUI)
         {
             cmdUIcount.CommandText = $"select * from 'quest_objectives' where QuestId={questID}";
@@ -618,22 +639,6 @@ namespace DialogueEditor
             }
         }
 
-        public string[] LoadDialogueList()
-        {
-            cmdCount.CommandText = $"select count(*) from 'dialogue_answers'";
-            var dialogueCount = Convert.ToInt16(cmdCount.ExecuteScalar());
-            string[] dialogueList = new string[dialogueCount];
-            cmd.CommandText = $"select Id from 'dialogue_answers'";
-            reader = cmd.ExecuteReader();
-            for (int i = 0; i < dialogueCount; i++)
-            {
-                reader.Read();
-                dialogueList[i] = reader.GetValue(0).ToString();
-            }
-            reader.Close();
-            return dialogueList;
-        }
-
         public string[] LoadIdByEventType(string eventType)
         {
             switch (eventType)
@@ -663,8 +668,33 @@ namespace DialogueEditor
                     return null;
             }
         }
+        #endregion
+        #region Save Quest
+        public void SaveQuestToDB(string startQuestEventType,string startQuestTargetID, string endQuestEventType, string endQuestTargetID, ref List<TaskUI> taskCounteiner, int questId)
+        {
+            cmdNPCtext.CommandText = $"select id from 'game_event_types' where game_events='{startQuestEventType}'";
+            var startQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
+
+            cmdNPCtext.CommandText = $"select id from 'game_event_types' where game_events='{endQuestEventType}'";
+            var endQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
+
+            cmd.CommandText = $"update 'quest' SET StartDialogId = '{startQuestTargetID}', EndDialogId = '{endQuestTargetID}', StartQuestEventType = '{startQuestEventTypeForID}', EndQuestEventType = '{endQuestEventTypeForID}' where Id = '{questId}'";
+         //   WriteCommand(cmd.CommandText);
+         
+            cmd.ExecuteNonQuery();
+            for (int i = 0; i < taskCounteiner.Count; i++)
+            {
+                cmdNPCtext.CommandText = $"select id from 'quest_task_types' where type='{taskCounteiner[i].taskType}'";
+                var taskTypeForID = cmdNPCtext.ExecuteScalar().ToString();
+
+                cmdNPCtext.CommandText = $"update 'quest_objectives' SET Type='{taskTypeForID}', TargetId='{taskCounteiner[i].targetID}', Amount='{taskCounteiner[i].amount}',isOptional ='{taskCounteiner[i].isOptional}' where QuestId='{questId}' and Id ='{i+1}'";
+       //         WriteCommand(cmdNPCtext.CommandText);
+                cmdNPCtext.ExecuteNonQuery();
+            }
+
+        }
+        #endregion
     }
-    
 }
 
 

@@ -112,6 +112,7 @@ namespace DialogueEditor
                         task.taskTypeItems = DB.LoadTaskTypes();
                     }
                     DB.LoadTaskList(questId, ref taskContainerUI);
+
                 }
                 else
                 {
@@ -160,6 +161,21 @@ namespace DialogueEditor
         {
             comboBox7.Items.Clear();
             comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()));
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var startQuestEventType = comboBox1.SelectedItem.ToString();
+            var startQuestTargetID = comboBox6.SelectedItem.ToString();
+            var endQuestEventType = comboBox3.SelectedItem.ToString();
+            var endQuestTargetID = comboBox7.SelectedItem.ToString();
+
+            DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //add
         }
     }
 }

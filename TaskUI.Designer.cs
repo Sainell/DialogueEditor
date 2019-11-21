@@ -62,6 +62,7 @@
             this.comboBox2.TabIndex = 14;
             this.comboBox2.Text = "Task type";
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.comboBox2.SelectionChangeCommitted += new System.EventHandler(this.comboBox2_SelectionChangeCommitted);
             // 
             // label4
             // 
