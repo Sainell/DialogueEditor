@@ -77,6 +77,7 @@ namespace DialogueEditor
         {
             DBUpdate();
         }
+
         public void DBUpdate()
         {
             if (dbpath != null)
@@ -85,34 +86,40 @@ namespace DialogueEditor
                 DB.OpenConnection();
                 if (questId != 0)
                 {
-                    comboBox1.Items.Clear();
-                    comboBox3.Items.Clear();
-                    comboBox6.Items.Clear();
-                    comboBox7.Items.Clear();
-                    taskContainerUI.Clear();
-                    
-                    
-
-                    comboBox1.Items.AddRange(DB.LoadGameEvents());     
-                    comboBox3.Items.AddRange(DB.LoadGameEvents());
-                    comboBox1.SelectedItem = DB.LoadQuestSelectType(questId, "start");
-                    comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "end");
-
-                    
-
-                    comboBox6.SelectedItem = DB.LoadQuestSelectID(questId,"start");
-                    comboBox7.SelectedItem = DB.LoadQuestSelectID(questId,"end");
-
-                    CreateTaskContainerUI(DB.GetTasksCount(questId));
-
-                    panel2.Location = new Point(panel4.Location.X, panel4.Location.Y + panel4.Height + 2);
-
-                    foreach (TaskUI task in taskContainerUI)
+                    try
                     {
-                        task.taskTypeItems = DB.LoadTaskTypes();
-                    }
-                    DB.LoadTaskList(questId, ref taskContainerUI);
+                        comboBox1.Items.Clear();
+                        comboBox3.Items.Clear();
+                        comboBox6.Items.Clear();
+                        comboBox7.Items.Clear();
+                        taskContainerUI.Clear();
 
+
+
+                        comboBox1.Items.AddRange(DB.LoadGameEvents());
+                        comboBox3.Items.AddRange(DB.LoadGameEvents());
+                        comboBox1.SelectedItem = DB.LoadQuestSelectType(questId, "start");
+                        comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "end");
+
+
+
+                        comboBox6.SelectedItem = DB.LoadQuestSelectID(questId, "start");
+                        comboBox7.SelectedItem = DB.LoadQuestSelectID(questId, "end");
+
+                        CreateTaskContainerUI(DB.GetTasksCount(questId));
+
+                        panel2.Location = new Point(panel4.Location.X, panel4.Location.Y + panel4.Height + 2);
+
+                        foreach (TaskUI task in taskContainerUI)
+                        {
+                            task.taskTypeItems = DB.LoadTaskTypes();
+                        }
+                        DB.LoadTaskList(questId, ref taskContainerUI);
+                    }
+                    catch
+                    {
+                        MessageBox.Show($"ERROR: Quest ID  {questId} doesn't exist");
+                    }
                 }
                 else
                 {
@@ -146,7 +153,7 @@ namespace DialogueEditor
                 taskContainerUI.Add(new TaskUI(this));
                 taskContainerUI[i].Parent = panel4;
                 taskContainerUI[i].Visible = true;
-                taskContainerUI[i].Location = new Point(0,0+(i*30));
+                taskContainerUI[i].Location = new Point(0,0+(i*48));
                 taskContainerUI[i].taskName = "Task " + (i+1);
             }
         }
@@ -175,7 +182,22 @@ namespace DialogueEditor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //add
+            DB.AddNewQuest(1,1,1,1);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            DB.AddNewTask(questId);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            DB.DeleteQuest(questId);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //patch
         }
     }
 }

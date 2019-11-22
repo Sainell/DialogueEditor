@@ -21,7 +21,25 @@ namespace DialogueEditor
         }
 
         public string taskType { get { return comboBox2.SelectedItem.ToString(); } set { comboBox2.SelectedItem = value; } }
-        public string targetID { get { return comboBox5.SelectedItem.ToString(); } set { comboBox5.SelectedItem = value; } }
+        public string targetID
+        {
+            get
+            {
+                if (comboBox5.SelectedItem != null)
+                {
+                    return comboBox5.SelectedItem.ToString();
+                }
+                else
+                {
+                    return "1";
+                }
+            }
+            set
+            {
+                comboBox5.SelectedItem = value;
+            }
+        }
+
         public string amount { get { return textBox2.Text; } set { textBox2.Text = value; } }
         public string isOptional
         {
@@ -41,6 +59,8 @@ namespace DialogueEditor
         }
 
         public string taskName { get { return label4.Text; } set { label4.Text = value; } }
+
+        public int taskID { get; set; }
 
         public string[] taskTypeItems
         {
@@ -76,13 +96,16 @@ namespace DialogueEditor
         {
            comboBox5.Items.Clear();       
            targetIdItems = form.DB.LoadIdByTaskType(taskType);
-            comboBox5.SelectedIndex = 0;
-            //comboBox5.Items.AddRange(form.DB.LoadIdByTaskType(taskType));
         }
 
         private void comboBox2_SelectionChangeCommitted(object sender, EventArgs e)
         {
             
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            form.DB.DeleteTask(taskID);
         }
     }
 }

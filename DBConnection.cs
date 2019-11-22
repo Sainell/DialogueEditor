@@ -582,6 +582,7 @@ namespace DialogueEditor
                 taskCounteinerUI[i].targetID = readerTask.GetValue(3).ToString();
                 taskCounteinerUI[i].amount = readerTask.GetValue(4).ToString();
                 taskCounteinerUI[i].isOptional = readerTask.GetValue(5).ToString();
+                taskCounteinerUI[i].taskID = Convert.ToInt32(readerTask.GetValue(0));
             }
             readerTask.Close();
 
@@ -650,7 +651,8 @@ namespace DialogueEditor
                     return LoadNpcList();
 
                 default:
-                    return null;
+                    MessageBox.Show($"ERROR: type  \"{eventType}\" doesn't work yet");
+                    return new string[0];
             }
         }
 
@@ -665,12 +667,13 @@ namespace DialogueEditor
                     return LoadNpcList();
 
                 default:
-                    return null;
+                    MessageBox.Show($"ERROR: type  \"{taskType}\" doesn't work yet");
+                    return new string[0];
             }
         }
         #endregion
         #region Save Quest
-        public void SaveQuestToDB(string startQuestEventType,string startQuestTargetID, string endQuestEventType, string endQuestTargetID, ref List<TaskUI> taskCounteiner, int questId)
+        public void SaveQuestToDB(string startQuestEventType, string startQuestTargetID, string endQuestEventType, string endQuestTargetID, ref List<TaskUI> taskCounteiner, int questId)
         {
             cmdNPCtext.CommandText = $"select id from 'game_event_types' where game_events='{startQuestEventType}'";
             var startQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
@@ -679,19 +682,49 @@ namespace DialogueEditor
             var endQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
             cmd.CommandText = $"update 'quest' SET StartDialogId = '{startQuestTargetID}', EndDialogId = '{endQuestTargetID}', StartQuestEventType = '{startQuestEventTypeForID}', EndQuestEventType = '{endQuestEventTypeForID}' where Id = '{questId}'";
-         //   WriteCommand(cmd.CommandText);
-         
+            //   WriteCommand(cmd.CommandText);
+
             cmd.ExecuteNonQuery();
             for (int i = 0; i < taskCounteiner.Count; i++)
             {
                 cmdNPCtext.CommandText = $"select id from 'quest_task_types' where type='{taskCounteiner[i].taskType}'";
                 var taskTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
-                cmdNPCtext.CommandText = $"update 'quest_objectives' SET Type='{taskTypeForID}', TargetId='{taskCounteiner[i].targetID}', Amount='{taskCounteiner[i].amount}',isOptional ='{taskCounteiner[i].isOptional}' where QuestId='{questId}' and Id ='{i+1}'";
-       //         WriteCommand(cmdNPCtext.CommandText);
+                cmdNPCtext.CommandText = $"update 'quest_objectives' SET Type='{taskTypeForID}', TargetId='{taskCounteiner[i].targetID}', Amount='{taskCounteiner[i].amount}',isOptional ='{taskCounteiner[i].isOptional}' where QuestId='{questId}' and Id ='{i + 1}'";
+                //         WriteCommand(cmdNPCtext.CommandText);
                 cmdNPCtext.ExecuteNonQuery();
             }
 
+        }
+        #endregion
+
+        #region Add new Quest and Task
+        public void AddNewQuest(int startDialogId, int endDialogId, int startQuestEventType, int endQuestEventType)
+        {
+            cmd.CommandText = $"insert into 'quest' (StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType) values ('{startDialogId}','{endDialogId}','{startQuestEventType}','{endQuestEventType}') ";
+            cmd.ExecuteNonQuery();
+        }
+
+        public void AddNewTask(int questId)
+        {
+            cmd.CommandText = $"insert into 'quest_objectives' (QuestId) values ('{questId}') ";
+            cmd.ExecuteNonQuery();
+        }
+
+        #endregion
+        #region Delete Quest and Task
+        public void DeleteTask(int taskId)
+        {
+            cmd.CommandText = $"delete from 'quest_objectives' where Id ={taskId}";
+            cmd.ExecuteNonQuery();
+        }
+
+        public void DeleteQuest(int questId)
+        {
+            cmd.CommandText = $"delete from 'quest' where Id ={questId}";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = $"delete from 'quest_objectives' where QuestId ={questId}";
+            cmd.ExecuteNonQuery();
         }
         #endregion
     }
