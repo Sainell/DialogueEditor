@@ -1,0 +1,15 @@
+update 'quest' SET StartDialogId = '6', EndDialogId = '22', StartQuestEventType = '1', EndQuestEventType = '1' where Id = '1'; 
+update 'quest_objectives' SET Type='1', TargetId='1', Amount='1',isOptional ='0' where QuestId='1' and Id ='1'; 
+update 'quest_objectives' SET Type='1', TargetId='1', Amount='1',isOptional ='0' where QuestId='1' and Id ='2'; 
+insert into 'quest' (StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType) values ('1','1','1','1') ; 
+delete from 'quest' where Id =1; 
+delete from 'quest_objectives' where QuestId =1; 
+update 'quest' SET StartDialogId = '6', EndDialogId = '22', StartQuestEventType = '1', EndQuestEventType = '1' where Id = '1'; 
+update 'quest_objectives' SET Type='1', TargetId='1', Amount='1',isOptional ='0' where QuestId='1' and Id ='1'; 
+update 'quest_objectives' SET Type='1', TargetId='1', Amount='1',isOptional ='0' where QuestId='1' and Id ='2'; 
+insert into 'quest' (StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType) values ('1','1','1','1') ; 
+delete from 'quest' where Id =1; 
+delete from 'quest_objectives' where QuestId =1; 
+insert into 'quest_objectives' (QuestId) values ('2') ; 
+update 'quest' SET StartDialogId = '10', EndDialogId = '20', StartQuestEventType = '1', EndQuestEventType = '1' where Id = '2'; 
+update 'quest_objectives' SET Type='8', TargetId='5', Amount='2',isOptional ='1' where QuestId='2' and Id ='1'; 

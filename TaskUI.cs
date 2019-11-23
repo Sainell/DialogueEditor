@@ -60,7 +60,8 @@ namespace DialogueEditor
 
         public string taskName { get { return label4.Text; } set { label4.Text = value; } }
 
-        public int taskID { get; set; }
+        public int taskID { get { return Convert.ToInt32(label5.Text); } set { label5.Text += value; } }
+
 
         public string[] taskTypeItems
         {

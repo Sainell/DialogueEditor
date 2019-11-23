@@ -21,6 +21,7 @@ namespace DialogueEditor
         string copyDbDirectory = @".\_tempWorld.bytes";
         bool isClearTempDB = false;
         List<TaskUI> taskContainerUI = new List<TaskUI>();
+        public StringBuilder sb = new StringBuilder();
 
         public Form3(Form2 startform)
         {
@@ -30,13 +31,10 @@ namespace DialogueEditor
 
         private void Form3_FormClosed(object sender, FormClosedEventArgs e)
         {
+            if (DB != null) DB.CloseConnection();
             startform.Show();
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -55,17 +53,14 @@ namespace DialogueEditor
                 }
                 finally
                 {
-                    dbpath = copyDbDirectory;
-                    label6.Text = copyDbDirectory;
-
+                    CopyDB();
                 }
             }
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            dbpath = copyDbDirectory;
-            label6.Text = copyDbDirectory;
+            CopyDB();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -76,6 +71,12 @@ namespace DialogueEditor
         private void button1_Click(object sender, EventArgs e)
         {
             DBUpdate();
+        }
+
+        public void CopyDB()
+        {
+            dbpath = copyDbDirectory;
+            label6.Text = copyDbDirectory;
         }
 
         public void DBUpdate()
@@ -94,14 +95,10 @@ namespace DialogueEditor
                         comboBox7.Items.Clear();
                         taskContainerUI.Clear();
 
-
-
                         comboBox1.Items.AddRange(DB.LoadGameEvents());
                         comboBox3.Items.AddRange(DB.LoadGameEvents());
                         comboBox1.SelectedItem = DB.LoadQuestSelectType(questId, "start");
                         comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "end");
-
-
 
                         comboBox6.SelectedItem = DB.LoadQuestSelectID(questId, "start");
                         comboBox7.SelectedItem = DB.LoadQuestSelectID(questId, "end");
@@ -114,7 +111,7 @@ namespace DialogueEditor
                         {
                             task.taskTypeItems = DB.LoadTaskTypes();
                         }
-                        DB.LoadTaskList(questId, ref taskContainerUI);
+                        DB.LoadTaskList(questId, ref taskContainerUI, sb);
                     }
                     catch
                     {
@@ -130,11 +127,6 @@ namespace DialogueEditor
             {
                 MessageBox.Show("ERROR: DataBase not selected");
             }
-        }
-
-        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -197,7 +189,8 @@ namespace DialogueEditor
 
         private void button5_Click(object sender, EventArgs e)
         {
-            //patch
+            DB.CreateDBPatch("quest");
         }
+
     }
 }

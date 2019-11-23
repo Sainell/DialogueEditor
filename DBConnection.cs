@@ -289,12 +289,12 @@ namespace DialogueEditor
         {
             sb.AppendFormat(cmd + "; " + "\r\n");
         }
-        public void CreateDBPatch()
+        public void CreateDBPatch(string tableValue)
         {
             var path = @".\DB_Patches\";
             var date = DateTime.Now.ToString("yyyyMMdd-HHmm");
             var dbname = "_world_";
-            var table = "dialogues";
+            var table = tableValue;
             var format = ".sql";
 
             File.AppendAllText(path + date + dbname + table + format, sb.ToString());
@@ -569,8 +569,9 @@ namespace DialogueEditor
             return Convert.ToInt16(tasksCount);
         }
 
-        public void LoadTaskList(int questID, ref List<TaskUI> taskCounteinerUI)
+        public void LoadTaskList(int questID, ref List<TaskUI> taskCounteinerUI, StringBuilder sb)
         {
+            this.sb = sb;
             cmdUIcount.CommandText = $"select * from 'quest_objectives' where QuestId={questID}";
             readerTask = cmdUIcount.ExecuteReader();
             for (int i = 0; i < taskCounteinerUI.Count; i++)
@@ -682,7 +683,7 @@ namespace DialogueEditor
             var endQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
             cmd.CommandText = $"update 'quest' SET StartDialogId = '{startQuestTargetID}', EndDialogId = '{endQuestTargetID}', StartQuestEventType = '{startQuestEventTypeForID}', EndQuestEventType = '{endQuestEventTypeForID}' where Id = '{questId}'";
-            //   WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText);
 
             cmd.ExecuteNonQuery();
             for (int i = 0; i < taskCounteiner.Count; i++)
@@ -691,7 +692,7 @@ namespace DialogueEditor
                 var taskTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
                 cmdNPCtext.CommandText = $"update 'quest_objectives' SET Type='{taskTypeForID}', TargetId='{taskCounteiner[i].targetID}', Amount='{taskCounteiner[i].amount}',isOptional ='{taskCounteiner[i].isOptional}' where QuestId='{questId}' and Id ='{i + 1}'";
-                //         WriteCommand(cmdNPCtext.CommandText);
+                WriteCommand(cmdNPCtext.CommandText);
                 cmdNPCtext.ExecuteNonQuery();
             }
 
@@ -702,12 +703,14 @@ namespace DialogueEditor
         public void AddNewQuest(int startDialogId, int endDialogId, int startQuestEventType, int endQuestEventType)
         {
             cmd.CommandText = $"insert into 'quest' (StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType) values ('{startDialogId}','{endDialogId}','{startQuestEventType}','{endQuestEventType}') ";
+            WriteCommand(cmd.CommandText);
             cmd.ExecuteNonQuery();
         }
 
         public void AddNewTask(int questId)
         {
             cmd.CommandText = $"insert into 'quest_objectives' (QuestId) values ('{questId}') ";
+            WriteCommand(cmd.CommandText);
             cmd.ExecuteNonQuery();
         }
 
@@ -716,14 +719,17 @@ namespace DialogueEditor
         public void DeleteTask(int taskId)
         {
             cmd.CommandText = $"delete from 'quest_objectives' where Id ={taskId}";
+            WriteCommand(cmd.CommandText);
             cmd.ExecuteNonQuery();
         }
 
         public void DeleteQuest(int questId)
         {
             cmd.CommandText = $"delete from 'quest' where Id ={questId}";
+            WriteCommand(cmd.CommandText);
             cmd.ExecuteNonQuery();
             cmd.CommandText = $"delete from 'quest_objectives' where QuestId ={questId}";
+            WriteCommand(cmd.CommandText);
             cmd.ExecuteNonQuery();
         }
         #endregion

@@ -89,7 +89,7 @@ namespace DialogueEditor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            DB.CreateDBPatch();
+            DB.CreateDBPatch("dialogue");
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -109,13 +109,16 @@ namespace DialogueEditor
                 }
                 finally
                 {
-                    dbpath = copyDbDirectory;
-                    label2.Text = copyDbDirectory;
-                    
+                    CopyDB();
                 }
             }                
         }
         private void button6_Click(object sender, EventArgs e)
+        {
+            CopyDB();
+        }
+
+        public void CopyDB()
         {
             dbpath = copyDbDirectory;
             label2.Text = copyDbDirectory;
