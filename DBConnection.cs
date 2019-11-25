@@ -44,9 +44,10 @@ namespace DialogueEditor
         Point try_pEnd;
         Point try_pUp;
         List<Temp> temp = new List<Temp>();
+        bool isOpened = false;
 
 
-        public DBConnection(string BDpath)
+        public DBConnection(string BDpath,StringBuilder sb)
         {
             DB = new SQLiteConnection("Data Source= " + BDpath);
             cmd = DB.CreateCommand();
@@ -55,15 +56,24 @@ namespace DialogueEditor
             cmdCount = DB.CreateCommand();
             cmdUIcount = DB.CreateCommand();
             cmdUIAnswerCount = DB.CreateCommand();
+            this.sb = sb;
         }
 
         public void OpenConnection()
         {
-            DB.Open();
+            if(!isOpened)
+            {
+                DB.Open();
+                isOpened = true;
+            }
         }
         public void CloseConnection()
         {
-            DB.Close();
+            if (isOpened)
+            {
+                DB.Close();
+                isOpened = false;
+            }
         }
 
         public void GetFromDB(int npc_id, Control.ControlCollection controls, Form1 form)
@@ -497,9 +507,11 @@ namespace DialogueEditor
             pointsList.Clear();
         }
         #endregion
+
         #region Load Quest from DB
         public string[] LoadTaskTypes()
         {
+            OpenConnection();
             cmdCount.CommandText = $"select count(*) from 'quest_task_types'";
             var typesCount = Convert.ToInt16(cmdCount.ExecuteScalar());
             string[] types = new string[typesCount];
@@ -511,11 +523,13 @@ namespace DialogueEditor
                 types[i] = reader.GetValue(1).ToString();
             }
             reader.Close();
+            CloseConnection();
             return types;
         }
 
         public string[] LoadNpcList()
         {
+            OpenConnection();
             cmdCount.CommandText = $"select count(*) from 'npc'";
             var npcCount = Convert.ToInt16(cmdCount.ExecuteScalar());
             string[] npcList = new string[npcCount];
@@ -527,11 +541,13 @@ namespace DialogueEditor
                 npcList[i] = reader.GetValue(0).ToString();
             }
             reader.Close();
+         //   CloseConnection();
             return npcList;
         }
 
         public string[] LoadGameEvents()
         {
+            OpenConnection();
             cmdCount.CommandText = $"select count(*) from 'game_event_types'";
             var eventsCount = Convert.ToInt16(cmdCount.ExecuteScalar());
             string[] events = new string[eventsCount];
@@ -543,11 +559,13 @@ namespace DialogueEditor
                 events[i] = reader.GetValue(1).ToString();
             }
             reader.Close();
+            CloseConnection();
             return events;
         }
 
         public string[] LoadDialogueList()
         {
+            OpenConnection();
             cmdCount.CommandText = $"select count(*) from 'dialogue_answers'";
             var dialogueCount = Convert.ToInt16(cmdCount.ExecuteScalar());
             string[] dialogueList = new string[dialogueCount];
@@ -559,38 +577,50 @@ namespace DialogueEditor
                 dialogueList[i] = reader.GetValue(0).ToString();
             }
             reader.Close();
+          //  CloseConnection();
             return dialogueList;
         }
 
         public int GetTasksCount(int questID)
         {
+            OpenConnection();
             cmdCount.CommandText = $"select count(*) from 'quest_objectives' where QuestId={questID}";
             var tasksCount = cmdCount.ExecuteScalar();
+            CloseConnection();
             return Convert.ToInt16(tasksCount);
         }
 
-        public void LoadTaskList(int questID, ref List<TaskUI> taskCounteinerUI, StringBuilder sb)
+        public string GetQuestName(int questID)
         {
-            this.sb = sb;
-            cmdUIcount.CommandText = $"select * from 'quest_objectives' where QuestId={questID}";
+            OpenConnection();
+            cmd.CommandText = $"select QuestName from 'quest' where Id={questID}";
+            var questName = cmd.ExecuteScalar().ToString();
+            CloseConnection();
+            return questName;
+        }
+        
+        public void LoadTaskList(int questID, ref List<TaskUI> taskCounteinerUI)
+        {
+            OpenConnection();
+            cmdUIcount.CommandText = $"select * from 'quest_objectives' inner join 'quest_task_types' on quest_objectives.Type = quest_task_types.id where QuestId={questID}";
             readerTask = cmdUIcount.ExecuteReader();
             for (int i = 0; i < taskCounteinerUI.Count; i++)
             {
                 readerTask.Read();
-                var id = readerTask.GetValue(2).ToString();
-                cmdUIAnswerCount.CommandText = $"select type from 'quest_task_types' where id={id}";
-                taskCounteinerUI[i].taskType = cmdUIAnswerCount.ExecuteScalar().ToString();
+                taskCounteinerUI[i].taskType = readerTask.GetValue(7).ToString();
                 taskCounteinerUI[i].targetID = readerTask.GetValue(3).ToString();
                 taskCounteinerUI[i].amount = readerTask.GetValue(4).ToString();
                 taskCounteinerUI[i].isOptional = readerTask.GetValue(5).ToString();
                 taskCounteinerUI[i].taskID = Convert.ToInt32(readerTask.GetValue(0));
             }
             readerTask.Close();
+            CloseConnection();
 
         }
 
         public string LoadQuestSelectID(int questID, string value)
         {
+            OpenConnection();
             cmd.CommandText = $"select * from 'quest' where Id={questID}";
             reader = cmd.ExecuteReader();
             reader.Read();
@@ -598,17 +628,20 @@ namespace DialogueEditor
             {
                 var startDialogueId = reader.GetValue(7).ToString();
                 reader.Close();
+                CloseConnection();
                 return startDialogueId;
             }
             if (value == "end")
             {
                 var endDialogueId = reader.GetValue(8).ToString();
                 reader.Close();
+                CloseConnection();
                 return endDialogueId;
             }
 
             else
             {
+                CloseConnection();
                 throw new Exception("error value");
             }
 
@@ -616,6 +649,7 @@ namespace DialogueEditor
 
         public string LoadQuestSelectType(int questID, string value)
         {
+            OpenConnection();
             cmd.CommandText = $"select StartQuestEventType,EndQuestEventType from 'quest' where Id={questID}";
             reader = cmd.ExecuteReader();
             reader.Read();
@@ -625,6 +659,7 @@ namespace DialogueEditor
                 reader.Close();
                 cmdUIAnswerCount.CommandText = $"select game_events from 'game_event_types' where id ={id}";
                 var startQuestEventType = cmdUIAnswerCount.ExecuteScalar().ToString();
+                CloseConnection();
                 return startQuestEventType;
             }
             else if (value == "end")
@@ -633,10 +668,12 @@ namespace DialogueEditor
                 reader.Close();
                 cmdUIAnswerCount.CommandText = $"select game_events from 'game_event_types' where id ={id}";
                 var endQuestEventType = cmdUIAnswerCount.ExecuteScalar().ToString();
+                CloseConnection();
                 return endQuestEventType;
             }
             else
             {
+                CloseConnection();
                 throw new Exception("error value");
             }
         }
@@ -672,9 +709,28 @@ namespace DialogueEditor
                     return new string[0];
             }
         }
+
+        public string[] LoadQuestList()
+        {
+            OpenConnection();
+            cmdCount.CommandText = $"select count(*) from 'quest'";
+            var questCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            string[] questList = new string[questCount];
+            cmd.CommandText = $"select Id from 'quest'";
+            reader = cmd.ExecuteReader();
+            for (int i = 0; i < questCount; i++)
+            {
+                reader.Read();
+                questList[i] = reader.GetValue(0).ToString();
+            }
+            reader.Close();
+            CloseConnection();
+            return questList;
+
+        }
         #endregion
         #region Save Quest
-        public void SaveQuestToDB(string startQuestEventType, string startQuestTargetID, string endQuestEventType, string endQuestTargetID, ref List<TaskUI> taskCounteiner, int questId)
+        public void SaveQuestToDB(string startQuestEventType, string startQuestTargetID, string endQuestEventType, string endQuestTargetID, ref List<TaskUI> taskCounteiner, int questId, string questName)
         {
             cmdNPCtext.CommandText = $"select id from 'game_event_types' where game_events='{startQuestEventType}'";
             var startQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
@@ -682,16 +738,16 @@ namespace DialogueEditor
             cmdNPCtext.CommandText = $"select id from 'game_event_types' where game_events='{endQuestEventType}'";
             var endQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
-            cmd.CommandText = $"update 'quest' SET StartDialogId = '{startQuestTargetID}', EndDialogId = '{endQuestTargetID}', StartQuestEventType = '{startQuestEventTypeForID}', EndQuestEventType = '{endQuestEventTypeForID}' where Id = '{questId}'";
+            cmd.CommandText = $"update 'quest' SET StartDialogId = '{startQuestTargetID}', EndDialogId = '{endQuestTargetID}', StartQuestEventType = '{startQuestEventTypeForID}', EndQuestEventType = '{endQuestEventTypeForID}', QuestName='{questName}' where Id = '{questId}'";
             WriteCommand(cmd.CommandText);
-
             cmd.ExecuteNonQuery();
+
             for (int i = 0; i < taskCounteiner.Count; i++)
             {
                 cmdNPCtext.CommandText = $"select id from 'quest_task_types' where type='{taskCounteiner[i].taskType}'";
                 var taskTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
-                cmdNPCtext.CommandText = $"update 'quest_objectives' SET Type='{taskTypeForID}', TargetId='{taskCounteiner[i].targetID}', Amount='{taskCounteiner[i].amount}',isOptional ='{taskCounteiner[i].isOptional}' where QuestId='{questId}' and Id ='{i + 1}'";
+                cmdNPCtext.CommandText = $"update 'quest_objectives' SET Type='{taskTypeForID}', TargetId='{taskCounteiner[i].targetID}', Amount='{taskCounteiner[i].amount}',isOptional ='{taskCounteiner[i].isOptional}' where QuestId='{questId}' and Id ='{taskCounteiner[i].taskID}'";
                 WriteCommand(cmdNPCtext.CommandText);
                 cmdNPCtext.ExecuteNonQuery();
             }
@@ -718,9 +774,11 @@ namespace DialogueEditor
         #region Delete Quest and Task
         public void DeleteTask(int taskId)
         {
+            OpenConnection();
             cmd.CommandText = $"delete from 'quest_objectives' where Id ={taskId}";
             WriteCommand(cmd.CommandText);
             cmd.ExecuteNonQuery();
+            CloseConnection();
         }
 
         public void DeleteQuest(int questId)
@@ -733,6 +791,8 @@ namespace DialogueEditor
             cmd.ExecuteNonQuery();
         }
         #endregion
+
+
     }
 }
 

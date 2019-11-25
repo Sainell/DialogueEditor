@@ -95,18 +95,28 @@ namespace DialogueEditor
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-           comboBox5.Items.Clear();       
-           targetIdItems = form.DB.LoadIdByTaskType(taskType);
-        }
+            if (form.DB != null)
+            {
+                comboBox5.Items.Clear();
+                targetIdItems = form.DB.LoadIdByTaskType(taskType);
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
 
-        private void comboBox2_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            form.DB.DeleteTask(taskID);
+            if (form.DB != null)
+            {
+                form.DB.DeleteTask(taskID);
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
     }
 }

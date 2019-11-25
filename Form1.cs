@@ -153,7 +153,7 @@ namespace DialogueEditor
         {
             if (dbpath != null)
             {
-                DB = new DBConnection(dbpath);
+                DB = new DBConnection(dbpath,sb);  // Добавлено sb в конструктор, нужно проверить.
                 DB.OpenConnection();
                 if (npc_id != 0)
                 {

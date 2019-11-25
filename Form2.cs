@@ -30,5 +30,6 @@ namespace DialogueEditor
             f3.Show();
             this.Hide();
         }
+
     }
 }

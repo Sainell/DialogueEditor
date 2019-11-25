@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form3));
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -52,19 +51,22 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button7 = new System.Windows.Forms.Button();
             this.panel6 = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.button7 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button5 = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.button8 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -73,17 +75,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(57, 7);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(52, 20);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(115, 4);
+            this.button1.Location = new System.Drawing.Point(128, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(70, 25);
             this.button1.TabIndex = 2;
@@ -94,9 +88,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.Location = new System.Drawing.Point(2, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 13);
+            this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "QUEST ID";
             // 
@@ -132,32 +127,32 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(90, 19);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 7;
-            this.comboBox1.Text = "Start event";
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // comboBox3
             // 
+            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Location = new System.Drawing.Point(89, 18);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(121, 21);
             this.comboBox3.TabIndex = 9;
-            this.comboBox3.Text = "End event";
             this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // comboBox4
             // 
+            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Location = new System.Drawing.Point(228, 19);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(89, 21);
             this.comboBox4.TabIndex = 10;
-            this.comboBox4.Text = "Reward ID";
             // 
             // textBox3
             // 
@@ -170,7 +165,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(191, 4);
+            this.button2.Location = new System.Drawing.Point(204, 4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 25);
             this.button2.TabIndex = 14;
@@ -210,10 +205,10 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label6.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.label6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label6.Location = new System.Drawing.Point(525, 11);
+            this.label6.Location = new System.Drawing.Point(536, 11);
             this.label6.Name = "label6";
             this.label6.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label6.Size = new System.Drawing.Size(176, 13);
+            this.label6.Size = new System.Drawing.Size(165, 13);
             this.label6.TabIndex = 19;
             this.label6.Text = "db folder";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -231,25 +226,25 @@
             // 
             // comboBox6
             // 
+            this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox6.FormattingEnabled = true;
             this.comboBox6.Location = new System.Drawing.Point(228, 19);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(89, 21);
             this.comboBox6.TabIndex = 22;
-            this.comboBox6.Text = "Npc ID";
             // 
             // comboBox7
             // 
+            this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox7.FormattingEnabled = true;
             this.comboBox7.Location = new System.Drawing.Point(228, 18);
             this.comboBox7.Name = "comboBox7";
             this.comboBox7.Size = new System.Drawing.Size(89, 21);
             this.comboBox7.TabIndex = 23;
-            this.comboBox7.Text = "Npc ID";
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(272, 4);
+            this.button3.Location = new System.Drawing.Point(285, 4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(65, 25);
             this.button3.TabIndex = 24;
@@ -259,12 +254,12 @@
             // 
             // comboBox8
             // 
+            this.comboBox8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox8.FormattingEnabled = true;
             this.comboBox8.Location = new System.Drawing.Point(89, 19);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(121, 21);
             this.comboBox8.TabIndex = 25;
-            this.comboBox8.Text = "Reward type";
             // 
             // panel1
             // 
@@ -275,7 +270,7 @@
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.comboBox6);
-            this.panel1.Location = new System.Drawing.Point(58, 77);
+            this.panel1.Location = new System.Drawing.Point(273, 83);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(546, 46);
             this.panel1.TabIndex = 27;
@@ -302,13 +297,26 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.panel6);
             this.panel2.Controls.Add(this.button7);
+            this.panel2.Controls.Add(this.panel6);
             this.panel2.Controls.Add(this.panel3);
-            this.panel2.Location = new System.Drawing.Point(58, 132);
+            this.panel2.Location = new System.Drawing.Point(273, 138);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(546, 159);
             this.panel2.TabIndex = 28;
+            // 
+            // button7
+            // 
+            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button7.Location = new System.Drawing.Point(134, 1);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(293, 21);
+            this.button7.TabIndex = 32;
+            this.button7.Text = "Add New Task";
+            this.button7.UseVisualStyleBackColor = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // panel6
             // 
@@ -356,19 +364,6 @@
             this.label11.TabIndex = 35;
             this.label11.Text = "Revard Type";
             // 
-            // button7
-            // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button7.Location = new System.Drawing.Point(134, 1);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(293, 21);
-            this.button7.TabIndex = 32;
-            this.button7.Text = "Add New Task";
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(254)))), ((int)(((byte)(234)))));
@@ -406,7 +401,7 @@
             // panel4
             // 
             this.panel4.AutoSize = true;
-            this.panel4.Location = new System.Drawing.Point(58, 129);
+            this.panel4.Location = new System.Drawing.Point(273, 135);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(318, 28);
             this.panel4.TabIndex = 29;
@@ -426,10 +421,10 @@
             this.panel5.AutoSize = true;
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel5.Controls.Add(this.comboBox2);
             this.panel5.Controls.Add(this.button8);
             this.panel5.Controls.Add(this.label6);
             this.panel5.Controls.Add(this.button5);
-            this.panel5.Controls.Add(this.textBox1);
             this.panel5.Controls.Add(this.button1);
             this.panel5.Controls.Add(this.label1);
             this.panel5.Controls.Add(this.button2);
@@ -444,9 +439,19 @@
             this.panel5.Size = new System.Drawing.Size(964, 34);
             this.panel5.TabIndex = 31;
             // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(65, 6);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(50, 21);
+            this.comboBox2.TabIndex = 32;
+            this.comboBox2.TextChanged += new System.EventHandler(this.comboBox2_TextChanged);
+            this.comboBox2.Click += new System.EventHandler(this.comboBox2_Click);
+            // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(343, 4);
+            this.button8.Location = new System.Drawing.Point(356, 4);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(77, 25);
             this.button8.TabIndex = 31;
@@ -456,13 +461,34 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pictureBox1.ErrorImage = null;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(632, 36);
+            this.pictureBox1.Location = new System.Drawing.Point(-213, 36);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(332, 406);
+            this.pictureBox1.Size = new System.Drawing.Size(588, 406);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 32;
             this.pictureBox1.TabStop = false;
+            // 
+            // textBox2
+            // 
+            this.textBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox2.Location = new System.Drawing.Point(381, 57);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(438, 13);
+            this.textBox2.TabIndex = 33;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label13.Location = new System.Drawing.Point(278, 57);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(84, 13);
+            this.label13.TabIndex = 34;
+            this.label13.Text = "Quest Name: ";
             // 
             // Form3
             // 
@@ -471,18 +497,20 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(964, 442);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.panel5);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel4);
+            this.Controls.Add(this.pictureBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(980, 480);
             this.MinimumSize = new System.Drawing.Size(980, 480);
             this.Name = "Form3";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Quest Creator v0.9";
+            this.Text = "Quest Creator v1.0";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form3_FormClosed);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -500,8 +528,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -537,5 +563,8 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox comboBox2;
     }
 }

@@ -26,7 +26,7 @@ namespace DialogueEditor
         public Form3(Form2 startform)
         {
             InitializeComponent();
-            this.startform = startform;
+            this.startform = startform;         
         }
 
         private void Form3_FormClosed(object sender, FormClosedEventArgs e)
@@ -63,10 +63,18 @@ namespace DialogueEditor
             CopyDB();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void comboBox2_TextChanged(object sender, EventArgs e)
         {
-            questId = Convert.ToInt16(textBox1.Text);
+            try
+            {
+                questId = Convert.ToInt16(comboBox2.Text);
+            }
+            catch
+            {
+                MessageBox.Show("ERROR: ID cannot be a string, You must enter only Number");
+            }
         }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -77,13 +85,20 @@ namespace DialogueEditor
         {
             dbpath = copyDbDirectory;
             label6.Text = copyDbDirectory;
+            if (dbpath != null)
+            {
+                DB = new DBConnection(dbpath,sb);
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
 
         public void DBUpdate()
         {
-            if (dbpath != null)
+            if (DB != null)
             {
-                DB = new DBConnection(dbpath);
                 DB.OpenConnection();
                 if (questId != 0)
                 {
@@ -95,11 +110,11 @@ namespace DialogueEditor
                         comboBox7.Items.Clear();
                         taskContainerUI.Clear();
 
+                        textBox2.Text = DB.GetQuestName(questId);
                         comboBox1.Items.AddRange(DB.LoadGameEvents());
                         comboBox3.Items.AddRange(DB.LoadGameEvents());
                         comboBox1.SelectedItem = DB.LoadQuestSelectType(questId, "start");
                         comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "end");
-
                         comboBox6.SelectedItem = DB.LoadQuestSelectID(questId, "start");
                         comboBox7.SelectedItem = DB.LoadQuestSelectID(questId, "end");
 
@@ -111,11 +126,15 @@ namespace DialogueEditor
                         {
                             task.taskTypeItems = DB.LoadTaskTypes();
                         }
-                        DB.LoadTaskList(questId, ref taskContainerUI, sb);
+                        DB.LoadTaskList(questId, ref taskContainerUI);
                     }
                     catch
                     {
                         MessageBox.Show($"ERROR: Quest ID  {questId} doesn't exist");
+                    }
+                    finally
+                    {
+                        DB.CloseConnection();
                     }
                 }
                 else
@@ -137,6 +156,7 @@ namespace DialogueEditor
             }
             else isClearTempDB = false;
         }
+
         private void CreateTaskContainerUI(int count)
         {
             panel4.Controls.Clear();
@@ -152,45 +172,138 @@ namespace DialogueEditor
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBox6.Items.Clear();
-            comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()));
+            if (DB != null)
+            {
+             //   DB.OpenConnection();
+                comboBox6.Items.Clear();
+                comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()));
+               // DB.CloseConnection();
+            }
+            
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBox7.Items.Clear();
-            comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()));
+            if (DB != null)
+            {
+             //   DB.OpenConnection();
+                comboBox7.Items.Clear();
+                comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()));
+             //   DB.CloseConnection();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var startQuestEventType = comboBox1.SelectedItem.ToString();
-            var startQuestTargetID = comboBox6.SelectedItem.ToString();
-            var endQuestEventType = comboBox3.SelectedItem.ToString();
-            var endQuestTargetID = comboBox7.SelectedItem.ToString();
+            if (DB != null)
+            {
+                if (comboBox1.SelectedItem != null && comboBox6.SelectedItem!= null && comboBox3.SelectedItem!= null && comboBox7.SelectedItem!=null)
+                {
+                    var startQuestEventType = comboBox1.SelectedItem.ToString();
+                    var startQuestTargetID = comboBox6.SelectedItem.ToString();
+                    var endQuestEventType = comboBox3.SelectedItem.ToString();
+                    var endQuestTargetID = comboBox7.SelectedItem.ToString();
 
-            DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId);
+                    DB.OpenConnection();
+                    DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId, textBox2.Text);
+                    DB.CloseConnection();
+                }
+                else
+                {
+                    MessageBox.Show("ERROR: Quest is not Load or some fields have not selected value");
+                }
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
-
+        // add new quest
         private void button3_Click(object sender, EventArgs e)
         {
-            DB.AddNewQuest(1,1,1,1);
+            if (DB != null)
+            {
+                DB.OpenConnection();
+                DB.AddNewQuest(1, 1, 1, 1);
+                DB.CloseConnection();
+                MessageBox.Show("New Quest has been created");
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
-
+        //add new task
         private void button7_Click(object sender, EventArgs e)
         {
-            DB.AddNewTask(questId);
+            if (DB != null)
+            {
+                DB.OpenConnection();
+                DB.AddNewTask(questId);
+                DB.CloseConnection();
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
-
+        //delete Quest
         private void button8_Click(object sender, EventArgs e)
         {
-            DB.DeleteQuest(questId);
-        }
 
+            if (DB != null)
+            {
+                if (questId != 0)
+                {
+                    var result = MessageBox.Show($"Are you sure you want to delete the Quest with ID \" {questId}\" ", "Delete Quest", MessageBoxButtons.YesNo);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        DB.OpenConnection();
+                        DB.DeleteQuest(questId);
+                        DB.CloseConnection();
+                        MessageBox.Show($"The Quest with ID \" {questId}\" has been deleted");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("ERROR: Quest ID not selected");
+                }
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
+
+        }
+        //create DB patch
         private void button5_Click(object sender, EventArgs e)
         {
-            DB.CreateDBPatch("quest");
+            if (DB != null)
+            {
+                DB.OpenConnection();
+                DB.CreateDBPatch("quest");
+                DB.CloseConnection();
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
 
+        private void comboBox2_Click(object sender, EventArgs e)
+        {
+            if (DB != null)
+            {
+               // DB.OpenConnection();
+                comboBox2.Items.Clear();
+                comboBox2.Items.AddRange(DB.LoadQuestList());
+              //  DB.CloseConnection();
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
+        }
     }
 }
