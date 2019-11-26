@@ -45,6 +45,7 @@ namespace DialogueEditor
         Point try_pUp;
         List<Temp> temp = new List<Temp>();
         bool isOpened = false;
+        bool npcTextFlag = false;
 
 
         public DBConnection(string BDpath,StringBuilder sb)
@@ -81,8 +82,7 @@ namespace DialogueEditor
             this.Controls = controls;
             this.npc_id = npc_id;
             this.form = form;
-            this.sb = form.sb;
-
+            
             cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
 
             ClearNodeUIElements();
@@ -172,15 +172,18 @@ namespace DialogueEditor
                 {
                     t.Text = "";
                 }
-
-                reader = cmdNPCtext.ExecuteReader();
-                for (int j = 0; j < nodeContainer.Count(); j++)
+                if (!npcTextFlag)
                 {
-                    reader.Read();
-                    var npcTextResult = reader.GetValue(0).ToString();
-                    nodeContainer[j].npcTextBox.Text = npcTextResult;
+                    reader = cmdNPCtext.ExecuteReader();
+                    for (int j = 0; j < nodeContainer.Count(); j++)
+                    {
+                        reader.Read();
+                        var npcTextResult = reader.GetValue(0).ToString();
+                        nodeContainer[j].npcTextBox.Text = npcTextResult;
+                    }
+                    reader.Close();
+                    npcTextFlag = true;
                 }
-                reader.Close();
 
                 reader = cmd.ExecuteReader();
                 for (int j = 0; j < GetNpcTextCount(); j++)
@@ -235,7 +238,7 @@ namespace DialogueEditor
                 var k = 0;
                 for (int i = 0; i < nodeContainer.Count(); i++)
                 {
-                    nodeContainer[i].npcTextBox.Text = temp[i].npcText;
+                    nodeContainer[i].npcTextBox.Text = temp[k].npcText;
 
                     for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++, k++)
                     {

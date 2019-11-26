@@ -510,7 +510,7 @@
             this.MinimumSize = new System.Drawing.Size(980, 480);
             this.Name = "Form3";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Quest Creator v1.0";
+            this.Text = "Quest Creator v1.1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form3_FormClosed);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

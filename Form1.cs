@@ -9,7 +9,6 @@ namespace DialogueEditor
 {
     public partial class Form1 : Form
     {
-
         private int npc_id;
         private List<NodeUI> nodeContainerUI = new List<NodeUI>();
         private List<NodeContainer> nodeContainer = new List<NodeContainer>();
@@ -31,11 +30,10 @@ namespace DialogueEditor
         private Form2 startform;
         List<Temp> temp;
         bool tempSaveFlag = true;
-
+        public int testi = 0;
         public Form1(Form2 startform)
         {
             InitializeComponent();
-            MouseWheel += new MouseEventHandler(Form1_MouseWheel);
             this.startform = startform;
         }
 
@@ -45,7 +43,7 @@ namespace DialogueEditor
             {
                 temp.Clear();
             }
-            DBUpdate(false); 
+            DBUpdate(); 
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
@@ -53,50 +51,56 @@ namespace DialogueEditor
             npc_id = Convert.ToInt16( textBox7.Text);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(label2);
-            panel1.Controls.Add(textBox7);
-            panel1.Controls.Add(button1);
-            panel1.Controls.Add(button2);
-            panel1.Controls.Add(button3);
-            panel1.Controls.Add(button4);
-            panel1.Controls.Add(button5);
-            panel1.Controls.Add(button6);
-
-        }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             if (DB != null)
             {
-                    DB.DrawPointsAndLines();
-                    DB.DrawLines();
+                DB.DrawPointsAndLines();
+                DB.DrawLines();
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            DB.SaveChangesToDB();
+            if (DB != null)
+            {
+                if (npc_id != 0)
+                {
+                    DB.SaveChangesToDB();
+                }
+                else
+                {
+                    MessageBox.Show("ERROR: NPC ID not selected");
+                } 
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
            if (DB!=null) DB.CloseConnection();
             startform.Show();
-           
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            DB.CreateDBPatch("dialogue");
+            if (DB != null)
+            {
+                DB.CreateDBPatch("dialogue");
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                
+            {   
                 try
                 {
                     FileInfo fn = new FileInfo(ofd.FileName);
@@ -122,44 +126,25 @@ namespace DialogueEditor
         {
             dbpath = copyDbDirectory;
             label2.Text = copyDbDirectory;
+            if (dbpath != null)
+            {
+                DB = new DBConnection(dbpath, sb);
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            DB.CreateNewNode("npc text");
-            DBUpdate(false);
-        }
-
-        private void Form1_Scroll(object sender, ScrollEventArgs e)
-        {
-            MenuPanelScrolling();
-        }
-
-        private void Form1_MouseWheel(object sender, MouseEventArgs e)
-        {
-            MenuPanelScrolling();
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox1.Checked)
+            if (DB != null)
             {
-                isClearTempDB = true;
-            }
-            else isClearTempDB = false;
-        }
-
-        public void DBUpdate(bool tempsave)
-        {
-            if (dbpath != null)
-            {
-                DB = new DBConnection(dbpath,sb);  // Добавлено sb в конструктор, нужно проверить.
-                DB.OpenConnection();
                 if (npc_id != 0)
                 {
-                    DB.GetFromDB(npc_id, Controls, this);
-                    DB.CreateGraph();
-                    MenuPanelScrolling();
+                    DB.CreateNewNode("npc text");
+                    // SaveToTempAndLoad();
+                    DBUpdate();
                 }
                 else
                 {
@@ -171,40 +156,57 @@ namespace DialogueEditor
                 MessageBox.Show("ERROR: DataBase not selected");
             }
         }
-        private void MenuPanelScrolling()
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-         //  panel1.Location = new Point(panel1.Location.X, 0);
+            if (checkBox1.Checked)
+            {
+                isClearTempDB = true;
+            }
+            else isClearTempDB = false;
         }
 
-        private void Form1_SizeChanged(object sender, EventArgs e)
+        public void DBUpdate()
         {
-           
+            if (DB != null)
+            {
+                DB = new DBConnection(dbpath, sb);  // Добавлено sb в конструктор, нужно проверить.
             
+                if (npc_id != 0)
+                {
+                    DB.OpenConnection();
+                    DB.GetFromDB(npc_id, Controls, this);
+                    DB.CreateGraph();
+                }
+                else
+                {
+                    MessageBox.Show("ERROR: NPC ID not selected");
+                }
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
 
         private void Form1_Resize(object sender, EventArgs e)
+        {
+            DBUpdate();
+         // SaveToTempAndLoad();
+        }
+        public void SaveToTempAndLoad()
         {
             if (tempSaveFlag)
             {
                 temp = DB.SaveToTemp();
                 tempSaveFlag = false;
             }
-            if (dbpath != null)
+            if (DB != null)
             {
-                DBUpdate(true);
+                DBUpdate();
                 DB.LoadFromTemp(temp);
             }
             tempSaveFlag = true;
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-          temp = DB.SaveToTemp();
-        }
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-            DB.LoadFromTemp(temp);
         }
     }
 }

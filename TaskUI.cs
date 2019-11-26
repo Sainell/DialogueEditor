@@ -75,7 +75,7 @@ namespace DialogueEditor
             get
             {
                 string[] str = new string[comboBox5.Items.Count];
-               for (int i=0;i<str.Length;i++)
+                for (int i = 0; i < str.Length; i++)
                 {
                     str[i] = comboBox5.Items[i].ToString();
                 }
@@ -111,7 +111,13 @@ namespace DialogueEditor
         {
             if (form.DB != null)
             {
-                form.DB.DeleteTask(taskID);
+                var result = MessageBox.Show("Are you save changes?", "Deleting the Task", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    form.DB.DeleteTask(taskID);
+                    form.DBUpdate();
+                }
+
             }
             else
             {

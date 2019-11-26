@@ -238,14 +238,20 @@ namespace DialogueEditor
         {
             if (DB != null)
             {
-                DB.OpenConnection();
-                DB.AddNewTask(questId);
-                DB.CloseConnection();
+                var result = MessageBox.Show("Are you save changes?", "Adding new Task", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    DB.OpenConnection();
+                    DB.AddNewTask(questId);
+                    DB.CloseConnection();
+                    DBUpdate();
+                }
             }
             else
             {
                 MessageBox.Show("ERROR: DataBase not selected");
             }
+            
         }
         //delete Quest
         private void button8_Click(object sender, EventArgs e)
