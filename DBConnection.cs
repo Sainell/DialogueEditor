@@ -43,7 +43,8 @@ namespace DialogueEditor
         StringBuilder sb;
         Point try_pEnd;
         Point try_pUp;
-        List<Temp> temp = new List<Temp>();
+        List<Temp> temp;//= new List<Temp>();
+        List<NodeTemp> nodeTemp = new List<NodeTemp>();
         bool isOpened = false;
         bool npcTextFlag = false;
 
@@ -87,6 +88,8 @@ namespace DialogueEditor
 
             ClearNodeUIElements();
             CreateNodeCounteinerList();
+            ClearFields();
+            LoadNpcText();
             GetNodeAllDates();
             GetRealCountNodes();
             RestructingNodes();
@@ -140,14 +143,10 @@ namespace DialogueEditor
                 nodeContainer.Add(new NodeContainer(nodeContainerUI[i]));
             }
         }
-
-        public void GetNodeAllDates()
+        public void ClearFields()
         {
             for (int i = 0; i < nodeContainer.Count; i++)
             {
-                cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
-                cmd.CommandText = $"select * from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
-                cmdNPCtext.CommandText = $"select Npc_text from 'dialogue_node' where Npc_id = {npc_id}";
                 foreach (TextBox t in nodeContainer[i].answerBoxList)
                 {
                     t.Text = "";
@@ -172,18 +171,26 @@ namespace DialogueEditor
                 {
                     t.Text = "";
                 }
-                if (!npcTextFlag)
-                {
-                    reader = cmdNPCtext.ExecuteReader();
-                    for (int j = 0; j < nodeContainer.Count(); j++)
-                    {
-                        reader.Read();
-                        var npcTextResult = reader.GetValue(0).ToString();
-                        nodeContainer[j].npcTextBox.Text = npcTextResult;
-                    }
-                    reader.Close();
-                    npcTextFlag = true;
-                }
+            }
+        }
+        public void LoadNpcText()
+        {
+            cmdNPCtext.CommandText = $"select Npc_text from 'dialogue_node' where Npc_id = {npc_id}";
+            reader = cmdNPCtext.ExecuteReader();
+            for (int j = 0; j < nodeContainer.Count(); j++)
+            {
+                reader.Read();
+                var npcTextResult = reader.GetValue(0).ToString();
+                nodeContainer[j].npcTextBox.Text = npcTextResult;
+            }
+            reader.Close();
+        }
+        public void GetNodeAllDates()
+        {
+            for (int i = 0; i < nodeContainer.Count; i++)
+            {
+                cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
+                cmd.CommandText = $"select * from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
 
                 reader = cmd.ExecuteReader();
                 for (int j = 0; j < GetNpcTextCount(); j++)
@@ -202,18 +209,17 @@ namespace DialogueEditor
 
         }
 
-        public List<Temp> SaveToTemp()
-        {
-            temp.Clear();
+        public List<NodeTemp> SaveToTemp()
+            {
             for (int i = 0; i < nodeContainer.Count(); i++)
             {
                 if (nodeContainerUI[i].npcText == null)
                 {
-                    temp.Clear();
-                    return temp;
+                    nodeTemp.Clear();
+                    return nodeTemp;
                 }
                 var npcText = nodeContainerUI[i].npcText;
-
+                temp = new List<Temp>();
                 for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++)
                 {
                     var ID = nodeContainerUI[i].answerUIList[j].answerId;
@@ -225,30 +231,30 @@ namespace DialogueEditor
                     var startCheckBoxValue = nodeContainerUI[i].answerUIList[j].startCheckBoxValue;
                     var finishCheckBoxValue = nodeContainerUI[i].answerUIList[j].finishCheckBoxValue;
                     var exitCheckBoxValue = nodeContainerUI[i].answerUIList[j].exitCheckBoxValue;
-                    temp.Add(new Temp(npcText, ID, answerBoxText, questIdText, toNodeText, startCheckBoxValue, finishCheckBoxValue, exitCheckBoxValue));
+                    temp.Add(new Temp(ID, answerBoxText, questIdText, toNodeText, startCheckBoxValue, finishCheckBoxValue, exitCheckBoxValue));
                 }
-
+                nodeTemp.Add(new NodeTemp(npcText, temp));
             }
-            return temp;
+            return nodeTemp;
         }
-        public void LoadFromTemp(List<Temp> temp)
+        public void LoadFromTemp(List<NodeTemp> temp)
         {
             if (temp.Count != 0)
             {
                 var k = 0;
                 for (int i = 0; i < nodeContainer.Count(); i++)
                 {
-                    nodeContainer[i].npcTextBox.Text = temp[k].npcText;
+                    nodeContainer[i].npcTextBox.Text = temp[i].npcText;
 
-                    for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++, k++)
+                    for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++)
                     {
-                        nodeContainer[i].AnswerIDList[j].Text = temp[k].ID;
-                        nodeContainer[i].answerBoxList[j].Text = temp[k].answerBoxText;
-                        nodeContainer[i].questIdList[j].Text = temp[k].questIdText;
-                        nodeContainer[i].toNodeList[j].Text = temp[k].toNodeText;
-                        nodeContainer[i].startCheckBoxList[j].Checked = temp[k].startCheckBoxValue;
-                        nodeContainer[i].finishCheckBoxList[j].Checked = temp[k].finishCheckBoxValue;
-                        nodeContainer[i].exitCheckBoxList[j].Checked = temp[k].exitCheckBoxValue;
+                        nodeContainer[i].AnswerIDList[j].Text = temp[i].tempList[j].ID;
+                        nodeContainer[i].answerBoxList[j].Text = temp[i].tempList[j].answerBoxText;
+                        nodeContainer[i].questIdList[j].Text = temp[i].tempList[j].questIdText;
+                        nodeContainer[i].toNodeList[j].Text = temp[i].tempList[j].toNodeText;
+                        nodeContainer[i].startCheckBoxList[j].Checked = temp[i].tempList[j].startCheckBoxValue;
+                        nodeContainer[i].finishCheckBoxList[j].Checked = temp[i].tempList[j].finishCheckBoxValue;
+                        nodeContainer[i].exitCheckBoxList[j].Checked = temp[i].tempList[j].exitCheckBoxValue;
                     }
                 }
             }

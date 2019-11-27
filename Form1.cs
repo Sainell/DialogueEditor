@@ -28,7 +28,7 @@ namespace DialogueEditor
         bool isClearTempDB = false;
         public StringBuilder sb = new StringBuilder();
         private Form2 startform;
-        List<Temp> temp;
+        List<NodeTemp> temp;
         bool tempSaveFlag = true;
         public int testi = 0;
         public Form1(Form2 startform)
@@ -138,13 +138,19 @@ namespace DialogueEditor
 
         private void button5_Click(object sender, EventArgs e)
         {
+
             if (DB != null)
             {
+
                 if (npc_id != 0)
                 {
-                    DB.CreateNewNode("npc text");
-                    // SaveToTempAndLoad();
-                    DBUpdate();
+                    var result = MessageBox.Show("Are you save changes?", "Adding new Task", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        DB.CreateNewNode("npc text");
+                        //SaveToTempAndLoad();
+                        DBUpdate();
+                    }
                 }
                 else
                 {
@@ -191,8 +197,8 @@ namespace DialogueEditor
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            DBUpdate();
-         // SaveToTempAndLoad();
+           // DBUpdate();
+          SaveToTempAndLoad();
         }
         public void SaveToTempAndLoad()
         {

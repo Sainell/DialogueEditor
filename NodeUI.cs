@@ -56,23 +56,35 @@ namespace DialogueEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
-           DB.CreateNewAnswer(this.node_ID);
-            form.DBUpdate();
-          // form.SaveToTempAndLoad();
+            var result = MessageBox.Show("Are you save changes?", "Adding new answer", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                DB.CreateNewAnswer(this.node_ID);
+                form.DBUpdate();
+                // form.SaveToTempAndLoad();
+            }
 
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            DB.DeleteNode(node_ID);
-            form.DBUpdate();
-           //form.SaveToTempAndLoad();
+            var result = MessageBox.Show("Are you save changes?", "Deleting node", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                DB.DeleteNode(node_ID);
+                form.DBUpdate();
+                // form.SaveToTempAndLoad();
+            }
         }
 
         public void AnswerDelete(int answerNumber)
         {
-            DB.DeleteAnswer(answerNumber);
-            form.DBUpdate();
+            var result = MessageBox.Show("Are you save changes?", "Deleting answer", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                DB.DeleteAnswer(answerNumber);
+                form.DBUpdate();
+            }
         }
 
         private void textBox9_TextChanged(object sender, EventArgs e)

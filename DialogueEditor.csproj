@@ -81,6 +81,7 @@
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
     <Compile Include="NodeContainer.cs" />
+    <Compile Include="NodeTemp.cs" />
     <Compile Include="NodeUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
