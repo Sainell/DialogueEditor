@@ -106,6 +106,7 @@ namespace DialogueEditor
             countResult = Convert.ToInt16(cmdCount.ExecuteScalar());
             return countResult;
         }
+
         public void ClearNodeUIElements()
         {
             dellist.Clear();
