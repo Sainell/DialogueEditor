@@ -46,9 +46,22 @@ namespace DialogueEditor
             DBUpdate(); 
         }
 
-        private void textBox7_TextChanged(object sender, EventArgs e)
+        //private void textBox7_TextChanged(object sender, EventArgs e)
+        //{
+        //    npc_id = Convert.ToInt16( textBox7.Text);
+        //}
+
+        private void comboBox1_Click(object sender, EventArgs e)
         {
-            npc_id = Convert.ToInt16( textBox7.Text);
+            if (DB != null)
+            {
+                comboBox1.Items.Clear();
+                comboBox1.Items.AddRange(DB.LoadNpcList());
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -76,6 +89,18 @@ namespace DialogueEditor
             else
             {
                 MessageBox.Show("ERROR: DataBase not selected");
+            }
+        }
+
+        private void comboBox1_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                npc_id = Convert.ToInt16(comboBox1.Text);
+            }
+            catch
+            {
+                MessageBox.Show("ERROR: ID cannot be a string, You must enter only Number");
             }
         }
 

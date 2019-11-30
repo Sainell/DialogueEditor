@@ -106,7 +106,7 @@
             this.MinimumSize = new System.Drawing.Size(800, 450);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Game Manager v0.5";
+            this.Text = "Game Editor v0.6";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
