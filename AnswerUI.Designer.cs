@@ -38,6 +38,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label13
@@ -53,7 +54,7 @@
             // checkBox7
             // 
             this.checkBox7.AutoSize = true;
-            this.checkBox7.Location = new System.Drawing.Point(107, 58);
+            this.checkBox7.Location = new System.Drawing.Point(109, 66);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(44, 17);
             this.checkBox7.TabIndex = 48;
@@ -64,7 +65,7 @@
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(55, 58);
+            this.checkBox6.Location = new System.Drawing.Point(109, 52);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(46, 17);
             this.checkBox6.TabIndex = 47;
@@ -74,10 +75,10 @@
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(2, 58);
+            this.textBox10.Location = new System.Drawing.Point(59, 56);
             this.textBox10.Multiline = true;
             this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(43, 21);
+            this.textBox10.Size = new System.Drawing.Size(41, 21);
             this.textBox10.TabIndex = 49;
             this.textBox10.TextChanged += new System.EventHandler(this.textBox10_TextChanged);
             // 
@@ -130,6 +131,7 @@
             this.textBox1.Location = new System.Drawing.Point(0, 16);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(153, 36);
             this.textBox1.TabIndex = 44;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -149,10 +151,21 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label2.Location = new System.Drawing.Point(3, 59);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 54;
+            this.label2.Text = "Quest ID: ";
+            // 
             // AnswerUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.checkBox7);
@@ -182,5 +195,6 @@
         public System.Windows.Forms.Label label4;
         public System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Label label2;
     }
 }

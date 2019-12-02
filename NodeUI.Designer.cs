@@ -46,7 +46,7 @@
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.groupBox1.Size = new System.Drawing.Size(207, 155);
+            this.groupBox1.Size = new System.Drawing.Size(207, 168);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Node ID";
@@ -69,9 +69,9 @@
             // button1
             // 
             this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button1.Location = new System.Drawing.Point(3, 131);
+            this.button1.Location = new System.Drawing.Point(3, 146);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(201, 21);
+            this.button1.Size = new System.Drawing.Size(201, 19);
             this.button1.TabIndex = 8;
             this.button1.Text = "Add Answer";
             this.button1.UseVisualStyleBackColor = true;
@@ -94,6 +94,7 @@
             this.textBox9.Multiline = true;
             this.textBox9.Name = "textBox9";
             this.textBox9.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.textBox9.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox9.Size = new System.Drawing.Size(185, 43);
             this.textBox9.TabIndex = 6;
             this.textBox9.TextChanged += new System.EventHandler(this.textBox9_TextChanged);
@@ -106,7 +107,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "NodeUI";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Size = new System.Drawing.Size(213, 161);
+            this.Size = new System.Drawing.Size(213, 174);
             this.Load += new System.EventHandler(this.NodeUI_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
