@@ -537,22 +537,23 @@ namespace DialogueEditor
             return types;
         }
 
-        public string[] LoadNpcList()
+        public (string[], string[]) LoadNpcList()
         {
             OpenConnection();
             cmdCount.CommandText = $"select count(*) from 'npc'";
             var npcCount = Convert.ToInt16(cmdCount.ExecuteScalar());
-            string[] npcList = new string[npcCount];
-            cmd.CommandText = $"select * from 'npc'";
+            (string[], string[]) npcListTuple = (new string[npcCount], new string[npcCount]);
+            cmd.CommandText = $"select id, npc_name from 'npc'";
             reader = cmd.ExecuteReader();
             for (int i = 0; i < npcCount; i++)
             {
                 reader.Read();
-                npcList[i] = reader.GetValue(0).ToString();
+                npcListTuple.Item1[i] = reader.GetValue(0).ToString();
+                npcListTuple.Item2[i] = reader.GetValue(1).ToString();
             }
             reader.Close();
          //   CloseConnection();
-            return npcList;
+            return npcListTuple;
         }
 
         public string[] LoadGameEvents()
@@ -573,22 +574,24 @@ namespace DialogueEditor
             return events;
         }
 
-        public string[] LoadDialogueList()
+        // public string[] LoadDialogueList()
+        public (string[], string[]) LoadDialogueList()
         {
             OpenConnection();
             cmdCount.CommandText = $"select count(*) from 'dialogue_answers'";
             var dialogueCount = Convert.ToInt16(cmdCount.ExecuteScalar());
-            string[] dialogueList = new string[dialogueCount];
-            cmd.CommandText = $"select Id from 'dialogue_answers'";
+            (string[],string[]) dialogueListTuple = (new string[dialogueCount], new string[dialogueCount]);
+            cmd.CommandText = $"select Id, Answer_text from 'dialogue_answers'";
             reader = cmd.ExecuteReader();
             for (int i = 0; i < dialogueCount; i++)
             {
                 reader.Read();
-                dialogueList[i] = reader.GetValue(0).ToString();
+                dialogueListTuple.Item1[i] = $"{reader.GetValue(0).ToString()}";
+                dialogueListTuple.Item2[i] = $"{reader.GetValue(1).ToString()}";
             }
             reader.Close();
-          //  CloseConnection();
-            return dialogueList;
+            ////  CloseConnection();
+            return dialogueListTuple ;
         }
 
         public int GetTasksCount(int questID)
@@ -688,7 +691,7 @@ namespace DialogueEditor
             }
         }
 
-        public string[] LoadIdByEventType(string eventType)
+        public (string[], string[]) LoadIdByEventType(string eventType)
         {
             switch (eventType)
             {
@@ -700,11 +703,11 @@ namespace DialogueEditor
 
                 default:
                     MessageBox.Show($"ERROR: type  \"{eventType}\" doesn't work yet");
-                    return new string[0];
+                    return (new string[0], new string[0]);
             }
         }
 
-        public string[] LoadIdByTaskType(string taskType)
+        public (string[], string[]) LoadIdByTaskType(string taskType)
         {
             switch (taskType)
             {
@@ -716,7 +719,7 @@ namespace DialogueEditor
 
                 default:
                     MessageBox.Show($"ERROR: type  \"{taskType}\" doesn't work yet");
-                    return new string[0];
+                    return (new string[0], new string[0]);
             }
         }
 

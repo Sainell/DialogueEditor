@@ -56,7 +56,7 @@ namespace DialogueEditor
             if (DB != null)
             {
                 comboBox1.Items.Clear();
-                comboBox1.Items.AddRange(DB.LoadNpcList());
+                comboBox1.Items.AddRange(DB.LoadNpcList().Item1);
             }
             else
             {

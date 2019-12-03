@@ -16,3 +16,5 @@ E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.Form3.resourc
 E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.TaskUI.resources
 E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.Data.SQLite.dll
 E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.csprojAssemblyReference.cache
+E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.ValueTuple.dll
+E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.ValueTuple.xml

@@ -107,7 +107,9 @@ namespace DialogueEditor
                         comboBox1.Items.Clear();
                         comboBox3.Items.Clear();
                         comboBox6.Items.Clear();
+                        comboBox5.Items.Clear();
                         comboBox7.Items.Clear();
+                        comboBox9.Items.Clear();
                         taskContainerUI.Clear();
 
                         textBox2.Text = DB.GetQuestName(questId);
@@ -176,7 +178,9 @@ namespace DialogueEditor
             {
              //   DB.OpenConnection();
                 comboBox6.Items.Clear();
-                comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()));
+                comboBox5.Items.Clear();
+                comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()).Item1);
+                comboBox5.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()).Item2);
                // DB.CloseConnection();
             }
             
@@ -188,8 +192,10 @@ namespace DialogueEditor
             {
              //   DB.OpenConnection();
                 comboBox7.Items.Clear();
-                comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()));
-             //   DB.CloseConnection();
+                comboBox9.Items.Clear();
+                comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item1);
+                comboBox9.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item2);
+                //   DB.CloseConnection();
             }
         }
 
@@ -310,6 +316,26 @@ namespace DialogueEditor
             {
                 MessageBox.Show("ERROR: DataBase not selected");
             }
+        }
+
+        private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox5.SelectedIndex = comboBox6.SelectedIndex;
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox6.SelectedIndex = comboBox5.SelectedIndex;
+        }
+
+        private void comboBox7_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox9.SelectedIndex = comboBox7.SelectedIndex;
+        }
+
+        private void comboBox9_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox7.SelectedIndex = comboBox9.SelectedIndex;
         }
     }
 }

@@ -86,6 +86,24 @@ namespace DialogueEditor
                 comboBox5.Items.AddRange(value);
             }
         }
+
+        public string[] targetValueItems
+        {
+            get
+            {
+                string[] str = new string[comboBox1.Items.Count];
+                for (int i = 0; i < str.Length; i++)
+                {
+                    str[i] = comboBox1.Items[i].ToString();
+                }
+                return str;
+            }
+            set
+            {
+                comboBox1.Items.AddRange(value);
+            }
+        }
+
         public void ClearTasksUI()
         {
             comboBox2.Items.Clear();
@@ -98,7 +116,9 @@ namespace DialogueEditor
             if (form.DB != null)
             {
                 comboBox5.Items.Clear();
-                targetIdItems = form.DB.LoadIdByTaskType(taskType);
+                comboBox1.Items.Clear();
+                targetIdItems = form.DB.LoadIdByTaskType(taskType).Item1;
+                targetValueItems = form.DB.LoadIdByTaskType(taskType).Item2;
             }
             else
             {
@@ -123,6 +143,16 @@ namespace DialogueEditor
             {
                 MessageBox.Show("ERROR: DataBase not selected");
             }
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox1.SelectedIndex = comboBox5.SelectedIndex;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox5.SelectedIndex = comboBox1.SelectedIndex;
         }
     }
 }
