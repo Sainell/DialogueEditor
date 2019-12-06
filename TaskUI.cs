@@ -12,9 +12,14 @@ namespace DialogueEditor
 {
     public partial class TaskUI : UserControl
     {
-        Form3 form;
+        Form4 form;
 
-        public TaskUI(Form3 form)
+        //public TaskUI(Form3 form)
+        //{
+        //    InitializeComponent();
+        //    this.form = form;
+        //}
+        public TaskUI(Form4 form)
         {
             InitializeComponent();
             this.form = form;

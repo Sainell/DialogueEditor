@@ -11,9 +11,13 @@ using System.Windows.Forms;
 
 namespace DialogueEditor
 {
-    public partial class Form3 : Form
+    public partial class Form4 : Form
     {
-        private Form2 startform;
+        public Form4()
+        {
+            InitializeComponent();
+        }
+
         public DBConnection DB;
         private int questId;
         private string dbpath;
@@ -23,20 +27,13 @@ namespace DialogueEditor
         List<TaskUI> taskContainerUI = new List<TaskUI>();
         public StringBuilder sb = new StringBuilder();
 
-        public Form3(Form2 startform)
-        {
-            InitializeComponent();
-            this.startform = startform;         
-        }
-
         private void Form3_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (DB != null) DB.CloseConnection();
-            startform.Show();
         }
 
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button12_Click(object sender, EventArgs e)
         {
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -58,7 +55,7 @@ namespace DialogueEditor
             }
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void button13_Click(object sender, EventArgs e)
         {
             CopyDB();
         }
@@ -76,7 +73,7 @@ namespace DialogueEditor
         }
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button9_Click(object sender, EventArgs e)
         {
             DBUpdate();
         }
@@ -87,7 +84,7 @@ namespace DialogueEditor
             label6.Text = copyDbDirectory;
             if (dbpath != null)
             {
-                DB = new DBConnection(dbpath,sb);
+                DB = new DBConnection(dbpath, sb);
             }
             else
             {
@@ -104,25 +101,25 @@ namespace DialogueEditor
                 {
                     try
                     {
-                        comboBox1.Items.Clear();
                         comboBox3.Items.Clear();
+                        comboBox7.Items.Clear();
                         comboBox6.Items.Clear();
                         comboBox5.Items.Clear();
-                        comboBox7.Items.Clear();
+                        comboBox10.Items.Clear();
                         comboBox9.Items.Clear();
                         taskContainerUI.Clear();
 
                         textBox2.Text = DB.GetQuestName(questId);
-                        comboBox1.Items.AddRange(DB.LoadGameEvents());
                         comboBox3.Items.AddRange(DB.LoadGameEvents());
-                        comboBox1.SelectedItem = DB.LoadQuestSelectType(questId, "start");
-                        comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "end");
+                        comboBox7.Items.AddRange(DB.LoadGameEvents());
+                        comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "start");
+                        comboBox7.SelectedItem = DB.LoadQuestSelectType(questId, "end");
                         comboBox6.SelectedItem = DB.LoadQuestSelectID(questId, "start");
-                        comboBox7.SelectedItem = DB.LoadQuestSelectID(questId, "end");
+                        comboBox10.SelectedItem = DB.LoadQuestSelectID(questId, "end");
 
                         CreateTaskContainerUI(DB.GetTasksCount(questId));
 
-                        panel2.Location = new Point(panel4.Location.X, panel4.Location.Y + panel4.Height + 2);
+                        panel6.Location = new Point(panel9.Location.X, panel9.Location.Y + panel9.Height + 2);
 
                         foreach (TaskUI task in taskContainerUI)
                         {
@@ -150,9 +147,9 @@ namespace DialogueEditor
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (checkBox2.Checked)
             {
                 isClearTempDB = true;
             }
@@ -161,50 +158,50 @@ namespace DialogueEditor
 
         private void CreateTaskContainerUI(int count)
         {
-            panel4.Controls.Clear();
-            for (int i=0; i < count; i++)
+            panel9.Controls.Clear();
+            for (int i = 0; i < count; i++)
             {
-               // taskContainerUI.Add(new TaskUI(this));
-                taskContainerUI[i].Parent = panel4;
+                taskContainerUI.Add(new TaskUI(this));
+                taskContainerUI[i].Parent = panel9;
                 taskContainerUI[i].Visible = true;
-                taskContainerUI[i].Location = new Point(0,0+(i*48));
-                taskContainerUI[i].taskName = "Task " + (i+1);
+                taskContainerUI[i].Location = new Point(0, 0 + (i * 48));
+                taskContainerUI[i].taskName = "Task " + (i + 1);
             }
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (DB != null)
-            {
-                comboBox6.Items.Clear();
-                comboBox5.Items.Clear();
-                comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()).Item1);
-                comboBox5.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()).Item2);
-            }
-            
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (DB != null)
             {
-                comboBox7.Items.Clear();
-                comboBox9.Items.Clear();
-                comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item1);
-                comboBox9.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item2);
+                comboBox6.Items.Clear();
+                comboBox5.Items.Clear();
+                comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item1);
+                comboBox5.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item2);
             }
+
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void comboBox7_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (DB != null)
             {
-                if (comboBox1.SelectedItem != null && comboBox6.SelectedItem!= null && comboBox3.SelectedItem!= null && comboBox7.SelectedItem!=null)
+                comboBox10.Items.Clear();
+                comboBox9.Items.Clear();
+                comboBox10.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString()).Item1);
+                comboBox9.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString()).Item2);
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (DB != null)
+            {
+                if (comboBox10.SelectedItem != null && comboBox6.SelectedItem != null && comboBox7.SelectedItem != null && comboBox10.SelectedItem != null)
                 {
-                    var startQuestEventType = comboBox1.SelectedItem.ToString();
+                    var startQuestEventType = comboBox10.SelectedItem.ToString();
                     var startQuestTargetID = comboBox6.SelectedItem.ToString();
-                    var endQuestEventType = comboBox3.SelectedItem.ToString();
-                    var endQuestTargetID = comboBox7.SelectedItem.ToString();
+                    var endQuestEventType = comboBox7.SelectedItem.ToString();
+                    var endQuestTargetID = comboBox10.SelectedItem.ToString();
 
                     DB.OpenConnection();
                     DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId, textBox2.Text);
@@ -221,7 +218,7 @@ namespace DialogueEditor
             }
         }
         // add new quest
-        private void button3_Click(object sender, EventArgs e)
+        private void button11_Click(object sender, EventArgs e)
         {
             if (DB != null)
             {
@@ -236,7 +233,7 @@ namespace DialogueEditor
             }
         }
         //add new task
-        private void button7_Click(object sender, EventArgs e)
+        private void button14_Click(object sender, EventArgs e)
         {
             if (DB != null)
             {
@@ -253,7 +250,7 @@ namespace DialogueEditor
             {
                 MessageBox.Show("ERROR: DataBase not selected");
             }
-            
+
         }
         //delete Quest
         private void button8_Click(object sender, EventArgs e)
@@ -285,7 +282,7 @@ namespace DialogueEditor
 
         }
         //create DB patch
-        private void button5_Click(object sender, EventArgs e)
+        private void button7_Click(object sender, EventArgs e)
         {
             if (DB != null)
             {
@@ -303,10 +300,8 @@ namespace DialogueEditor
         {
             if (DB != null)
             {
-               // DB.OpenConnection();
                 comboBox2.Items.Clear();
                 comboBox2.Items.AddRange(DB.LoadQuestList());
-              //  DB.CloseConnection();
             }
             else
             {
@@ -324,14 +319,14 @@ namespace DialogueEditor
             comboBox6.SelectedIndex = comboBox5.SelectedIndex;
         }
 
-        private void comboBox7_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBox10_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBox9.SelectedIndex = comboBox7.SelectedIndex;
+            comboBox9.SelectedIndex = comboBox10.SelectedIndex;
         }
 
         private void comboBox9_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBox7.SelectedIndex = comboBox9.SelectedIndex;
+            comboBox10.SelectedIndex = comboBox9.SelectedIndex;
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
