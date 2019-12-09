@@ -123,11 +123,14 @@
             // 
             // panel2
             // 
+            this.panel2.AutoScroll = true;
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 36);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1170, 497);
             this.panel2.TabIndex = 20;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            this.panel2.Resize += new System.EventHandler(this.panel2_Resize);
             // 
             // panel1
             // 
@@ -157,6 +160,8 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(44, 21);
             this.comboBox1.TabIndex = 17;
+            this.comboBox1.TextChanged += new System.EventHandler(this.comboBox1_TextChanged);
+            this.comboBox1.Click += new System.EventHandler(this.comboBox1_Click);
             // 
             // button6
             // 
@@ -167,6 +172,7 @@
             this.button6.TabIndex = 17;
             this.button6.Text = "Open Temp DB";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // checkBox1
             // 
@@ -180,6 +186,7 @@
             this.checkBox1.TabIndex = 16;
             this.checkBox1.Text = "   Clear \r\nTemp DB";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // button2
             // 
@@ -189,6 +196,7 @@
             this.button2.TabIndex = 11;
             this.button2.Text = "Save Changes";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button5
             // 
@@ -198,6 +206,7 @@
             this.button5.TabIndex = 15;
             this.button5.Text = "Create new Node";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button1
             // 
@@ -207,6 +216,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Load Nodes";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 
@@ -232,6 +242,7 @@
             this.button4.TabIndex = 13;
             this.button4.Text = "DB Select";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // label1
             // 
@@ -251,6 +262,7 @@
             this.button3.TabIndex = 12;
             this.button3.Text = "Create Patch";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // tabPage2
             // 
@@ -266,6 +278,7 @@
             // 
             // panel3
             // 
+            this.panel3.AutoScroll = true;
             this.panel3.Controls.Add(this.label13);
             this.panel3.Controls.Add(this.textBox2);
             this.panel3.Controls.Add(this.panel4);
@@ -742,6 +755,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "Form4";
             this.Text = "Form4";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form4_FormClosed);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);

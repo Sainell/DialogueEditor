@@ -17,10 +17,11 @@ namespace DialogueEditor
         public int count;
         public DBConnection DB;
         public int node_ID;
-        public Form1 form;
+        public Form4 form;
+        public Panel panel;
         public string npcText { get; set; }
 
-        public NodeUI(int count, int node_ID, DBConnection DB,Form1 form)
+        public NodeUI(int count, int node_ID, DBConnection DB,Form4 form, Panel panel)
         {
             InitializeComponent();
 
@@ -28,6 +29,7 @@ namespace DialogueEditor
             this.node_ID = node_ID;
             this.DB = DB;
             this.form = form;
+            this.panel = panel;
   
         }
         
@@ -60,7 +62,7 @@ namespace DialogueEditor
             if (result == DialogResult.Yes)
             {
                 DB.CreateNewAnswer(this.node_ID);
-                form.DBUpdate();
+                form.DialogueDBUpdate();
                 // form.SaveToTempAndLoad();
             }
 
@@ -72,7 +74,7 @@ namespace DialogueEditor
             if (result == DialogResult.Yes)
             {
                 DB.DeleteNode(node_ID);
-                form.DBUpdate();
+                form.DialogueDBUpdate();
                 // form.SaveToTempAndLoad();
             }
         }
@@ -83,7 +85,7 @@ namespace DialogueEditor
             if (result == DialogResult.Yes)
             {
                 DB.DeleteAnswer(answerNumber);
-                form.DBUpdate();
+                form.DialogueDBUpdate();
             }
         }
 

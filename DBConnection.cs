@@ -29,7 +29,8 @@ namespace DialogueEditor
         int countResult;
         private int npc_id;
         Control.ControlCollection Controls;
-        public Form1 form;
+        public Form4 form;
+        public Panel panel;
         List<int> usedNode = new List<int>();
         public List<List<int>> realCount = new List<List<int>>();
         Graphics g;
@@ -43,11 +44,9 @@ namespace DialogueEditor
         StringBuilder sb;
         Point try_pEnd;
         Point try_pUp;
-        List<Temp> temp;//= new List<Temp>();
+        List<Temp> temp;
         List<NodeTemp> nodeTemp = new List<NodeTemp>();
         bool isOpened = false;
-        bool npcTextFlag = false;
-
 
         public DBConnection(string BDpath,StringBuilder sb)
         {
@@ -78,11 +77,12 @@ namespace DialogueEditor
             }
         }
 
-        public void GetFromDB(int npc_id, Control.ControlCollection controls, Form1 form)
+        public void GetFromDB(int npc_id, Control.ControlCollection controls, Form4 form, Panel panel)
         {
             this.Controls = controls;
             this.npc_id = npc_id;
             this.form = form;
+            this.panel = panel;
             
             cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
 
@@ -135,7 +135,7 @@ namespace DialogueEditor
                 cmdUIAnswerCount.CommandText = $"select count(*) from 'dialogue_answers' where Npc_id ={npc_id} and Node_ID = {i}";
                 var UIanswerCountResult = Convert.ToInt16(cmdUIAnswerCount.ExecuteScalar());
 
-                nodeContainerUI.Add(new NodeUI(UIanswerCountResult, i, form.DB, form));
+                nodeContainerUI.Add(new NodeUI(UIanswerCountResult, i, form.DB, form, panel));
                 nodeContainerUI[i].Visible = true;
                 nodeContainerUI[i].Location = new Point((form.Width / 2) - (197 / 2), 50 + (i * 450));
                 nodeContainerUI[i].Name = "nodeUI" + i;
@@ -242,7 +242,6 @@ namespace DialogueEditor
         {
             if (temp.Count != 0)
             {
-                var k = 0;
                 for (int i = 0; i < nodeContainer.Count(); i++)
                 {
                     nodeContainer[i].npcTextBox.Text = temp[i].npcText;
@@ -410,7 +409,7 @@ namespace DialogueEditor
                     try
                     {
                         var num = realCount[j].ElementAt(i);
-                        nodeContainerUI[num].Location = new Point((form.Width / (realCount[j].Count + 1)) - (197 / 2) + (form.Width * i / (realCount[j].Count + 1)), 700 + (j * 450));
+                        nodeContainerUI[num].Location = new Point((panel.Width / (realCount[j].Count + 1)) - (197 / 2) + (panel.Width * i / (realCount[j].Count + 1)), 700 + (j * 450));
                         nodeContainer.RemoveAt(num);
                         nodeContainer.Insert(num, new NodeContainer(nodeContainerUI[num]));
                     }
@@ -425,7 +424,7 @@ namespace DialogueEditor
         #region Drawing
         public void CreateGraph()
         {
-            g = form.CreateGraphics();
+            g = panel.CreateGraphics();
         }
 
         public void DrawPointsAndLines()
@@ -438,8 +437,8 @@ namespace DialogueEditor
                     {
                         try
                         {
-                            try_pEnd = form.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.X - form.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.Y - form.VerticalScroll.Value));
-                            try_pUp = form.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.X - form.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.Y - form.VerticalScroll.Value));
+                            try_pEnd = panel.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.X - panel.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.Y - panel.VerticalScroll.Value));
+                            try_pUp = panel.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.X - panel.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.Y - panel.VerticalScroll.Value));
 
                         }
                         catch
@@ -451,14 +450,14 @@ namespace DialogueEditor
                         {
                             Point pEnd = try_pEnd;
                             Point pUp = try_pUp;
-                            Point pRightStart = form.PointToClient(new Point(nodeContainer[j].startRightPoint[i].X - form.HorizontalScroll.Value, nodeContainer[j].startRightPoint[i].Y - form.VerticalScroll.Value));
-                            Point pLeftStart = form.PointToClient(new Point(nodeContainer[j].startLeftPoint[i].X - form.HorizontalScroll.Value, nodeContainer[j].startLeftPoint[i].Y - form.VerticalScroll.Value));
-                            Point pUpRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointUpRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpRight.Y - form.VerticalScroll.Value));
-                            Point pUpLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointUpLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpLeft.Y - form.VerticalScroll.Value));
-                            Point pDownRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointDownRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointDownRight.Y - form.VerticalScroll.Value));
-                            Point pDownLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointDownLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointDownLeft.Y - form.VerticalScroll.Value));
-                            Point pMiddleRight = form.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleRight.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleRight.Y - form.VerticalScroll.Value));
-                            Point pMiddleLeft = form.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleLeft.X - form.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleLeft.Y - form.VerticalScroll.Value));
+                            Point pRightStart = panel.PointToClient(new Point(nodeContainer[j].startRightPoint[i].X - panel.HorizontalScroll.Value, nodeContainer[j].startRightPoint[i].Y - panel.VerticalScroll.Value));
+                            Point pLeftStart = panel.PointToClient(new Point(nodeContainer[j].startLeftPoint[i].X - panel.HorizontalScroll.Value, nodeContainer[j].startLeftPoint[i].Y - panel.VerticalScroll.Value));
+                            Point pUpRight = panel.PointToClient(new Point(nodeContainer[j].intermediatePointUpRight.X - panel.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpRight.Y - panel.VerticalScroll.Value));
+                            Point pUpLeft = panel.PointToClient(new Point(nodeContainer[j].intermediatePointUpLeft.X - panel.HorizontalScroll.Value, nodeContainer[j].intermediatePointUpLeft.Y - panel.VerticalScroll.Value));
+                            Point pDownRight = panel.PointToClient(new Point(nodeContainer[j].intermediatePointDownRight.X - panel.HorizontalScroll.Value, nodeContainer[j].intermediatePointDownRight.Y - panel.VerticalScroll.Value));
+                            Point pDownLeft = panel.PointToClient(new Point(nodeContainer[j].intermediatePointDownLeft.X - panel.HorizontalScroll.Value, nodeContainer[j].intermediatePointDownLeft.Y - panel.VerticalScroll.Value));
+                            Point pMiddleRight = panel.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleRight.X - panel.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleRight.Y - panel.VerticalScroll.Value));
+                            Point pMiddleLeft = panel.PointToClient(new Point(nodeContainer[j].intermediatePointMiddleLeft.X - panel.HorizontalScroll.Value, nodeContainer[j].intermediatePointMiddleLeft.Y - panel.VerticalScroll.Value));
 
                             //For line settings
                             //g.DrawRectangle(pen2, pUpRight.X, pUpRight.Y, 4, 4);

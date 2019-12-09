@@ -18,3 +18,4 @@ E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.csprojAssembl
 E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.ValueTuple.dll
 E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.ValueTuple.xml
 E:\Projects\DialogueEditor\DialogueEditor\obj\Debug\DialogueEditor.Form4.resources
+E:\Projects\DialogueEditor\DialogueEditor\bin\Debug\System.Data.SQLite.dll

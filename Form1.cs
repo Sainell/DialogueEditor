@@ -46,11 +46,6 @@ namespace DialogueEditor
             DBUpdate(); 
         }
 
-        //private void textBox7_TextChanged(object sender, EventArgs e)
-        //{
-        //    npc_id = Convert.ToInt16( textBox7.Text);
-        //}
-
         private void comboBox1_Click(object sender, EventArgs e)
         {
             if (DB != null)
@@ -206,7 +201,7 @@ namespace DialogueEditor
                 if (npc_id != 0)
                 {
                     DB.OpenConnection();
-                    DB.GetFromDB(npc_id, Controls, this);
+                   // DB.GetFromDB(npc_id, Controls, this);
                     DB.CreateGraph();
                 }
                 else
