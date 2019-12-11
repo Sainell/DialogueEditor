@@ -26,29 +26,32 @@ namespace DialogueEditor
         List<Control> dellist = new List<Control>();
         SQLiteDataReader reader;
         SQLiteDataReader readerTask;
-        int countResult;
+        int nodeUIWidth = 197;
+        int nodeUIHeight = 50;
+        int nodeUIStartOffset = 700;
+        int nodeUIoffset = 450;
         private int npc_id;
         Control.ControlCollection Controls;
         public Form4 form;
         public Panel panel;
         List<int> usedNode = new List<int>();
         public List<List<int>> realCount = new List<List<int>>();
-        Graphics g;
         Pen pen = new Pen(Color.Red, 3);
         Pen pen2 = new Pen(Color.Blue, 3);
         Pen pen3 = new Pen(Color.DarkOliveGreen, 3);
         Pen pen4 = new Pen(Color.AliceBlue, 3);
         List<Pen> penList = new List<Pen>();
         private Random rnd = new Random();
-        List<Point[]> pointsList = new List<Point[]>();
-        StringBuilder sb;
+        public List<Point[]> pointsList = new List<Point[]>();
+        StringBuilder questSb;
+        StringBuilder dialogueSb;
         Point try_pEnd;
         Point try_pUp;
         List<Temp> temp;
         List<NodeTemp> nodeTemp = new List<NodeTemp>();
         bool isOpened = false;
 
-        public DBConnection(string BDpath,StringBuilder sb)
+        public DBConnection(string BDpath,StringBuilder questSb, StringBuilder dialogueSb)
         {
             DB = new SQLiteConnection("Data Source= " + BDpath);
             cmd = DB.CreateCommand();
@@ -57,7 +60,8 @@ namespace DialogueEditor
             cmdCount = DB.CreateCommand();
             cmdUIcount = DB.CreateCommand();
             cmdUIAnswerCount = DB.CreateCommand();
-            this.sb = sb;
+            this.questSb = questSb;
+            this.dialogueSb = dialogueSb;
         }
 
         public void OpenConnection()
@@ -77,14 +81,15 @@ namespace DialogueEditor
             }
         }
 
-        public void GetFromDB(int npc_id, Control.ControlCollection controls, Form4 form, Panel panel)
+        #region LoadDatesFromDB
+        public void GetFromDB(int npc_id, Form4 form, Panel panel)
         {
-            this.Controls = controls;
+            this.Controls = panel.Controls;
             this.npc_id = npc_id;
             this.form = form;
             this.panel = panel;
             
-            cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
+            
 
             ClearNodeUIElements();
             CreateNodeCounteinerList();
@@ -97,29 +102,32 @@ namespace DialogueEditor
 
         public int GetUIElementCount()
         {
+            cmdUIcount.CommandText = $"select count(*) from 'dialogue_node' where Npc_id = {npc_id}";
             var UIcountResult = Convert.ToInt16(cmdUIcount.ExecuteScalar());
             return UIcountResult;
         }
 
-        public int GetNpcTextCount()
-        {
-            countResult = Convert.ToInt16(cmdCount.ExecuteScalar());
-            return countResult;
-        }
+        //public int GetNpcTextCount()
+        //{
+        //    countResult = Convert.ToInt16(cmdCount.ExecuteScalar());
+        //    return countResult;
+        //}
 
         public void ClearNodeUIElements()
         {
             dellist.Clear();
             nodeContainer.Clear();
-            for (int i = 0; i < Controls.Count; i++)
+            if (Controls.Count != 0)
             {
-                if (Controls[i].GetType().ToString() == "DialogueEditor.NodeUI")
+                for (int i = 0; i < Controls.Count; i++)
                 {
-
-                    dellist.Add(Controls[i]);
+                    if (Controls[i].GetType().ToString() == "DialogueEditor.NodeUI")
+                    {
+                        dellist.Add(Controls[i]);
+                    }
                 }
             }
-            if (dellist != null)
+            if (dellist.Count != 0)
             {
                 foreach (Control c in dellist)
                 {
@@ -135,9 +143,9 @@ namespace DialogueEditor
                 cmdUIAnswerCount.CommandText = $"select count(*) from 'dialogue_answers' where Npc_id ={npc_id} and Node_ID = {i}";
                 var UIanswerCountResult = Convert.ToInt16(cmdUIAnswerCount.ExecuteScalar());
 
-                nodeContainerUI.Add(new NodeUI(UIanswerCountResult, i, form.DB, form, panel));
-                nodeContainerUI[i].Visible = true;
-                nodeContainerUI[i].Location = new Point((form.Width / 2) - (197 / 2), 50 + (i * 450));
+                nodeContainerUI.Add(new NodeUI(UIanswerCountResult, i, form, panel));
+            //    nodeContainerUI[i].Visible = true;
+                nodeContainerUI[i].Location = new Point((panel.Width / 2) - (nodeUIWidth / 2), nodeUIHeight + (i * nodeUIoffset));
                 nodeContainerUI[i].Name = "nodeUI" + i;
                 nodeContainerUI[i].groupBox1.Text = "Node ID:" + i;
                 Controls.Add(nodeContainerUI[i]);
@@ -190,11 +198,11 @@ namespace DialogueEditor
         {
             for (int i = 0; i < nodeContainer.Count; i++)
             {
-                cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
+               // cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
                 cmd.CommandText = $"select * from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
-
                 reader = cmd.ExecuteReader();
-                for (int j = 0; j < GetNpcTextCount(); j++)
+
+                for (int j = 0; j < nodeContainerUI[i].count; j++)
                 {
                     reader.Read();
                     nodeContainer[i].AnswerIDList[j].Text = reader.GetValue(0).ToString();
@@ -267,7 +275,7 @@ namespace DialogueEditor
 
                 var npcText = nodeContainer[i].npcTextBox.Text;
                 cmdNPCtext.CommandText = $"update 'dialogue_node' SET Npc_text ='{npcText}' where Npc_id = {npc_id} and Node_id = {i}";
-                WriteCommand(cmdNPCtext.CommandText);
+                WriteCommand(cmdNPCtext.CommandText,"dialogue");
                 cmdNPCtext.ExecuteNonQuery();
 
                 for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++)
@@ -298,15 +306,23 @@ namespace DialogueEditor
                     else exitCheckBoxValue = 0;
 
                     cmd.CommandText = $"update 'dialogue_answers' SET Answer_text='{answerBoxText}', To_node ='{toNodeText}', Quest_ID='{questIdText}', End_dialogue='{exitCheckBoxValue}', Start_quest='{startCheckBoxValue}', End_quest='{finishCheckBoxValue}'   where Id = '{ID}'";
-                    WriteCommand(cmd.CommandText);
+                    WriteCommand(cmd.CommandText, "dialogue");
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        public void WriteCommand(string cmd)
+        public void WriteCommand(string cmd, string value)
         {
-            sb.AppendFormat(cmd + "; " + "\r\n");
+            if (value == "quest")
+            {
+                questSb.AppendFormat(cmd + "; " + "\r\n");
+            }
+
+            if (value == "dialogue")
+            {
+                dialogueSb.AppendFormat(cmd + "; " + "\r\n");
+            }
         }
         public void CreateDBPatch(string tableValue)
         {
@@ -315,15 +331,22 @@ namespace DialogueEditor
             var dbname = "_world_";
             var table = tableValue;
             var format = ".sql";
-
-            File.AppendAllText(path + date + dbname + table + format, sb.ToString());
+            if(tableValue=="quest")
+            {
+                File.AppendAllText(path + date + dbname + table + format, questSb.ToString());
+            }
+            if (tableValue == "dialogue")
+            {
+                File.AppendAllText(path + date + dbname + table + format, dialogueSb.ToString());
+            }
+            
             MessageBox.Show($"Patch name is:  {date + dbname + table + format}");
         }
 
         public void CreateNewNode(string npc_text)
         {
             cmd.CommandText = $"insert into 'dialogue_node' (Npc_id, Node_ID, Npc_text) values ('{npc_id}','{nodeContainer.Count}','{npc_text}') ";
-            WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText, "dialogue");
             cmd.ExecuteNonQuery();
         }
         public void DeleteNode(int node_id)
@@ -357,7 +380,7 @@ namespace DialogueEditor
             if (checkBindings)
             {
                 cmd.CommandText = $"delete from 'dialogue_node' where Npc_id={npc_id} and Node_ID={node_id}";
-                WriteCommand(cmd.CommandText);
+                WriteCommand(cmd.CommandText, "dialogue");
                 cmd.ExecuteNonQuery();
             }
         }
@@ -365,14 +388,14 @@ namespace DialogueEditor
         public void CreateNewAnswer(int node_ID)
         {
             cmd.CommandText = $"insert into 'dialogue_answers' (Npc_id, Node_ID, Answer_text, To_node, End_dialogue) values ('{npc_id}','{node_ID}','answer','0','0')";
-            WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText, "dialogue");
             cmd.ExecuteNonQuery();
         }
 
         public void DeleteAnswer(int answer_id)
         {
             cmd.CommandText = $"delete from 'dialogue_answers' where Id ={answer_id}";
-            WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText, "dialogue");
             cmd.ExecuteNonQuery();
         }
 
@@ -385,12 +408,13 @@ namespace DialogueEditor
                 nodeContainer[j].rCount.Clear();
                 for (int i = 0; i < nodeContainer[j].toNodeList.Count; i++)
                 {
-                    if (nodeContainer[j].toNodeList[i].Text != "" && nodeContainer[j].toNodeList[i].Text != "0")
+                    var toNodeValue = nodeContainer[j].toNodeList[i].Text;
+                    if (toNodeValue != "" && toNodeValue != "0")
                     {
-                        if (!usedNode.Contains(Convert.ToInt32(nodeContainer[j].toNodeList[i].Text)))
+                        if (!usedNode.Contains(Convert.ToInt32(toNodeValue)))
                         {
-                            nodeContainer[j].rCount.Add(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text)));
-                            usedNode.Add(Convert.ToInt32((nodeContainer[j].toNodeList[i].Text)));
+                            nodeContainer[j].rCount.Add(Convert.ToInt32(toNodeValue));
+                            usedNode.Add(Convert.ToInt32((toNodeValue)));
                         }
                     }
                 }
@@ -409,9 +433,10 @@ namespace DialogueEditor
                     try
                     {
                         var num = realCount[j].ElementAt(i);
-                        nodeContainerUI[num].Location = new Point((panel.Width / (realCount[j].Count + 1)) - (197 / 2) + (panel.Width * i / (realCount[j].Count + 1)), 700 + (j * 450));
+                        nodeContainerUI[num].Location = new Point((panel.Width / (realCount[j].Count + 1)) - (nodeUIWidth / 2) + (panel.Width * i / (realCount[j].Count + 1)), nodeUIStartOffset + (j * nodeUIoffset));
                         nodeContainer.RemoveAt(num);
                         nodeContainer.Insert(num, new NodeContainer(nodeContainerUI[num]));
+                        
                     }
                     catch
                     {
@@ -421,30 +446,33 @@ namespace DialogueEditor
                 }
             }
         }
-        #region Drawing
-        public void CreateGraph()
-        {
-            g = panel.CreateGraphics();
-        }
+        #endregion
 
-        public void DrawPointsAndLines()
+        #region Drawing
+        //public void CreateGraph()
+        //{
+        //    g = panel.CreateGraphics();
+        //}
+
+        public (List<Point[]>,List<Pen>) DrawPointsAndLines()
         {
             for (int j = 0; j < usedNode.Count; j++)
             {
                 for (int i = 0; i < nodeContainer[j].toNodeList.Count; i++)
                 {
-                    if (nodeContainer[j].toNodeList[i].Text != "" && nodeContainer[j].toNodeList[i].Text != "0")
+                    var toNodeValue = nodeContainer[j].toNodeList[i].Text;
+                    if (toNodeValue != "" && toNodeValue != "0")
                     {
                         try
                         {
-                            try_pEnd = panel.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.X - panel.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].endPoint.Y - panel.VerticalScroll.Value));
-                            try_pUp = panel.PointToClient(new Point(nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.X - panel.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(nodeContainer[j].toNodeList[i].Text)].intermediatePointUp.Y - panel.VerticalScroll.Value));
+                            try_pEnd = panel.PointToClient(new Point(nodeContainer[Convert.ToInt16(toNodeValue)].endPoint.X - panel.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(toNodeValue)].endPoint.Y - panel.VerticalScroll.Value));
+                            try_pUp = panel.PointToClient(new Point(nodeContainer[Convert.ToInt16(toNodeValue)].intermediatePointUp.X - panel.HorizontalScroll.Value, nodeContainer[Convert.ToInt16(toNodeValue)].intermediatePointUp.Y - panel.VerticalScroll.Value));
 
                         }
                         catch
                         {
-                            MessageBox.Show($"ERROR DRAW: Node '{nodeContainer[j].toNodeList[i].Text}' does not exits. Reset to 'Null'");
-                            nodeContainer[j].toNodeList[i].Text = 0.ToString();
+                            MessageBox.Show($"ERROR DRAW: Node '{toNodeValue}' does not exits. Reset to 'Null'");
+                            toNodeValue = 0.ToString();
                         }
                         finally
                         {
@@ -498,6 +526,7 @@ namespace DialogueEditor
                     }
                 }
             }
+            return (pointsList, penList);
         }
         public double LineLength(Point p1, Point p2)
         {
@@ -505,16 +534,16 @@ namespace DialogueEditor
             return lineLength;
         }
 
-        public void DrawLines()
-        {
-            for (int i = 0; i < pointsList.Count; i++)
-            {
-                penList[i].CustomEndCap = new AdjustableArrowCap(4, 7);
-                g.DrawCurve(penList[i], pointsList[i]);
+        //public void DrawLines()
+        //{
+        //    for (int i = 0; i < pointsList.Count; i++)
+        //    {
+        //        penList[i].CustomEndCap = new AdjustableArrowCap(4, 7);
+        //        g.DrawCurve(penList[i], pointsList[i]);
 
-            }
-            pointsList.Clear();
-        }
+        //    }
+        //    pointsList.Clear();
+        //}
         #endregion
 
         #region Load Quest from DB
@@ -574,13 +603,22 @@ namespace DialogueEditor
         }
 
         // public string[] LoadDialogueList()
-        public (string[], string[]) LoadDialogueList()
+        public (string[], string[]) LoadDialogueList(string state)
         {
             OpenConnection();
-            cmdCount.CommandText = $"select count(*) from 'dialogue_answers'";
+            if (state != "task")
+            {
+                cmdCount.CommandText = $"select count(*), Id, Answer_text from 'dialogue_answers' where {state}_quest=1";
+                cmd.CommandText = $"select Id, Answer_text from 'dialogue_answers' where {state}_quest=1";
+            }
+            else
+            {
+                cmdCount.CommandText = $"select count(*), Id, Answer_text from 'dialogue_answers'";
+                cmd.CommandText = $"select Id, Answer_text from 'dialogue_answers'";
+            }
             var dialogueCount = Convert.ToInt16(cmdCount.ExecuteScalar());
-            (string[],string[]) dialogueListTuple = (new string[dialogueCount], new string[dialogueCount]);
-            cmd.CommandText = $"select Id, Answer_text from 'dialogue_answers'";
+            (string[], string[]) dialogueListTuple = (new string[dialogueCount], new string[dialogueCount]);
+
             reader = cmd.ExecuteReader();
             for (int i = 0; i < dialogueCount; i++)
             {
@@ -590,7 +628,7 @@ namespace DialogueEditor
             }
             reader.Close();
             ////  CloseConnection();
-            return dialogueListTuple ;
+            return dialogueListTuple;
         }
 
         public int GetTasksCount(int questID)
@@ -602,11 +640,21 @@ namespace DialogueEditor
             return Convert.ToInt16(tasksCount);
         }
 
+        public string GetQuestDescription(int questID)
+        {
+            OpenConnection();
+            cmd.CommandText = $"select Description from 'quest_locale_ru' where QuestId={questID}";
+            var questDesciption = cmd.ExecuteScalar().ToString();
+
+            CloseConnection();
+            return questDesciption;
+        }
         public string GetQuestName(int questID)
         {
             OpenConnection();
-            cmd.CommandText = $"select QuestName from 'quest' where Id={questID}";
+            cmd.CommandText = $"select Title from 'quest_locale_ru' where QuestId={questID}";
             var questName = cmd.ExecuteScalar().ToString();
+           
             CloseConnection();
             return questName;
         }
@@ -690,12 +738,12 @@ namespace DialogueEditor
             }
         }
 
-        public (string[], string[]) LoadIdByEventType(string eventType)
+        public (string[], string[]) LoadIdByEventType(string eventType, string state)
         {
             switch (eventType)
             {
                 case "DialogAnswerSelect":
-                    return LoadDialogueList();
+                    return LoadDialogueList(state);
 
                 case "NpcDie":
                     return LoadNpcList();
@@ -711,7 +759,7 @@ namespace DialogueEditor
             switch (taskType)
             {
                 case "SelectAnswer":
-                    return LoadDialogueList();
+                    return LoadDialogueList("task");
 
                 case "KillNpc":
                     return LoadNpcList();
@@ -741,8 +789,9 @@ namespace DialogueEditor
 
         }
         #endregion
+
         #region Save Quest
-        public void SaveQuestToDB(string startQuestEventType, string startQuestTargetID, string endQuestEventType, string endQuestTargetID, ref List<TaskUI> taskCounteiner, int questId, string questName)
+        public void SaveQuestToDB(string startQuestEventType, string startQuestTargetID, string endQuestEventType, string endQuestTargetID, ref List<TaskUI> taskCounteiner, int questId, string questName, string questDescription)
         {
             cmdNPCtext.CommandText = $"select id from 'game_event_types' where game_events='{startQuestEventType}'";
             var startQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
@@ -750,8 +799,11 @@ namespace DialogueEditor
             cmdNPCtext.CommandText = $"select id from 'game_event_types' where game_events='{endQuestEventType}'";
             var endQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
-            cmd.CommandText = $"update 'quest' SET StartDialogId = '{startQuestTargetID}', EndDialogId = '{endQuestTargetID}', StartQuestEventType = '{startQuestEventTypeForID}', EndQuestEventType = '{endQuestEventTypeForID}', QuestName='{questName}' where Id = '{questId}'";
-            WriteCommand(cmd.CommandText);
+            cmd.CommandText = $"update 'quest_locale_ru' SET Title = '{questName}', Description = '{questDescription}'";
+            WriteCommand(cmd.CommandText,"quest");
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = $"update 'quest' SET StartDialogId = '{startQuestTargetID}', EndDialogId = '{endQuestTargetID}', StartQuestEventType = '{startQuestEventTypeForID}', EndQuestEventType = '{endQuestEventTypeForID}' where Id = '{questId}'";
+            WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
 
             for (int i = 0; i < taskCounteiner.Count; i++)
@@ -760,7 +812,7 @@ namespace DialogueEditor
                 var taskTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
                 cmdNPCtext.CommandText = $"update 'quest_objectives' SET Type='{taskTypeForID}', TargetId='{taskCounteiner[i].targetID}', Amount='{taskCounteiner[i].amount}',isOptional ='{taskCounteiner[i].isOptional}' where QuestId='{questId}' and Id ='{taskCounteiner[i].taskID}'";
-                WriteCommand(cmdNPCtext.CommandText);
+                WriteCommand(cmdNPCtext.CommandText, "quest");
                 cmdNPCtext.ExecuteNonQuery();
             }
 
@@ -771,24 +823,38 @@ namespace DialogueEditor
         public void AddNewQuest(int startDialogId, int endDialogId, int startQuestEventType, int endQuestEventType)
         {
             cmd.CommandText = $"insert into 'quest' (StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType) values ('{startDialogId}','{endDialogId}','{startQuestEventType}','{endQuestEventType}') ";
-            WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText, "quest");
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = $"select id from 'quest' order by id desc limit 1";
+            var npcID = cmd.ExecuteScalar();
+            cmd.CommandText = $"insert into 'quest_locale_ru' (QuestId) values ('{npcID}')";
+            WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
         }
 
         public void AddNewTask(int questId)
         {
             cmd.CommandText = $"insert into 'quest_objectives' (QuestId) values ('{questId}') ";
-            WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText, "quest");
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = $"select id from 'quest_objectives' order by id desc limit 1";
+            var taskID = cmd.ExecuteScalar();
+            cmd.CommandText = $"insert into 'quest_objectives_locale_ru' (ObjectiveId) values ('{taskID}')";
+            WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
         }
 
         #endregion
+
         #region Delete Quest and Task
         public void DeleteTask(int taskId)
         {
             OpenConnection();
             cmd.CommandText = $"delete from 'quest_objectives' where Id ={taskId}";
-            WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText, "quest");
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = $"delete from 'quest_objectives_locale_ru' where ObjectiveId ={taskId}";
+            WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
             CloseConnection();
         }
@@ -796,10 +862,28 @@ namespace DialogueEditor
         public void DeleteQuest(int questId)
         {
             cmd.CommandText = $"delete from 'quest' where Id ={questId}";
-            WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
+            
+            cmd.CommandText = $"delete from 'quest_locale_ru' where QuestId ={questId}";
+            WriteCommand(cmd.CommandText, "quest");
+            cmd.ExecuteNonQuery();
+
+            cmdCount.CommandText = $"select count(id) from 'quest_objectives' where QuestId={questId}";
+            var taskCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            cmd.CommandText = $"select id from 'quest_objectives' where QuestId={questId} ";
+            var reader = cmd.ExecuteReader();
+            for (int i=0;i<taskCount;i++)
+            {
+                reader.Read();
+                var taskID = reader.GetValue(0).ToString();
+                cmdUIcount.CommandText = $"delete from 'quest_objectives_locale_ru' where ObjectiveId ={taskID}";
+                WriteCommand(cmdUIcount.CommandText, "quest");
+                cmdUIcount.ExecuteNonQuery();
+            }
+            reader.Close();
             cmd.CommandText = $"delete from 'quest_objectives' where QuestId ={questId}";
-            WriteCommand(cmd.CommandText);
+            WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
         }
         #endregion

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,7 +26,8 @@ namespace DialogueEditor
         string copyDbDirectory = @".\_tempWorld.bytes";
         bool isClearTempDB = false;
         List<TaskUI> taskContainerUI = new List<TaskUI>();
-        public StringBuilder sb = new StringBuilder();
+        public StringBuilder questSb = new StringBuilder();
+        public StringBuilder dialogueSb = new StringBuilder();
         //=====================================================
         private int npc_id;
         private List<NodeUI> nodeContainerUI = new List<NodeUI>();
@@ -35,15 +37,14 @@ namespace DialogueEditor
         public List<List<int>> realCount = new List<List<int>>();
         List<int> usedNode = new List<int>();
         private Random rnd = new Random();
-       // public DBConnection DB;
         Pen pen = new Pen(Color.Red, 3);
         Pen pen2 = new Pen(Color.Blue, 3);
         Pen pen3 = new Pen(Color.DarkOliveGreen, 3);
         Pen pen4 = new Pen(Color.AliceBlue, 3);
-       // public StringBuilder sb = new StringBuilder();
         List<NodeTemp> temp;
         bool tempSaveFlag = true;
         public int testi = 0;
+        public bool paintFlag = false;
 
 
         private void Form4_FormClosed(object sender, FormClosedEventArgs e)
@@ -104,7 +105,7 @@ namespace DialogueEditor
             label2.Text = copyDbDirectory;
             if (dbpath != null)
             {
-                DB = new DBConnection(dbpath, sb);
+                DB = new DBConnection(dbpath, questSb, dialogueSb);
             }
             else
             {
@@ -130,6 +131,7 @@ namespace DialogueEditor
                         taskContainerUI.Clear();
 
                         textBox2.Text = DB.GetQuestName(questId);
+                        textBox1.Text = DB.GetQuestDescription(questId);
                         comboBox3.Items.AddRange(DB.LoadGameEvents());
                         comboBox7.Items.AddRange(DB.LoadGameEvents());
                         comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "start");
@@ -195,8 +197,8 @@ namespace DialogueEditor
             {
                 comboBox6.Items.Clear();
                 comboBox5.Items.Clear();
-                comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item1);
-                comboBox5.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item2);
+                comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString(), "Start").Item1);
+                comboBox5.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString(), "Start").Item2);
             }
 
         }
@@ -207,8 +209,8 @@ namespace DialogueEditor
             {
                 comboBox10.Items.Clear();
                 comboBox9.Items.Clear();
-                comboBox10.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString()).Item1);
-                comboBox9.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString()).Item2);
+                comboBox10.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString(),"End").Item1);
+                comboBox9.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString(), "End").Item2);
             }
         }
 
@@ -218,13 +220,13 @@ namespace DialogueEditor
             {
                 if (comboBox10.SelectedItem != null && comboBox6.SelectedItem != null && comboBox7.SelectedItem != null && comboBox10.SelectedItem != null)
                 {
-                    var startQuestEventType = comboBox10.SelectedItem.ToString();
+                    var startQuestEventType = comboBox3.SelectedItem.ToString();
                     var startQuestTargetID = comboBox6.SelectedItem.ToString();
                     var endQuestEventType = comboBox7.SelectedItem.ToString();
                     var endQuestTargetID = comboBox10.SelectedItem.ToString();
 
                     DB.OpenConnection();
-                    DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId, textBox2.Text);
+                    DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId, textBox2.Text, textBox1.Text);
                     DB.CloseConnection();
                 }
                 else
@@ -363,7 +365,15 @@ namespace DialogueEditor
             {
                 temp.Clear();
             }
-            DialogueDBUpdate();
+            if (comboBox1.Items.Contains(npc_id.ToString()))
+            {
+                DialogueDBUpdate();
+            }
+            else
+            {
+                MessageBox.Show("ERROR: ID does not exist");
+            }
+
         }
 
         private void comboBox1_Click(object sender, EventArgs e)
@@ -378,15 +388,38 @@ namespace DialogueEditor
                 MessageBox.Show("ERROR: DataBase not selected");
             }
         }
+        private void comboBox1_TextChanged(object sender, EventArgs e)//
+        {
+            try
+            {
+                npc_id = Convert.ToInt16(comboBox1.Text);
+                //if (!comboBox1.Items.Contains(npc_id.ToString()))
+                //{
+                //    MessageBox.Show("ERROR: ID does not exist");
+                //}
+            }
+            catch
+            {
+                MessageBox.Show("ERROR: ID cannot be a string, You must enter only Number");
+            }
+        }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
-            //if (DB != null)
-            //{
-            //    DB.DrawPointsAndLines();
-            //    DB.DrawLines();
-            //}
+            if (DB != null)
+            {
+                var pointsLines = DB.DrawPointsAndLines();
+                for (int i = 0; i < pointsLines.Item1.Count; i++)
+                {
+                    pointsLines.Item2[i].CustomEndCap = new AdjustableArrowCap(4, 7);
+                    e.Graphics.DrawCurve(pointsLines.Item2[i], pointsLines.Item1[i]);
+
+                }
+                pointsLines.Item1.Clear();
+
+            }
         }
+
         private void panel2_Resize(object sender, EventArgs e)
         {
             if (DB != null)
@@ -415,18 +448,6 @@ namespace DialogueEditor
             else
             {
                 MessageBox.Show("ERROR: DataBase not selected");
-            }
-        }
-
-        private void comboBox1_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                npc_id = Convert.ToInt16(comboBox1.Text);
-            }
-            catch
-            {
-                MessageBox.Show("ERROR: ID cannot be a string, You must enter only Number");
             }
         }
 
@@ -527,13 +548,15 @@ namespace DialogueEditor
         {
             if (DB != null)
             {
-                DB = new DBConnection(dbpath, sb);  // Добавлено sb в конструктор, нужно проверить.
+                DB = new DBConnection(dbpath, questSb, dialogueSb);  // Добавлено sb в конструктор, нужно проверить.
 
                 if (npc_id != 0)
                 {
                     DB.OpenConnection();
-                    DB.GetFromDB(npc_id, panel2.Controls,this, panel2);
-                    DB.CreateGraph();
+                    DB.GetFromDB(npc_id,this, panel2);
+                   // DB.CreateGraph();
+                   // DB.DrawPointsAndLines();
+                   // DB.DrawLines();
                 }
                 else
                 {
@@ -561,5 +584,6 @@ namespace DialogueEditor
             tempSaveFlag = true;
         }
         #endregion
+
     }
 }

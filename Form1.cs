@@ -63,8 +63,9 @@ namespace DialogueEditor
         {
             if (DB != null)
             {
-                DB.DrawPointsAndLines();
-                DB.DrawLines();
+                
+                    DB.DrawPointsAndLines();
+                   // DB.DrawLines();
             }
         }
 
@@ -148,7 +149,7 @@ namespace DialogueEditor
             label2.Text = copyDbDirectory;
             if (dbpath != null)
             {
-                DB = new DBConnection(dbpath, sb);
+        //        DB = new DBConnection(dbpath, sb);
             }
             else
             {
@@ -196,13 +197,13 @@ namespace DialogueEditor
         {
             if (DB != null)
             {
-                DB = new DBConnection(dbpath, sb);  // Добавлено sb в конструктор, нужно проверить.
+   //             DB = new DBConnection(dbpath, sb);  // Добавлено sb в конструктор, нужно проверить.
             
                 if (npc_id != 0)
                 {
                     DB.OpenConnection();
                    // DB.GetFromDB(npc_id, Controls, this);
-                    DB.CreateGraph();
+                   // DB.CreateGraph();
                 }
                 else
                 {

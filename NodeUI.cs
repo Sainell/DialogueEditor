@@ -21,13 +21,13 @@ namespace DialogueEditor
         public Panel panel;
         public string npcText { get; set; }
 
-        public NodeUI(int count, int node_ID, DBConnection DB,Form4 form, Panel panel)
+        public NodeUI(int count, int node_ID,Form4 form, Panel panel)
         {
             InitializeComponent();
 
             this.count = count;
             this.node_ID = node_ID;
-            this.DB = DB;
+            this.DB = form.DB;
             this.form = form;
             this.panel = panel;
   

@@ -87,7 +87,7 @@ namespace DialogueEditor
             label6.Text = copyDbDirectory;
             if (dbpath != null)
             {
-                DB = new DBConnection(dbpath,sb);
+          //      DB = new DBConnection(dbpath,sb);
             }
             else
             {
@@ -178,8 +178,8 @@ namespace DialogueEditor
             {
                 comboBox6.Items.Clear();
                 comboBox5.Items.Clear();
-                comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()).Item1);
-                comboBox5.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()).Item2);
+            //    comboBox6.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()).Item1);
+            //    comboBox5.Items.AddRange(DB.LoadIdByEventType(comboBox1.SelectedItem.ToString()).Item2);
             }
             
         }
@@ -190,8 +190,8 @@ namespace DialogueEditor
             {
                 comboBox7.Items.Clear();
                 comboBox9.Items.Clear();
-                comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item1);
-                comboBox9.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item2);
+               // comboBox7.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item1);
+              //  comboBox9.Items.AddRange(DB.LoadIdByEventType(comboBox3.SelectedItem.ToString()).Item2);
             }
         }
 
@@ -207,7 +207,7 @@ namespace DialogueEditor
                     var endQuestTargetID = comboBox7.SelectedItem.ToString();
 
                     DB.OpenConnection();
-                    DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId, textBox2.Text);
+                //    DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId, textBox2.Text);
                     DB.CloseConnection();
                 }
                 else
