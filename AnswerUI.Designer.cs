@@ -39,6 +39,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label13
@@ -161,10 +162,22 @@
             this.label2.TabIndex = 54;
             this.label2.Text = "Quest ID: ";
             // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(150, 59);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(46, 17);
+            this.checkBox2.TabIndex = 55;
+            this.checkBox2.Text = "task";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
             // AnswerUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label13);
@@ -196,5 +209,6 @@
         public System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
         public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.CheckBox checkBox2;
     }
 }

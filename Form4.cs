@@ -120,8 +120,8 @@ namespace DialogueEditor
                 DB.OpenConnection();
                 if (questId != 0)
                 {
-                    try
-                    {
+                    //try
+                    //{
                         comboBox3.Items.Clear();
                         comboBox7.Items.Clear();
                         comboBox6.Items.Clear();
@@ -148,15 +148,15 @@ namespace DialogueEditor
                             task.taskTypeItems = DB.LoadTaskTypes();
                         }
                         DB.LoadTaskList(questId, ref taskContainerUI);
-                    }
-                    catch
-                    {
-                        MessageBox.Show($"ERROR: Quest ID  {questId} doesn't exist");
-                    }
-                    finally
-                    {
+           //        }
+              //      catch
+                 //  {
+                   //     MessageBox.Show($"ERROR: Quest ID  {questId} doesn't exist");
+                   // }
+                //    finally
+               //     {
                         DB.CloseConnection();
-                    }
+                //    }
                 }
                 else
                 {
@@ -218,12 +218,15 @@ namespace DialogueEditor
         {
             if (DB != null)
             {
-                if (comboBox10.SelectedItem != null && comboBox6.SelectedItem != null && comboBox7.SelectedItem != null && comboBox10.SelectedItem != null)
+                if (comboBox3.SelectedItem != null && comboBox6.SelectedItem != null && comboBox7.SelectedItem != null && comboBox10.SelectedItem != null)
                 {
+
                     var startQuestEventType = comboBox3.SelectedItem.ToString();
-                    var startQuestTargetID = comboBox6.SelectedItem.ToString();
+                    //  var intPoint = comboBox6.SelectedItem.ToString().IndexOf(" ");
+                    var startQuestTargetID = comboBox6.SelectedItem.ToString();//.Remove(intPoint);
                     var endQuestEventType = comboBox7.SelectedItem.ToString();
-                    var endQuestTargetID = comboBox10.SelectedItem.ToString();
+                    //  intPoint = comboBox10.SelectedItem.ToString().IndexOf(" ");
+                    var endQuestTargetID = comboBox10.SelectedItem.ToString();//.Remove(intPoint);
 
                     DB.OpenConnection();
                     DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId, textBox2.Text, textBox1.Text);

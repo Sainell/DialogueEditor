@@ -198,7 +198,6 @@ namespace DialogueEditor
         {
             for (int i = 0; i < nodeContainer.Count; i++)
             {
-               // cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
                 cmd.CommandText = $"select * from 'dialogue_answers' where Node_id = {i} and Npc_id = {npc_id}";
                 reader = cmd.ExecuteReader();
 
@@ -211,6 +210,7 @@ namespace DialogueEditor
                     nodeContainer[i].toNodeList[j].Text = reader.GetValue(3).ToString();
                     if (reader.GetValue(6).ToString() == "1") nodeContainer[i].startCheckBoxList[j].Checked = true;
                     if (reader.GetValue(7).ToString() == "1") nodeContainer[i].finishCheckBoxList[j].Checked = true;
+                    if (reader.GetValue(9).ToString() == "1") nodeContainer[i].taskCheckBoxList[j].Checked = true;
                     if ((bool)reader.GetValue(4) == true) nodeContainer[i].exitCheckBoxList[j].Checked = true;
                 }
                 reader.Close();
@@ -240,6 +240,7 @@ namespace DialogueEditor
                     var startCheckBoxValue = nodeContainerUI[i].answerUIList[j].startCheckBoxValue;
                     var finishCheckBoxValue = nodeContainerUI[i].answerUIList[j].finishCheckBoxValue;
                     var exitCheckBoxValue = nodeContainerUI[i].answerUIList[j].exitCheckBoxValue;
+                    var taskCheckBoxValue = nodeContainerUI[i].answerUIList[j].taskCheckBoxValue;
                     temp.Add(new Temp(ID, answerBoxText, questIdText, toNodeText, startCheckBoxValue, finishCheckBoxValue, exitCheckBoxValue));
                 }
                 nodeTemp.Add(new NodeTemp(npcText, temp));
@@ -270,6 +271,7 @@ namespace DialogueEditor
 
         public void SaveChangesToDB()
         {
+            OpenConnection();
             for (int i = 0; i < nodeContainer.Count(); i++)
             {
 
@@ -304,8 +306,11 @@ namespace DialogueEditor
                     int exitCheckBoxValue;
                     if (nodeContainer[i].exitCheckBoxList[j].Checked == true) { exitCheckBoxValue = 1; }
                     else exitCheckBoxValue = 0;
+                    int taskCheckBoxValue = 0;
+                    if (nodeContainer[i].taskCheckBoxList[j].Checked == true) { taskCheckBoxValue = 1; }
+                    else taskCheckBoxValue = 0;
 
-                    cmd.CommandText = $"update 'dialogue_answers' SET Answer_text='{answerBoxText}', To_node ='{toNodeText}', Quest_ID='{questIdText}', End_dialogue='{exitCheckBoxValue}', Start_quest='{startCheckBoxValue}', End_quest='{finishCheckBoxValue}'   where Id = '{ID}'";
+                    cmd.CommandText = $"update 'dialogue_answers' SET Answer_text='{answerBoxText}', To_node ='{toNodeText}', Quest_ID='{questIdText}', End_dialogue='{exitCheckBoxValue}', Start_quest='{startCheckBoxValue}', End_quest='{finishCheckBoxValue}', Task_quest = '{taskCheckBoxValue}'   where Id = '{ID}'";
                     WriteCommand(cmd.CommandText, "dialogue");
                     cmd.ExecuteNonQuery();
                 }
@@ -602,19 +607,18 @@ namespace DialogueEditor
             return events;
         }
 
-        // public string[] LoadDialogueList()
         public (string[], string[]) LoadDialogueList(string state)
         {
             OpenConnection();
             if (state != "task")
             {
-                cmdCount.CommandText = $"select count(*), Id, Answer_text from 'dialogue_answers' where {state}_quest=1";
-                cmd.CommandText = $"select Id, Answer_text from 'dialogue_answers' where {state}_quest=1";
+                cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where {state}_quest=1";
+                cmd.CommandText = $"select Id, Answer_text, Npc_id from 'dialogue_answers' where {state}_quest=1";
             }
             else
             {
-                cmdCount.CommandText = $"select count(*), Id, Answer_text from 'dialogue_answers'";
-                cmd.CommandText = $"select Id, Answer_text from 'dialogue_answers'";
+                cmdCount.CommandText = $"select count(*) from 'dialogue_answers' where {state}_quest=1";
+                cmd.CommandText = $"select Id, Answer_text, Npc_id from 'dialogue_answers' where {state}_quest=1";
             }
             var dialogueCount = Convert.ToInt16(cmdCount.ExecuteScalar());
             (string[], string[]) dialogueListTuple = (new string[dialogueCount], new string[dialogueCount]);
@@ -624,7 +628,7 @@ namespace DialogueEditor
             {
                 reader.Read();
                 dialogueListTuple.Item1[i] = $"{reader.GetValue(0).ToString()}";
-                dialogueListTuple.Item2[i] = $"{reader.GetValue(1).ToString()}";
+                dialogueListTuple.Item2[i] = $"npc:{reader.GetValue(2).ToString()}   - { reader.GetValue(1).ToString()}";
             }
             reader.Close();
             ////  CloseConnection();

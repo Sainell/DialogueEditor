@@ -401,7 +401,7 @@
             // comboBox6
             // 
             this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox6.DropDownWidth = 20;
+            this.comboBox6.DropDownWidth = 70;
             this.comboBox6.FormatString = "N2";
             this.comboBox6.FormattingEnabled = true;
             this.comboBox6.Location = new System.Drawing.Point(217, 19);
@@ -598,7 +598,7 @@
             // comboBox10
             // 
             this.comboBox10.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox10.DropDownWidth = 20;
+            this.comboBox10.DropDownWidth = 70;
             this.comboBox10.FormattingEnabled = true;
             this.comboBox10.Location = new System.Drawing.Point(217, 18);
             this.comboBox10.Name = "comboBox10";

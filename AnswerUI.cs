@@ -21,6 +21,7 @@ namespace DialogueEditor
         public bool startCheckBoxValue { get; set; }
         public bool finishCheckBoxValue { get; set; }
         public bool exitCheckBoxValue { get; set; }
+        public bool taskCheckBoxValue { get; set; }
 
 
         public AnswerUI(NodeUI node)
@@ -66,6 +67,11 @@ namespace DialogueEditor
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             exitCheckBoxValue = checkBox1.Checked;
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            taskCheckBoxValue = checkBox2.Checked;
         }
     }
 }

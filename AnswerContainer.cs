@@ -15,6 +15,7 @@ namespace DialogueEditor
         public bool finishCheckBox;
         public bool exitCheckBox;
         public string toNode;
+        public bool taskCheckBox;
 
         public AnswerContainer(AnswerUI answer)
         {
@@ -24,6 +25,7 @@ namespace DialogueEditor
             finishCheckBox = answer.finishCheckBoxValue;
             exitCheckBox = answer.exitCheckBoxValue;
             toNode = answer.toNodeText;
+            taskCheckBox = answer.taskCheckBoxValue;
         }
     }
 }

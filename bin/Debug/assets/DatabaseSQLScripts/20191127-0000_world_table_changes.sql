@@ -22,8 +22,8 @@ BEGIN TRANSACTION;
 -- Таблица: quest
 DROP TABLE IF EXISTS quest;
 CREATE TABLE quest (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, MinLevel INTEGER DEFAULT (1) NOT NULL, QuestLevel INTEGER DEFAULT (1) NOT NULL, TimeAllowed INTEGER DEFAULT (- 1) NOT NULL, ZoneId INTEGER DEFAULT (1) NOT NULL, RewardExp INTEGER NOT NULL DEFAULT (0), RewardMoney INTEGER NOT NULL DEFAULT (0), StartDialogId INTEGER NOT NULL DEFAULT (0), EndDialogId INTEGER DEFAULT (0) NOT NULL, StartQuestEventType INTEGER NOT NULL DEFAULT (0), EndQuestEventType INTEGER NOT NULL DEFAULT (0), QuestName STRING DEFAULT questName NOT NULL);
-INSERT INTO quest (Id, MinLevel, QuestLevel, TimeAllowed, ZoneId, RewardExp, RewardMoney, StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType, QuestName) VALUES (1, 1, 1, -1, 1, 0, 0, 6, 22, 1, 1, 'questName');
-INSERT INTO quest (Id, MinLevel, QuestLevel, TimeAllowed, ZoneId, RewardExp, RewardMoney, StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType, QuestName) VALUES (2, 1, 1, -1, 1, 0, 0, 10, 20, 1, 1, 'questName');
+INSERT INTO quest (Id, MinLevel, QuestLevel, TimeAllowed, ZoneId, RewardExp, RewardMoney, StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType) VALUES (1, 1, 1, -1, 1, 0, 0, 6, 22, 1, 1);
+INSERT INTO quest (Id, MinLevel, QuestLevel, TimeAllowed, ZoneId, RewardExp, RewardMoney, StartDialogId, EndDialogId, StartQuestEventType, EndQuestEventType) VALUES (2, 1, 1, -1, 1, 0, 0, 10, 20, 1, 1);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

@@ -16,6 +16,7 @@ namespace DialogueEditor
         public List<CheckBox> startCheckBoxList = new List<CheckBox>();
         public List<CheckBox> finishCheckBoxList = new List<CheckBox>();
         public List<CheckBox> exitCheckBoxList = new List<CheckBox>();
+        public List<CheckBox> taskCheckBoxList = new List<CheckBox>();
         public List<Point> startRightPoint = new List<Point>();
         public List<Point> startLeftPoint = new List<Point>();
         public List<Label> AnswerIDList = new List<Label>();
@@ -47,6 +48,7 @@ namespace DialogueEditor
                 startCheckBoxList.Add(node.answerUIList[i].checkBox6);
                 finishCheckBoxList.Add(node.answerUIList[i].checkBox7);
                 exitCheckBoxList.Add(node.answerUIList[i].checkBox1);
+                taskCheckBoxList.Add(node.answerUIList[i].checkBox2);
                 toNodeList.Add(node.answerUIList[i].textBox6);
                 startRightPoint.Add(node.answerUIList[i].PointToScreen(new Point(node.answerUIList[i].textBox6.Location.X + node.answerUIList[i].textBox6.Width + 7, node.answerUIList[i].textBox6.Location.Y + node.answerUIList[i].textBox6.Height / 2)));
                 startLeftPoint.Add(node.answerUIList[i].PointToScreen(new Point(node.answerUIList[i].textBox6.Location.X - 157, node.answerUIList[i].textBox6.Location.Y + node.answerUIList[i].textBox6.Height / 2)));
