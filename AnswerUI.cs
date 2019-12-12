@@ -53,6 +53,21 @@ namespace DialogueEditor
         private void textBox10_TextChanged(object sender, EventArgs e)
         {
             questIdText = textBox10.Text;
+            if(textBox10.Text == "0")
+            {
+                checkBox2.Enabled = false;
+                checkBox6.Enabled = false;
+                checkBox7.Enabled = false;
+                checkBox2.Checked = false;
+                checkBox6.Checked = false;
+                checkBox7.Checked = false;
+            }
+            else
+            {
+                checkBox2.Enabled = true;
+                checkBox6.Enabled = true;
+                checkBox7.Enabled = true;
+            }
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
