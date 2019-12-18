@@ -45,13 +45,14 @@ namespace DialogueEditor
         public List<Point[]> pointsList = new List<Point[]>();
         StringBuilder questSb;
         StringBuilder dialogueSb;
+        StringBuilder npcSb;
         Point try_pEnd;
         Point try_pUp;
         List<Temp> temp;
         List<NodeTemp> nodeTemp = new List<NodeTemp>();
         bool isOpened = false;
 
-        public DBConnection(string BDpath,StringBuilder questSb, StringBuilder dialogueSb)
+        public DBConnection(string BDpath, StringBuilder questSb, StringBuilder dialogueSb, StringBuilder npcSb)
         {
             DB = new SQLiteConnection("Data Source= " + BDpath);
             cmd = DB.CreateCommand();
@@ -62,11 +63,12 @@ namespace DialogueEditor
             cmdUIAnswerCount = DB.CreateCommand();
             this.questSb = questSb;
             this.dialogueSb = dialogueSb;
+            this.npcSb = npcSb;
         }
 
         public void OpenConnection()
         {
-            if(!isOpened)
+            if (!isOpened)
             {
                 DB.Open();
                 isOpened = true;
@@ -88,8 +90,8 @@ namespace DialogueEditor
             this.npc_id = npc_id;
             this.form = form;
             this.panel = panel;
-            
-            
+
+
 
             ClearNodeUIElements();
             CreateNodeCounteinerList();
@@ -144,7 +146,7 @@ namespace DialogueEditor
                 var UIanswerCountResult = Convert.ToInt16(cmdUIAnswerCount.ExecuteScalar());
 
                 nodeContainerUI.Add(new NodeUI(UIanswerCountResult, i, form, panel));
-            //    nodeContainerUI[i].Visible = true;
+                //    nodeContainerUI[i].Visible = true;
                 nodeContainerUI[i].Location = new Point((panel.Width / 2) - (nodeUIWidth / 2), nodeUIHeight + (i * nodeUIoffset));
                 nodeContainerUI[i].Name = "nodeUI" + i;
                 nodeContainerUI[i].groupBox1.Text = "Node ID:" + i;
@@ -219,7 +221,7 @@ namespace DialogueEditor
         }
 
         public List<NodeTemp> SaveToTemp()
-            {
+        {
             for (int i = 0; i < nodeContainer.Count(); i++)
             {
                 if (nodeContainerUI[i].npcText == null)
@@ -277,7 +279,7 @@ namespace DialogueEditor
 
                 var npcText = nodeContainer[i].npcTextBox.Text;
                 cmdNPCtext.CommandText = $"update 'dialogue_node' SET Npc_text ='{npcText}' where Npc_id = {npc_id} and Node_id = {i}";
-                WriteCommand(cmdNPCtext.CommandText,"dialogue");
+                WriteCommand(cmdNPCtext.CommandText, "dialogue");
                 cmdNPCtext.ExecuteNonQuery();
 
                 for (int j = 0; j < nodeContainer[i].answerBoxList.Count; j++)
@@ -328,24 +330,33 @@ namespace DialogueEditor
             {
                 dialogueSb.AppendFormat(cmd + "; " + "\r\n");
             }
+            if (value == "npc")
+            {
+                npcSb.AppendFormat(cmd + "; " + "\r\n");
+            }
         }
         public void CreateDBPatch(string tableValue)
         {
+            OpenConnection();
             var path = @".\DB_Patches\";
             var date = DateTime.Now.ToString("yyyyMMdd-HHmm");
             var dbname = "_world_";
             var table = tableValue;
             var format = ".sql";
-            if(tableValue=="quest")
-            {
+            if (tableValue == "quest")
+            {OpenConnection();
                 File.AppendAllText(path + date + dbname + table + format, questSb.ToString());
             }
             if (tableValue == "dialogue")
             {
                 File.AppendAllText(path + date + dbname + table + format, dialogueSb.ToString());
             }
-            
+            if (tableValue == "npc")
+            {
+                File.AppendAllText(path + date + dbname + table + format, npcSb.ToString());
+            }
             MessageBox.Show($"Patch name is:  {date + dbname + table + format}");
+            CloseConnection();
         }
 
         public void CreateNewNode(string npc_text)
@@ -441,7 +452,7 @@ namespace DialogueEditor
                         nodeContainerUI[num].Location = new Point((panel.Width / (realCount[j].Count + 1)) - (nodeUIWidth / 2) + (panel.Width * i / (realCount[j].Count + 1)), nodeUIStartOffset + (j * nodeUIoffset));
                         nodeContainer.RemoveAt(num);
                         nodeContainer.Insert(num, new NodeContainer(nodeContainerUI[num]));
-                        
+
                     }
                     catch
                     {
@@ -459,7 +470,7 @@ namespace DialogueEditor
         //    g = panel.CreateGraphics();
         //}
 
-        public (List<Point[]>,List<Pen>) DrawPointsAndLines()
+        public (List<Point[]>, List<Pen>) DrawPointsAndLines()
         {
             for (int j = 0; j < usedNode.Count; j++)
             {
@@ -533,6 +544,7 @@ namespace DialogueEditor
             }
             return (pointsList, penList);
         }
+
         public double LineLength(Point p1, Point p2)
         {
             var lineLength = Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y));
@@ -585,7 +597,7 @@ namespace DialogueEditor
                 npcListTuple.Item2[i] = reader.GetValue(1).ToString();
             }
             reader.Close();
-         //   CloseConnection();
+            //   CloseConnection();
             return npcListTuple;
         }
 
@@ -658,11 +670,18 @@ namespace DialogueEditor
             OpenConnection();
             cmd.CommandText = $"select Title from 'quest_locale_ru' where QuestId={questID}";
             var questName = cmd.ExecuteScalar().ToString();
-           
+
             CloseConnection();
             return questName;
         }
-        
+        public string GetTaskName(int taskID)
+        {
+            OpenConnection();
+            cmd.CommandText = $"select Title from 'quest_objectives_locale_ru' where ObjectiveId={taskID}";
+            var taskName = cmd.ExecuteScalar().ToString();
+            return taskName;
+        }
+
         public void LoadTaskList(int questID, ref List<TaskUI> taskCounteinerUI)
         {
             OpenConnection();
@@ -676,6 +695,7 @@ namespace DialogueEditor
                 taskCounteinerUI[i].amount = readerTask.GetValue(4).ToString();
                 taskCounteinerUI[i].isOptional = readerTask.GetValue(5).ToString();
                 taskCounteinerUI[i].taskID = Convert.ToInt32(readerTask.GetValue(0));
+                taskCounteinerUI[i].taskName = GetTaskName(taskCounteinerUI[i].taskID);
             }
             readerTask.Close();
             CloseConnection();
@@ -803,8 +823,8 @@ namespace DialogueEditor
             cmdNPCtext.CommandText = $"select id from 'game_event_types' where game_events='{endQuestEventType}'";
             var endQuestEventTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
-            cmd.CommandText = $"update 'quest_locale_ru' SET Title = '{questName}', Description = '{questDescription}'";
-            WriteCommand(cmd.CommandText,"quest");
+            cmd.CommandText = $"update 'quest_locale_ru' SET Title = '{questName}', Description = '{questDescription}' where QuestId = '{questId}'";
+            WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
             cmd.CommandText = $"update 'quest' SET StartDialogId = '{startQuestTargetID}', EndDialogId = '{endQuestTargetID}', StartQuestEventType = '{startQuestEventTypeForID}', EndQuestEventType = '{endQuestEventTypeForID}' where Id = '{questId}'";
             WriteCommand(cmd.CommandText, "quest");
@@ -816,6 +836,10 @@ namespace DialogueEditor
                 var taskTypeForID = cmdNPCtext.ExecuteScalar().ToString();
 
                 cmdNPCtext.CommandText = $"update 'quest_objectives' SET Type='{taskTypeForID}', TargetId='{taskCounteiner[i].targetID}', Amount='{taskCounteiner[i].amount}',isOptional ='{taskCounteiner[i].isOptional}' where QuestId='{questId}' and Id ='{taskCounteiner[i].taskID}'";
+                WriteCommand(cmdNPCtext.CommandText, "quest");
+                cmdNPCtext.ExecuteNonQuery();
+
+                cmdNPCtext.CommandText = $"update 'quest_objectives_locale_ru' SET Title='{taskCounteiner[i].taskName}' where ObjectiveId = '{taskCounteiner[i].taskID}'";
                 WriteCommand(cmdNPCtext.CommandText, "quest");
                 cmdNPCtext.ExecuteNonQuery();
             }
@@ -841,8 +865,10 @@ namespace DialogueEditor
             cmd.CommandText = $"insert into 'quest_objectives' (QuestId) values ('{questId}') ";
             WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
+
             cmd.CommandText = $"select id from 'quest_objectives' order by id desc limit 1";
             var taskID = cmd.ExecuteScalar();
+
             cmd.CommandText = $"insert into 'quest_objectives_locale_ru' (ObjectiveId) values ('{taskID}')";
             WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
@@ -868,7 +894,7 @@ namespace DialogueEditor
             cmd.CommandText = $"delete from 'quest' where Id ={questId}";
             WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
-            
+
             cmd.CommandText = $"delete from 'quest_locale_ru' where QuestId ={questId}";
             WriteCommand(cmd.CommandText, "quest");
             cmd.ExecuteNonQuery();
@@ -877,7 +903,7 @@ namespace DialogueEditor
             var taskCount = Convert.ToInt16(cmdCount.ExecuteScalar());
             cmd.CommandText = $"select id from 'quest_objectives' where QuestId={questId} ";
             var reader = cmd.ExecuteReader();
-            for (int i=0;i<taskCount;i++)
+            for (int i = 0; i < taskCount; i++)
             {
                 reader.Read();
                 var taskID = reader.GetValue(0).ToString();
@@ -892,7 +918,81 @@ namespace DialogueEditor
         }
         #endregion
 
+        public string[] LoadNpcInfo(int npcId)
+        {
+            OpenConnection();
+            cmdCount.CommandText = $"select count(*) from npc where id = {npcId}";
+            var npcCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            cmd.CommandText = $"select * from npc where id ={npcId}";
+            string[] npcInfo = new string[12];
+            reader = cmd.ExecuteReader();
 
+            reader.Read();
+            for (int i = 0; i < npcInfo.Length; i++)
+            {
+                npcInfo[i] = reader.GetValue(i + 1).ToString();
+            }
+            reader.Close();
+            CloseConnection();
+            return npcInfo;
+        }
+        public string[] LoadNpcTypes()
+        {
+            OpenConnection();
+            cmdCount.CommandText = $"select count(*) from 'npc_types'";
+            var typesCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            string[] types = new string[typesCount];
+            cmd.CommandText = $"select * from 'npc_types'";
+            reader = cmd.ExecuteReader();
+            for (int i = 0; i < typesCount; i++)
+            {
+                reader.Read();
+                types[i] = reader.GetValue(1).ToString();
+            }
+            reader.Close();
+            CloseConnection();
+            return types;
+        }
+        public string[] LoadNpcSocialGroups()
+        {
+            OpenConnection();
+            cmdCount.CommandText = $"select count(*) from 'npc_social_groups'";
+            var groupsCount = Convert.ToInt16(cmdCount.ExecuteScalar());
+            string[] groups = new string[groupsCount];
+            cmd.CommandText = $"select * from 'npc_social_groups'";
+            reader = cmd.ExecuteReader();
+            for (int i = 0; i < groupsCount; i++)
+            {
+                reader.Read();
+                groups[i] = reader.GetValue(1).ToString();
+            }
+            reader.Close();
+            CloseConnection();
+            return groups;
+        }
+        public void SaveNpcToDB(int npcId, string name, string type, string socialGroup, string level,
+        string health, string stamina, string mana, string strength, string dexterity, string intgelligence, string speed, string attackSpeed)
+        {
+            OpenConnection();
+            cmdNPCtext.CommandText = $"select id from 'npc_types' where type_name='{type}'";
+            var npcTypeForID = cmdNPCtext.ExecuteScalar().ToString();
+
+            cmdNPCtext.CommandText = $"select id from 'npc_social_groups' where group_name='{socialGroup}'";
+            var socialGroupsForID = cmdNPCtext.ExecuteScalar().ToString();
+
+            cmd.CommandText = $"update 'npc' SET npc_name = '{name}', type= '{npcTypeForID}', social_group= '{socialGroupsForID}', level= '{level}', health= '{health}', stamina= '{stamina}', mana= '{mana}', strength= '{strength}', dexterity= '{dexterity}', intelligence= '{intgelligence}', speed= '{speed}', attack_speed= '{attackSpeed}' where id = {npcId}";
+            WriteCommand(cmd.CommandText, "npc");
+            cmd.ExecuteNonQuery();
+            CloseConnection();
+        }
+        public void AddNewNpc()
+        {
+            OpenConnection();
+            cmd.CommandText = $"insert into 'npc' (npc_name) values ('name') ";
+            WriteCommand(cmd.CommandText, "npc");
+            cmd.ExecuteNonQuery();
+            CloseConnection();
+        }
     }
 }
 

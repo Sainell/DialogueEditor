@@ -28,8 +28,10 @@ namespace DialogueEditor
         List<TaskUI> taskContainerUI = new List<TaskUI>();
         public StringBuilder questSb = new StringBuilder();
         public StringBuilder dialogueSb = new StringBuilder();
+        public StringBuilder npcSb = new StringBuilder();
         //=====================================================
-        private int npc_id;
+        private int npc_id; //for dialogs
+        private int npcId;
         private List<NodeUI> nodeContainerUI = new List<NodeUI>();
         private List<NodeContainer> nodeContainer = new List<NodeContainer>();
         List<NodeUI> del = new List<NodeUI>();
@@ -55,24 +57,7 @@ namespace DialogueEditor
         #region QuestEditor
         private void button12_Click(object sender, EventArgs e)
         {
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-
-                try
-                {
-                    FileInfo fn = new FileInfo(ofd.FileName);
-                    fn.CopyTo(copyDbDirectory, isClearTempDB);
-                    MessageBox.Show($"Database was successfully copied to: {copyDbDirectory}");
-                }
-                catch
-                {
-                    MessageBox.Show("DataBase copy already exist");
-                }
-                finally
-                {
-                    CopyDB();
-                }
-            }
+            DBSelect();
         }
 
         private void button13_Click(object sender, EventArgs e)
@@ -103,9 +88,10 @@ namespace DialogueEditor
             dbpath = copyDbDirectory;
             label6.Text = copyDbDirectory;
             label2.Text = copyDbDirectory;
+            label19.Text = copyDbDirectory;
             if (dbpath != null)
             {
-                DB = new DBConnection(dbpath, questSb, dialogueSb);
+                DB = new DBConnection(dbpath, questSb, dialogueSb, npcSb);
             }
             else
             {
@@ -122,41 +108,41 @@ namespace DialogueEditor
                 {
                     //try
                     //{
-                        comboBox3.Items.Clear();
-                        comboBox7.Items.Clear();
-                        comboBox6.Items.Clear();
-                        comboBox5.Items.Clear();
-                        comboBox10.Items.Clear();
-                        comboBox9.Items.Clear();
-                        taskContainerUI.Clear();
+                    comboBox3.Items.Clear();
+                    comboBox7.Items.Clear();
+                    comboBox6.Items.Clear();
+                    comboBox5.Items.Clear();
+                    comboBox10.Items.Clear();
+                    comboBox9.Items.Clear();
+                    taskContainerUI.Clear();
 
-                        textBox2.Text = DB.GetQuestName(questId);
-                        textBox1.Text = DB.GetQuestDescription(questId);
-                        comboBox3.Items.AddRange(DB.LoadGameEvents());
-                        comboBox7.Items.AddRange(DB.LoadGameEvents());
-                        comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "start");
-                        comboBox7.SelectedItem = DB.LoadQuestSelectType(questId, "end");
-                        comboBox6.SelectedItem = DB.LoadQuestSelectID(questId, "start");
-                        comboBox10.SelectedItem = DB.LoadQuestSelectID(questId, "end");
+                    textBox2.Text = DB.GetQuestName(questId);
+                    textBox1.Text = DB.GetQuestDescription(questId);
+                    comboBox3.Items.AddRange(DB.LoadGameEvents());
+                    comboBox7.Items.AddRange(DB.LoadGameEvents());
+                    comboBox3.SelectedItem = DB.LoadQuestSelectType(questId, "start");
+                    comboBox7.SelectedItem = DB.LoadQuestSelectType(questId, "end");
+                    comboBox6.SelectedItem = DB.LoadQuestSelectID(questId, "start");
+                    comboBox10.SelectedItem = DB.LoadQuestSelectID(questId, "end");
 
-                        CreateTaskContainerUI(DB.GetTasksCount(questId));
+                    CreateTaskContainerUI(DB.GetTasksCount(questId));
 
-                        panel6.Location = new Point(panel9.Location.X, panel9.Location.Y + panel9.Height + 2);
+                    panel6.Location = new Point(panel9.Location.X, panel9.Location.Y + panel9.Height + 2);
 
-                        foreach (TaskUI task in taskContainerUI)
-                        {
-                            task.taskTypeItems = DB.LoadTaskTypes();
-                        }
-                        DB.LoadTaskList(questId, ref taskContainerUI);
-           //        }
-              //      catch
-                 //  {
-                   //     MessageBox.Show($"ERROR: Quest ID  {questId} doesn't exist");
-                   // }
-                //    finally
-               //     {
-                        DB.CloseConnection();
-                //    }
+                    foreach (TaskUI task in taskContainerUI)
+                    {
+                        task.taskTypeItems = DB.LoadTaskTypes();
+                    }
+                    DB.LoadTaskList(questId, ref taskContainerUI);
+                    //        }
+                    //      catch
+                    //  {
+                    //     MessageBox.Show($"ERROR: Quest ID  {questId} doesn't exist");
+                    // }
+                    //    finally
+                    //     {
+                    DB.CloseConnection();
+                    //    }
                 }
                 else
                 {
@@ -187,7 +173,7 @@ namespace DialogueEditor
                 taskContainerUI[i].Parent = panel9;
                 taskContainerUI[i].Visible = true;
                 taskContainerUI[i].Location = new Point(0, 0 + (i * 48));
-                taskContainerUI[i].taskName = "Task " + (i + 1);
+                taskContainerUI[i].taskNumber = "Task " + (i + 1);
             }
         }
 
@@ -209,7 +195,7 @@ namespace DialogueEditor
             {
                 comboBox10.Items.Clear();
                 comboBox9.Items.Clear();
-                comboBox10.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString(),"End").Item1);
+                comboBox10.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString(), "End").Item1);
                 comboBox9.Items.AddRange(DB.LoadIdByEventType(comboBox7.SelectedItem.ToString(), "End").Item2);
             }
         }
@@ -226,7 +212,7 @@ namespace DialogueEditor
                     var startQuestTargetID = comboBox6.SelectedItem.ToString();//.Remove(intPoint);
                     var endQuestEventType = comboBox7.SelectedItem.ToString();
                     //  intPoint = comboBox10.SelectedItem.ToString().IndexOf(" ");
-                    var endQuestTargetID = comboBox10.SelectedItem.ToString();//.Remove(intPoint);
+                    var endQuestTargetID = comboBox10.SelectedItem.ToString();
 
                     DB.OpenConnection();
                     DB.SaveQuestToDB(startQuestEventType, startQuestTargetID, endQuestEventType, endQuestTargetID, ref taskContainerUI, questId, textBox2.Text, textBox1.Text);
@@ -354,10 +340,6 @@ namespace DialogueEditor
             comboBox10.SelectedIndex = comboBox9.SelectedIndex;
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
         #endregion
 
         #region DialogueEditor
@@ -473,43 +455,12 @@ namespace DialogueEditor
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    FileInfo fn = new FileInfo(ofd.FileName);
-                    fn.CopyTo(copyDbDirectory, isClearTempDB);
-                    MessageBox.Show($"Database was successfully copied to: {copyDbDirectory}");
-                }
-                catch
-                {
-                    MessageBox.Show("DataBase copy already exist");
-                }
-                finally
-                {
-                    CopyDB();
-                }
-            }
+            DBSelect();
         }
         private void button6_Click(object sender, EventArgs e)
         {
             CopyDB();
         }
-
-        //public void CopyDB()
-        //{
-        //    dbpath = copyDbDirectory;
-        //    label2.Text = copyDbDirectory;
-        //    if (dbpath != null)
-        //    {
-        //        DB = new DBConnection(dbpath, sb);
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("ERROR: DataBase not selected");
-        //    }
-        //}
-
 
         private void button5_Click(object sender, EventArgs e)
         {
@@ -523,7 +474,6 @@ namespace DialogueEditor
                     if (result == DialogResult.Yes)
                     {
                         DB.CreateNewNode("npc text");
-                        //SaveToTempAndLoad();
                         DialogueDBUpdate();
                     }
                 }
@@ -551,15 +501,12 @@ namespace DialogueEditor
         {
             if (DB != null)
             {
-                DB = new DBConnection(dbpath, questSb, dialogueSb);  // Добавлено sb в конструктор, нужно проверить.
+                DB = new DBConnection(dbpath, questSb, dialogueSb,npcSb);  // Добавлено sb в конструктор, нужно проверить.
 
                 if (npc_id != 0)
                 {
                     DB.OpenConnection();
-                    DB.GetFromDB(npc_id,this, panel2);
-                   // DB.CreateGraph();
-                   // DB.DrawPointsAndLines();
-                   // DB.DrawLines();
+                    DB.GetFromDB(npc_id, this, panel2);
                 }
                 else
                 {
@@ -587,6 +534,172 @@ namespace DialogueEditor
             tempSaveFlag = true;
         }
         #endregion
+        private void DBSelect()
+        {
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    FileInfo fn = new FileInfo(ofd.FileName);
+                    fn.CopyTo(copyDbDirectory, isClearTempDB);
+                    MessageBox.Show($"Database was successfully copied to: {copyDbDirectory}");
+                }
+                catch
+                {
+                    MessageBox.Show("DataBase copy already exist");
+                }
+                finally
+                {
+                    CopyDB();
+                }
+            }
+        }
+        #region NPCEditor
+        #endregion
+        private void button15_Click(object sender, EventArgs e)
+        {
+            CopyDB();
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            DBSelect();
+        }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            if (DB != null)
+            {        
+                DB.CreateDBPatch("npc");
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            if (DB != null)
+            {
+                DB.OpenConnection();
+                if (npcId != 0)
+                {
+                    label22.Text = "";
+                    comboBox12.Items.Clear();
+                    comboBox13.Items.Clear();
+                    textBox4.Clear();
+                    textBox5.Clear();
+                    textBox6.Clear();
+                    textBox7.Clear();
+                    textBox8.Clear();
+                    textBox9.Clear();
+                    textBox10.Clear();
+                    textBox11.Clear();
+                    textBox12.Clear();
+                    
+
+                    label2.Text = npcId.ToString();
+                    comboBox12.Items.AddRange(DB.LoadNpcTypes());
+                    comboBox13.Items.AddRange(DB.LoadNpcSocialGroups());
+
+                    var NpcValueList = new List<string>();
+                    NpcValueList.AddRange(DB.LoadNpcInfo(npcId));
+
+                    label22.Text = npcId.ToString();
+                    textBox4.Text = NpcValueList[0];
+                    textBox5.Text = NpcValueList[1];
+                    textBox6.Text = NpcValueList[2];
+                    textBox7.Text = NpcValueList[3];
+
+                    textBox11.Text = NpcValueList[4];
+                    textBox12.Text = NpcValueList[5];
+                    
+
+                    textBox10.Text = NpcValueList[6];
+                    textBox9.Text = NpcValueList[7];
+                    textBox8.Text = NpcValueList[8];
+
+                    textBox13.Text = NpcValueList[9];
+
+                    comboBox12.SelectedIndex = Convert.ToInt16(NpcValueList[10])-1;
+                    comboBox13.SelectedIndex = Convert.ToInt16(NpcValueList[11])-1;
+
+                }
+            }
+
+        }
+        private void button16_Click(object sender, EventArgs e)
+        {
+            if (DB != null)
+            {
+                if (comboBox12.SelectedItem != null 
+                && comboBox13.SelectedItem != null 
+                && textBox4.Text != ""
+                && textBox5.Text!=""
+                && textBox6.Text!=""
+                && textBox7.Text!=""
+                && textBox8.Text!=""
+                && textBox9.Text!=""
+                && textBox10.Text!=""
+                && textBox11.Text!=""
+                && textBox12.Text!="")
+
+                {
+
+
+                    DB.SaveNpcToDB(npcId, textBox4.Text, comboBox12.Text, comboBox13.Text,textBox13.Text, textBox10.Text, textBox9.Text, textBox8.Text, textBox5.Text, textBox6.Text, textBox7.Text, textBox11.Text, textBox12.Text);
+
+                }
+                else
+                {
+                    MessageBox.Show("ERROR: Quest is not Load or some fields have not selected value");
+                }
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            if (DB != null)
+            {
+                DB.AddNewNpc();
+                MessageBox.Show("New Quest has been created");
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
+        }
+
+        private void comboBox11_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                npcId = Convert.ToInt16(comboBox11.Text);
+            }
+            catch
+            {
+                MessageBox.Show("ERROR: ID cannot be a string, You must enter only Number");
+            }
+        }
+
+        private void comboBox11_Click(object sender, EventArgs e)
+        {
+            if (DB != null)
+            {
+                comboBox11.Items.Clear();
+                comboBox11.Items.AddRange(DB.LoadNpcList().Item1);
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
+        }
 
     }
-}
+
+} 

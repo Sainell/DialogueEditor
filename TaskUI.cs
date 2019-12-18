@@ -13,12 +13,6 @@ namespace DialogueEditor
     public partial class TaskUI : UserControl
     {
         Form4 form;
-
-        //public TaskUI(Form3 form)
-        //{
-        //    InitializeComponent();
-        //    this.form = form;
-        //}
         public TaskUI(Form4 form)
         {
             InitializeComponent();
@@ -26,6 +20,7 @@ namespace DialogueEditor
         }
 
         public string taskType { get { return comboBox2.SelectedItem.ToString(); } set { comboBox2.SelectedItem = value; } }
+
         public string targetID
         {
             get
@@ -46,6 +41,7 @@ namespace DialogueEditor
         }
 
         public string amount { get { return textBox2.Text; } set { textBox2.Text = value; } }
+
         public string isOptional
         {
             get
@@ -63,7 +59,9 @@ namespace DialogueEditor
             set { if (value == "0") checkBox1.Checked = false; else checkBox1.Checked = true; }
         }
 
-        public string taskName { get { return label4.Text; } set { label4.Text = value; } }
+        public string taskName { get { return textBox1.Text; } set { textBox1.Text = value; } }
+
+        public string taskNumber { get { return label4.Text; } set { label4.Text = value; } }
 
         public int taskID { get { return Convert.ToInt32(label5.Text); } set { label5.Text += value; } }
 
