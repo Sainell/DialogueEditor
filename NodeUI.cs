@@ -20,6 +20,7 @@ namespace DialogueEditor
         public Form4 form;
         public Panel panel;
         public string npcText { get; set; }
+        public int id;
 
         public NodeUI(int count, int node_ID,Form4 form, Panel panel)
         {
@@ -73,7 +74,7 @@ namespace DialogueEditor
             var result = MessageBox.Show("Are you save changes?", "Deleting node", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                DB.DeleteNode(node_ID);
+                DB.DeleteNode(node_ID, id);
                 form.DialogueDBUpdate();
                 // form.SaveToTempAndLoad();
             }

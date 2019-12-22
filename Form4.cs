@@ -234,7 +234,8 @@ namespace DialogueEditor
             if (DB != null)
             {
                 DB.OpenConnection();
-                DB.AddNewQuest(1, 1, 1, 1);
+                DB.AddNewQuest(0,0,0,0);
+              //  DB.AddNewQuest(1, 1, 1, 1);
                 DB.CloseConnection();
                 MessageBox.Show("New Quest has been created");
             }
@@ -700,6 +701,30 @@ namespace DialogueEditor
             }
         }
 
+        private void button21_Click(object sender, EventArgs e)
+        {
+            if (DB != null)
+            {
+                if (npcId != 0)
+                {
+                    var result = MessageBox.Show($"Are you sure you want to delete the NPC with ID \" {npcId}\" ", "Delete NPC", MessageBoxButtons.YesNo);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        DB.DeleteNpc(npcId);
+                        MessageBox.Show($"The NPC with ID \" {npcId}\" has been deleted");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("ERROR: NPC ID not selected");
+                }
+            }
+            else
+            {
+                MessageBox.Show("ERROR: DataBase not selected");
+            }
+        }
     }
 
 } 

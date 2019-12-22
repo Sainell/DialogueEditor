@@ -33,6 +33,7 @@ namespace DialogueEditor
         public Point intermediatePointDown;
         NodeUI node;
         public int nodeHeight;
+        public string Id;
 
        public NodeContainer(NodeUI node)
         {

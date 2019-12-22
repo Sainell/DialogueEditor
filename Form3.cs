@@ -226,7 +226,7 @@ namespace DialogueEditor
             if (DB != null)
             {
                 DB.OpenConnection();
-                DB.AddNewQuest(1, 1, 1, 1);
+              //  DB.AddNewQuest(1, 1, 1, 1);
                 DB.CloseConnection();
                 MessageBox.Show("New Quest has been created");
             }

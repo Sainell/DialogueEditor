@@ -90,6 +90,20 @@
             this.button13 = new System.Windows.Forms.Button();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.panel10 = new System.Windows.Forms.Panel();
+            this.button21 = new System.Windows.Forms.Button();
+            this.comboBox11 = new System.Windows.Forms.ComboBox();
+            this.button15 = new System.Windows.Forms.Button();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.button16 = new System.Windows.Forms.Button();
+            this.button17 = new System.Windows.Forms.Button();
+            this.button18 = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.button19 = new System.Windows.Forms.Button();
+            this.label20 = new System.Windows.Forms.Label();
+            this.button20 = new System.Windows.Forms.Button();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel11 = new System.Windows.Forms.Panel();
             this.textBox13 = new System.Windows.Forms.TextBox();
             this.label35 = new System.Windows.Forms.Label();
@@ -118,17 +132,6 @@
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
-            this.panel10 = new System.Windows.Forms.Panel();
-            this.comboBox11 = new System.Windows.Forms.ComboBox();
-            this.button15 = new System.Windows.Forms.Button();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.button16 = new System.Windows.Forms.Button();
-            this.button17 = new System.Windows.Forms.Button();
-            this.button18 = new System.Windows.Forms.Button();
-            this.label19 = new System.Windows.Forms.Label();
-            this.button19 = new System.Windows.Forms.Button();
-            this.label20 = new System.Windows.Forms.Label();
-            this.button20 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -141,8 +144,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel5.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.panel11.SuspendLayout();
             this.panel10.SuspendLayout();
+            this.panel12.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.panel11.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -176,6 +181,8 @@
             // 
             this.panel2.AutoScroll = true;
             this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 36);
             this.panel2.Name = "panel2";
@@ -834,8 +841,8 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.panel11);
             this.tabPage3.Controls.Add(this.panel10);
+            this.tabPage3.Controls.Add(this.panel12);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(1176, 536);
@@ -843,8 +850,179 @@
             this.tabPage3.Text = "Npc";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // panel10
+            // 
+            this.panel10.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(254)))), ((int)(((byte)(233)))));
+            this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel10.Controls.Add(this.button21);
+            this.panel10.Controls.Add(this.comboBox11);
+            this.panel10.Controls.Add(this.button15);
+            this.panel10.Controls.Add(this.checkBox3);
+            this.panel10.Controls.Add(this.button16);
+            this.panel10.Controls.Add(this.button17);
+            this.panel10.Controls.Add(this.button18);
+            this.panel10.Controls.Add(this.label19);
+            this.panel10.Controls.Add(this.button19);
+            this.panel10.Controls.Add(this.label20);
+            this.panel10.Controls.Add(this.button20);
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel10.Location = new System.Drawing.Point(0, 0);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(1176, 33);
+            this.panel10.TabIndex = 20;
+            // 
+            // button21
+            // 
+            this.button21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button21.Location = new System.Drawing.Point(396, 3);
+            this.button21.Name = "button21";
+            this.button21.Size = new System.Drawing.Size(77, 25);
+            this.button21.TabIndex = 18;
+            this.button21.Text = "Delete Npc";
+            this.button21.UseVisualStyleBackColor = true;
+            this.button21.Click += new System.EventHandler(this.button21_Click);
+            // 
+            // comboBox11
+            // 
+            this.comboBox11.FormattingEnabled = true;
+            this.comboBox11.Location = new System.Drawing.Point(56, 5);
+            this.comboBox11.Name = "comboBox11";
+            this.comboBox11.Size = new System.Drawing.Size(44, 21);
+            this.comboBox11.TabIndex = 17;
+            this.comboBox11.TextChanged += new System.EventHandler(this.comboBox11_TextChanged);
+            this.comboBox11.Click += new System.EventHandler(this.comboBox11_Click);
+            // 
+            // button15
+            // 
+            this.button15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button15.Location = new System.Drawing.Point(934, 3);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(95, 25);
+            this.button15.TabIndex = 17;
+            this.button15.Text = "Open Temp DB";
+            this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.checkBox3.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox3.Location = new System.Drawing.Point(1116, 3);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(57, 22);
+            this.checkBox3.TabIndex = 16;
+            this.checkBox3.Text = "   Clear \r\nTemp DB";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // button16
+            // 
+            this.button16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button16.Location = new System.Drawing.Point(199, 3);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(87, 25);
+            this.button16.TabIndex = 11;
+            this.button16.Text = "Save Changes";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button16_Click);
+            // 
+            // button17
+            // 
+            this.button17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button17.Location = new System.Drawing.Point(292, 3);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(98, 25);
+            this.button17.TabIndex = 15;
+            this.button17.Text = "Create new Npc";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
+            // 
+            // button18
+            // 
+            this.button18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button18.Location = new System.Drawing.Point(118, 3);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(75, 25);
+            this.button18.TabIndex = 0;
+            this.button18.Text = "Load Npc";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button18_Click);
+            // 
+            // label19
+            // 
+            this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label19.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label19.ForeColor = System.Drawing.SystemColors.ButtonShadow;
+            this.label19.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label19.Location = new System.Drawing.Point(752, 9);
+            this.label19.Name = "label19";
+            this.label19.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label19.Size = new System.Drawing.Size(176, 13);
+            this.label19.TabIndex = 14;
+            this.label19.Text = "db folder";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // button19
+            // 
+            this.button19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button19.Location = new System.Drawing.Point(1035, 3);
+            this.button19.Name = "button19";
+            this.button19.Size = new System.Drawing.Size(75, 25);
+            this.button19.TabIndex = 13;
+            this.button19.Text = "DB Select";
+            this.button19.UseVisualStyleBackColor = true;
+            this.button19.Click += new System.EventHandler(this.button19_Click);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label20.Location = new System.Drawing.Point(7, 8);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(49, 13);
+            this.label20.TabIndex = 8;
+            this.label20.Text = "NPC ID";
+            // 
+            // button20
+            // 
+            this.button20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button20.Location = new System.Drawing.Point(479, 3);
+            this.button20.Name = "button20";
+            this.button20.Size = new System.Drawing.Size(77, 25);
+            this.button20.TabIndex = 12;
+            this.button20.Text = "Create Patch";
+            this.button20.UseVisualStyleBackColor = true;
+            this.button20.Click += new System.EventHandler(this.button20_Click);
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.pictureBox2);
+            this.panel12.Controls.Add(this.panel11);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel12.Location = new System.Drawing.Point(0, 0);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(1176, 536);
+            this.panel12.TabIndex = 0;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(829, 0);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(339, 562);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 47;
+            this.pictureBox2.TabStop = false;
+            // 
             // panel11
             // 
+            this.panel11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(254)))), ((int)(((byte)(234)))));
+            this.panel11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel11.Controls.Add(this.textBox13);
             this.panel11.Controls.Add(this.label35);
             this.panel11.Controls.Add(this.comboBox13);
@@ -872,7 +1050,7 @@
             this.panel11.Controls.Add(this.textBox7);
             this.panel11.Controls.Add(this.label28);
             this.panel11.Controls.Add(this.label27);
-            this.panel11.Location = new System.Drawing.Point(408, 105);
+            this.panel11.Location = new System.Drawing.Point(283, 98);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(364, 341);
             this.panel11.TabIndex = 46;
@@ -1097,143 +1275,6 @@
             this.label27.TabIndex = 33;
             this.label27.Text = "Strength:";
             // 
-            // panel10
-            // 
-            this.panel10.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(217)))), ((int)(((byte)(238)))), ((int)(((byte)(255)))));
-            this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel10.Controls.Add(this.comboBox11);
-            this.panel10.Controls.Add(this.button15);
-            this.panel10.Controls.Add(this.checkBox3);
-            this.panel10.Controls.Add(this.button16);
-            this.panel10.Controls.Add(this.button17);
-            this.panel10.Controls.Add(this.button18);
-            this.panel10.Controls.Add(this.label19);
-            this.panel10.Controls.Add(this.button19);
-            this.panel10.Controls.Add(this.label20);
-            this.panel10.Controls.Add(this.button20);
-            this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel10.Location = new System.Drawing.Point(0, 0);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1176, 33);
-            this.panel10.TabIndex = 20;
-            // 
-            // comboBox11
-            // 
-            this.comboBox11.FormattingEnabled = true;
-            this.comboBox11.Location = new System.Drawing.Point(56, 5);
-            this.comboBox11.Name = "comboBox11";
-            this.comboBox11.Size = new System.Drawing.Size(44, 21);
-            this.comboBox11.TabIndex = 17;
-            this.comboBox11.TextChanged += new System.EventHandler(this.comboBox11_TextChanged);
-            this.comboBox11.Click += new System.EventHandler(this.comboBox11_Click);
-            // 
-            // button15
-            // 
-            this.button15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button15.Location = new System.Drawing.Point(934, 3);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(95, 25);
-            this.button15.TabIndex = 17;
-            this.button15.Text = "Open Temp DB";
-            this.button15.UseVisualStyleBackColor = true;
-            this.button15.Click += new System.EventHandler(this.button15_Click);
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBox3.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox3.Location = new System.Drawing.Point(1116, 3);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(57, 22);
-            this.checkBox3.TabIndex = 16;
-            this.checkBox3.Text = "   Clear \r\nTemp DB";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // button16
-            // 
-            this.button16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button16.Location = new System.Drawing.Point(199, 3);
-            this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(87, 25);
-            this.button16.TabIndex = 11;
-            this.button16.Text = "Save Changes";
-            this.button16.UseVisualStyleBackColor = true;
-            this.button16.Click += new System.EventHandler(this.button16_Click);
-            // 
-            // button17
-            // 
-            this.button17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button17.Location = new System.Drawing.Point(292, 3);
-            this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(98, 25);
-            this.button17.TabIndex = 15;
-            this.button17.Text = "Create new Npc";
-            this.button17.UseVisualStyleBackColor = true;
-            this.button17.Click += new System.EventHandler(this.button17_Click);
-            // 
-            // button18
-            // 
-            this.button18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button18.Location = new System.Drawing.Point(118, 3);
-            this.button18.Name = "button18";
-            this.button18.Size = new System.Drawing.Size(75, 25);
-            this.button18.TabIndex = 0;
-            this.button18.Text = "Load Npc";
-            this.button18.UseVisualStyleBackColor = true;
-            this.button18.Click += new System.EventHandler(this.button18_Click);
-            // 
-            // label19
-            // 
-            this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label19.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label19.ForeColor = System.Drawing.SystemColors.ButtonShadow;
-            this.label19.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label19.Location = new System.Drawing.Point(752, 9);
-            this.label19.Name = "label19";
-            this.label19.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label19.Size = new System.Drawing.Size(176, 13);
-            this.label19.TabIndex = 14;
-            this.label19.Text = "db folder";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // button19
-            // 
-            this.button19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button19.Location = new System.Drawing.Point(1035, 3);
-            this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(75, 25);
-            this.button19.TabIndex = 13;
-            this.button19.Text = "DB Select";
-            this.button19.UseVisualStyleBackColor = true;
-            this.button19.Click += new System.EventHandler(this.button19_Click);
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label20.Location = new System.Drawing.Point(7, 8);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(49, 13);
-            this.label20.TabIndex = 8;
-            this.label20.Text = "NPC ID";
-            // 
-            // button20
-            // 
-            this.button20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button20.Location = new System.Drawing.Point(425, 3);
-            this.button20.Name = "button20";
-            this.button20.Size = new System.Drawing.Size(77, 25);
-            this.button20.TabIndex = 12;
-            this.button20.Text = "Create Patch";
-            this.button20.UseVisualStyleBackColor = true;
-            this.button20.Click += new System.EventHandler(this.button20_Click);
-            // 
             // Form4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1243,7 +1284,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1200, 600);
             this.Name = "Form4";
-            this.Text = "GameEditor_v1.4";
+            this.Text = "GameEditor_v1.7";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form4_FormClosed);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -1263,10 +1304,12 @@
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.tabPage3.ResumeLayout(false);
-            this.panel11.ResumeLayout(false);
-            this.panel11.PerformLayout();
             this.panel10.ResumeLayout(false);
             this.panel10.PerformLayout();
+            this.panel12.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.panel11.ResumeLayout(false);
+            this.panel11.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1373,5 +1416,8 @@
         private System.Windows.Forms.Panel panel11;
         private System.Windows.Forms.TextBox textBox13;
         private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Button button21;
+        private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }

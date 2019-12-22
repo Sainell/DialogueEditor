@@ -39,6 +39,7 @@ BEGIN TRANSACTION;
 -- Таблица: game_event_types
 DROP TABLE IF EXISTS game_event_types;
 CREATE TABLE game_event_types (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, game_events STRING);
+INSERT INTO game_event_types (id, game_events) VALUES (0, '');
 INSERT INTO game_event_types (id, game_events) VALUES (1, 'DialogAnswerSelect');
 INSERT INTO game_event_types (id, game_events) VALUES (2, 'NpcAreaEnter');
 INSERT INTO game_event_types (id, game_events) VALUES (3, 'DialogStarted');
@@ -66,6 +67,7 @@ BEGIN TRANSACTION;
 -- Таблица: quest_task_types
 DROP TABLE IF EXISTS quest_task_types;
 CREATE TABLE quest_task_types (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, type STRING);
+INSERT INTO quest_task_types (id, type) VALUES (0, '');
 INSERT INTO quest_task_types (id, type) VALUES (1, 'KillNpc');
 INSERT INTO quest_task_types (id, type) VALUES (2, 'CollectItem');
 INSERT INTO quest_task_types (id, type) VALUES (3, 'TalkWithNpc');

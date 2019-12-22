@@ -186,13 +186,14 @@ namespace DialogueEditor
         }
         public void LoadNpcText()
         {
-            cmdNPCtext.CommandText = $"select Npc_text from 'dialogue_node' where Npc_id = {npc_id}";
+            cmdNPCtext.CommandText = $"select Npc_text, Id from 'dialogue_node' where Npc_id = {npc_id}";
             reader = cmdNPCtext.ExecuteReader();
             for (int j = 0; j < nodeContainer.Count(); j++)
             {
                 reader.Read();
                 var npcTextResult = reader.GetValue(0).ToString();
                 nodeContainer[j].npcTextBox.Text = npcTextResult;
+                nodeContainerUI[j].id = Convert.ToInt16(reader.GetValue(1));
             }
             reader.Close();
         }
@@ -365,7 +366,7 @@ namespace DialogueEditor
             WriteCommand(cmd.CommandText, "dialogue");
             cmd.ExecuteNonQuery();
         }
-        public void DeleteNode(int node_id)
+        public void DeleteNode(int node_id,int id)
         {
             if (node_id == 0)
             {
@@ -395,7 +396,7 @@ namespace DialogueEditor
             }
             if (checkBindings)
             {
-                cmd.CommandText = $"delete from 'dialogue_node' where Npc_id={npc_id} and Node_ID={node_id}";
+                cmd.CommandText = $"delete from 'dialogue_node' where Id={id}";// Npc_id={npc_id} and Node_ID={node_id}";
                 WriteCommand(cmd.CommandText, "dialogue");
                 cmd.ExecuteNonQuery();
             }
@@ -772,6 +773,9 @@ namespace DialogueEditor
                 case "NpcDie":
                     return LoadNpcList();
 
+                case "":
+                    return (new string[0], new string[0]);
+
                 default:
                     MessageBox.Show($"ERROR: type  \"{eventType}\" doesn't work yet");
                     return (new string[0], new string[0]);
@@ -787,6 +791,9 @@ namespace DialogueEditor
 
                 case "KillNpc":
                     return LoadNpcList();
+
+                case "":
+                    return (new string[0], new string[0]);
 
                 default:
                     MessageBox.Show($"ERROR: type  \"{taskType}\" doesn't work yet");
@@ -989,6 +996,14 @@ namespace DialogueEditor
         {
             OpenConnection();
             cmd.CommandText = $"insert into 'npc' (npc_name) values ('name') ";
+            WriteCommand(cmd.CommandText, "npc");
+            cmd.ExecuteNonQuery();
+            CloseConnection();
+        }
+        public void DeleteNpc(int npcId)
+        {
+            OpenConnection();
+            cmd.CommandText = $"delete from 'npc' where Id ={npcId}";
             WriteCommand(cmd.CommandText, "npc");
             cmd.ExecuteNonQuery();
             CloseConnection();
